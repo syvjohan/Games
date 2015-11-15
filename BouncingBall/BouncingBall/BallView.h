@@ -5,10 +5,14 @@
 
 class BallView {
 	public:
-		BallView();
+		BallView(BallSimulation *ballSimulation);
 		~BallView();
 
-		void Draw();
+		SDL_Rect drawBall(float deltaTime, SDL_Rect area);
+
+		void setScale(float scale);
+		float getScale();
+
 
 	private:
 		Camera *camera;

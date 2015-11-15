@@ -1,13 +1,25 @@
 #pragma once
 
-#define BallSize 40
-
 class Ball {
 	public:
 		Ball();
+		Ball(const float positionX, const float positionY, const float sizeW, const float sizeH);
 		~Ball();
 
-		float position;
-		float speed;
-		float radius;
+		void setSizeW(float size);
+		void setSizeH(float size);
+		void setPositionX(float position);
+		void setPositionY(float position);
+
+		float getSizeW();
+		float getSizeH();
+		float getPositionX();
+		float getPositionY();
+
+	private:
+		float sizeW;
+		float sizeH;
+
+		float positionX;
+		float positionY;
 };
