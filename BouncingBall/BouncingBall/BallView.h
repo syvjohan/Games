@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Camera.h"
 #include "BallSimulation.h"
 
 class BallView {
@@ -8,14 +7,9 @@ class BallView {
 		BallView(BallSimulation *ballSimulation);
 		~BallView();
 
-		SDL_Rect drawBall(float deltaTime, SDL_Rect area);
-
-		void setScale(float scale);
-		float getScale();
-
+		SDL_Rect drawBall(float deltaTime, SDL_Rect area, float scaleX, float scaleY, float scaleH, float scaleW);
 
 	private:
-		Camera *camera;
 		BallSimulation *ballSimulation;
 };
 

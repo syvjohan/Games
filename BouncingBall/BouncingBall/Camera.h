@@ -1,13 +1,19 @@
 #pragma once
 
+typedef struct scale_s {
+	float sizeX;
+	float sizeY;
+	float sizeW;
+	float sizeH;
+}scale_t;
+
 class Camera {
 	public:
 		Camera();
 		~Camera();
 
-		void setScale(float size);
-		float getScale();
-
+		void set(float sizeX, float sizeY, float sizeW, float sizeH);
+		scale_t get();
 	private: 
-		float scale = 1; //decide size of everything.
+		scale_t scale;
 };

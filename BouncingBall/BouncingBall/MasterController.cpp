@@ -3,11 +3,11 @@
 SDL_Window *window = NULL;
 SDL_Event event;
 SDL_Renderer *render = NULL;
-SDL_Surface *surfaceScreen, *surfaceBall = NULL;
+SDL_Surface *surfaceScreen, *surfaceBall, *surfaceOldScreen = NULL;
 
 #define SDL_SRCCOLORKEY  0x00001000
 
-float screenWidth = 800;
+float screenWidth = 850;
 float screenHeight = 800;
 
 float border = 40;
@@ -17,44 +17,6 @@ SDL_Rect rectArea;
 
 MasterController::MasterController() {}
 MasterController::~MasterController() {}
-
-//Function for printing to Output console. Uses winapi.
-int outputf(const char *fmt, ...) {
-	va_list va;
-	va_start(va, fmt);
-
-	char buffer[4096];
-
-	int len = vsprintf(buffer, fmt, va);
-	buffer[len] = '\n';
-	buffer[len + 1] = '\0';
-
-	OutputDebugString(buffer);
-
-	va_end(va);
-}
-
-SDL_Surface* MasterController::loadImage(char *cStr) {
-
-	SDL_Surface *loadedSurface = IMG_Load(cStr);
-
-	if (loadedSurface == NULL) {
-		outputf("Unable to load image %s! SDL_image Error: %s\n", cStr, IMG_GetError());
-	} else {
-		//The final optimized image
-		SDL_Surface *optimizedSurface = NULL;
-
-		//Convert surface to screen format
-		optimizedSurface = SDL_ConvertSurface(loadedSurface, surfaceScreen->format, NULL);
-		if (optimizedSurface == NULL) {
-			outputf("Unable to optimize image %s! SDL Error: %s\n", cStr, SDL_GetError());
-		}
-
-		//Get rid of old loaded surface
-		SDL_FreeSurface(loadedSurface);
-		return optimizedSurface;
-	}
-}
 
 void FillRectBall(int x, int y, int w, int h) {
 	rectBall = { x, y, w, h };
@@ -66,40 +28,56 @@ void FillRectBall(int x, int y, int w, int h) {
 }
 
 void MasterController::freeMem() {
-	/*delete ballSimulation;
-	ballSimulation = NULL;
-
-	delete ballView;
-	ballView = NULL;
-
-	delete boarderView;
-	boarderView = NULL;*/
-
+	if (ballSimulation) {
+		delete ballSimulation;
+		ballSimulation = NULL;
+	} 
+	
+	if (ballView) {
+		delete ballView;
+		ballView = NULL;
+	} 
+	
+	if (boarderView) {
+		delete boarderView;
+		boarderView = NULL;
+	} 
+	
+	if (scale) {
+		delete scale;
+		scale = NULL;
+	}
 }
 
 void MasterController::gameLoop() {
+	scale = new Scale();
+	//Set scale here!!!
+	scale->set(1.f, 1.f, 1.f, 1.f);
+
 	ballSimulation = new BallSimulation();
 	ballSimulation->init();
 
 	ballView = new BallView(ballSimulation);
 	boarderView = new BoarderView();
 
-	//OBSERVE SET PROGRAM SCALE HERE!!!!!!
-	ballView->setScale(0.9f); //need to be called before changing to ballSimulation is done!
-
-
 	SDL_Init(SDL_INIT_EVERYTHING);
 
-	window = SDL_CreateWindow("BouncingBall", 400, 200, screenWidth * boarderView->getScale(), screenHeight * boarderView->getScale(), SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN); //Second and third argument is for screen position
+	window = SDL_CreateWindow("BouncingBall", 400, 200, screenWidth * scale->get().sizeX, screenHeight * scale->get().sizeY, SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
 	render = SDL_CreateRenderer(window, 0, 0);
 	surfaceScreen = SDL_GetWindowSurface(window);
 
-	surfaceBall = loadImage("ball.png");
+	surfaceBall = ballSimulation->loadImage("ball.png", *surfaceScreen);
+	if (surfaceBall == NULL) {
+		//outputf("could not get ball image");
+	}
 
 	Uint64 frequency = SDL_GetPerformanceFrequency();
 	Uint64 thisTick = SDL_GetPerformanceCounter();
 	Uint64 lastTick = thisTick;
 	float deltaTime;
+
+	float h;
+	float w;
 
 	bool running = 1;
 	while (running) {
@@ -110,8 +88,29 @@ void MasterController::gameLoop() {
 				if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
 					//Rezise window
 					surfaceScreen = SDL_GetWindowSurface(window);
-					outputf("Window resized");
+
+					//calculate new scaling.
+					h = surfaceScreen->h - surfaceOldScreen->h + surfaceOldScreen->h;
+					w = surfaceScreen->w - surfaceOldScreen->w + surfaceOldScreen->w;
+					
+					w = abs(w);
+					h = abs(h);
+					
+					w /= 1000;
+					h /= 1000;
+
+					if (w == 0) {
+						w = scale->get().sizeW;
+					} else if (h == 0) {
+						h = scale->get().sizeH;
+					} 
+
+					scale->set(scale->get().sizeX, scale->get().sizeY, w, h);
 				}
+			} else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
+				running = 0;
+			} else {
+				surfaceOldScreen = SDL_GetWindowSurface(window);
 			}
 		}
 
@@ -124,17 +123,18 @@ void MasterController::gameLoop() {
 		lastTick = thisTick;
 
 		// Render game board
-		rectArea = boarderView->getPlayArea(window, border * boarderView->getScale());
+		rectArea = boarderView->getPlayArea(window, border * scale->get().sizeW, border * scale->get().sizeH);
 		boarderView->renderBorder(surfaceScreen, rectArea);
 
 		//draw ball.
-		rectBall = ballView->drawBall(deltaTime, rectArea);
+		rectBall = ballView->drawBall(deltaTime, rectArea, scale->get().sizeX, scale->get().sizeY, scale->get().sizeH, scale->get().sizeW);
 		FillRectBall(rectBall.x, rectBall.y, rectBall.w, rectBall.h);
 
 		SDL_UpdateWindowSurface(window);
 		SDL_Delay(0);
 	}
 
+	//Free memory.
 	SDL_FreeSurface(surfaceScreen);
 	SDL_FreeSurface(surfaceBall);
 

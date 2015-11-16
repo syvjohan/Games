@@ -1,13 +1,21 @@
 #include "Camera.h"
 
-Camera::Camera() {}
+Camera::Camera() {
+	scale.sizeH = 1;
+	scale.sizeW = 1;
+	scale.sizeX = 1;
+	scale.sizeY = 1;
+}
 
 Camera::~Camera() {}
 
-void Camera::setScale(float s) {
-	this->scale = s;
+void Camera::set(float sizeX, float sizeY, float sizeW, float sizeH) {
+	this->scale.sizeH = sizeH;
+	this->scale.sizeW = sizeW;
+	this->scale.sizeX = sizeX;
+	this->scale.sizeY = sizeY;
 }
 
-float Camera::getScale() {
-	return this->scale;
+scale_t Camera::get() {
+	return scale;
 }

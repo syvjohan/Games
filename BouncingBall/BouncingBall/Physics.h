@@ -4,6 +4,7 @@
 #include <cfloat>
 #include <math.h>
 
+//vector to use in physic object.
 struct v2 {
 	float x, y;
 

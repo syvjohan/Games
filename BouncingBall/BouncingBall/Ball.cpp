@@ -10,6 +10,8 @@ Ball::Ball(const float positionX, const float positionY, const float sizeW, cons
 	this->positionY = positionY;
 }
 
+Ball::~Ball() {}
+
 void Ball::setSizeW(float size) {
 	this->sizeW = size;
 }
