@@ -1,15 +1,15 @@
 #pragma once
 
-#include "Camera.h"
-
 class Scale {
 	public:
 		Scale();
 		~Scale();
 
-		void set(float sizeX, float sizeY, float sizeW, float sizeH);
-		scale_t get();
+		void set(float sizeW, float sizeH);
+		float getW();
+		float getH();
 
 	private:
-		Camera *camera;
+		float w;
+		float h;
 };

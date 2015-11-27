@@ -47,11 +47,6 @@ void Physics::setRestitution(float restitution) {
 	this->restitution = restitution;
 }
 
-// Make ball slow down over time
-void Physics::applyForce(const v2 &force) {
-	velocity = velocity + force;
-}
-
 //Collision and calculating new direction.
 void Physics::update(float delta, const SDL_Rect &area) {
 	position = position + velocity * delta;

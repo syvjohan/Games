@@ -12,8 +12,10 @@ class SplitterSystem {
 
 	private:
 		SDL_Surface *surfaceScreen;
-		SplitterParticle particles[100];
+		SplitterParticle particles[1];
+		SDL_Surface *surfaceImg;
 
-		void fillRect(SplitterParticle particle);
+		void loadImage(char *path);
+		void fillRect(SplitterParticle particle, SDL_Surface *surfaceImg);
 };
 

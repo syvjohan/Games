@@ -1,13 +1,13 @@
 #pragma once
 
 #include <SDL.h>
+#include <iostream>
 
 #include "BallSimulation.h"
 #include "BallView.h"
 #include "BoarderView.h"
 #include "Scale.h"
 #include "Defs.h"
-//#include "Outputf.h"
 
 #define SDL_SRCCOLORKEY  0x00001000
 

@@ -52,7 +52,7 @@ void MasterController::freeMem() {
 void MasterController::gameLoop() {
 	scale = new Scale();
 	//Set scale here!!!
-	scale->set(1.f, 1.f, 1.f, 1.f);
+	scale->set(1.f, 1.f);
 
 	ballSimulation = new BallSimulation();
 	ballSimulation->init();
@@ -62,13 +62,13 @@ void MasterController::gameLoop() {
 
 	SDL_Init(SDL_INIT_EVERYTHING);
 
-	window = SDL_CreateWindow("BouncingBall", 400, 200, screenWidth * scale->get().sizeX, screenHeight * scale->get().sizeY, SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("BouncingBall", 400, 200, screenWidth * scale->getW(), screenHeight * scale->getH(), SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
 	render = SDL_CreateRenderer(window, 0, 0);
 	surfaceScreen = SDL_GetWindowSurface(window);
 
 	surfaceBall = ballSimulation->loadImage("ball.png", *surfaceScreen);
 	if (surfaceBall == NULL) {
-		//outputf("could not get ball image");
+		printf("could not get ball image");
 	}
 
 	Uint64 frequency = SDL_GetPerformanceFrequency();
@@ -100,12 +100,12 @@ void MasterController::gameLoop() {
 					h /= 1000;
 
 					if (w == 0) {
-						w = scale->get().sizeW;
+						w = scale->getW();
 					} else if (h == 0) {
-						h = scale->get().sizeH;
+						h = scale->getH();;
 					} 
 
-					scale->set(scale->get().sizeX, scale->get().sizeY, w, h);
+					scale->set(w, h);
 				}
 			} else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
 				running = 0;
@@ -123,11 +123,11 @@ void MasterController::gameLoop() {
 		lastTick = thisTick;
 
 		// Render game board
-		rectArea = boarderView->getPlayArea(window, border * scale->get().sizeW, border * scale->get().sizeH);
+		rectArea = boarderView->getPlayArea(window, border * scale->getW(), border * scale->getH());
 		boarderView->renderBorder(surfaceScreen, rectArea);
 
 		//draw ball.
-		rectBall = ballView->drawBall(deltaTime, rectArea, scale->get().sizeX, scale->get().sizeY, scale->get().sizeH, scale->get().sizeW);
+		rectBall = ballView->drawBall(deltaTime, rectArea, scale->getH(), scale->getW());
 		FillRectBall(rectBall.x, rectBall.y, rectBall.w, rectBall.h);
 
 		SDL_UpdateWindowSurface(window);

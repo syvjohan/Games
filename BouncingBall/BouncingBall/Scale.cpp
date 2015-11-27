@@ -1,20 +1,19 @@
 #include "Scale.h"
 
-Scale::Scale() {
-	camera = new Camera;
-}
-Scale::~Scale() {
-	if (camera) {
-		delete camera;
-		camera = nullptr;
-	}
+Scale::Scale() {}
+
+Scale::~Scale() {}
+
+void Scale::set(float sizeW, float sizeH) {
+	w = sizeW;
+	h = sizeH;
 }
 
-void Scale::set(float sizeX, float sizeY, float sizeW, float sizeH) {
-	camera->set(sizeX, sizeY, sizeW, sizeH);
+float Scale::getW() {
+	return w;
 }
 
-scale_t Scale::get() {
-	return camera->get();
+float Scale::getH() {
+	return h;
 }
 

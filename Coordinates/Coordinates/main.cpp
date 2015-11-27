@@ -108,7 +108,6 @@ int main(int, char**) {
 		running = 0;
 	}
 
-	//SDL_Quit();
 	system("pause");
 	return 0;
 }

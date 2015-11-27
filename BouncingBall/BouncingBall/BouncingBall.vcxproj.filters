@@ -15,12 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Camera.h">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BallSimulation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -63,9 +57,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MasterController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Outputf.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Defs.h">

@@ -47,7 +47,7 @@ void gameLoop() {
 
 		thisTick = SDL_GetPerformanceCounter();
 		// Delta time in milliseconds.
-		deltaTime = ((float)(thisTick - lastTick) / (float)frequency) * 1000.0f;
+		deltaTime = ((float)(thisTick - lastTick) / (float)frequency) * 10.0f;
 		lastTick = thisTick;
 
 		
@@ -65,7 +65,9 @@ void gameLoop() {
 
 int main(int, char**) {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-
+	
+	srand(time(NULL));
+	
 	gameLoop();
 
 	return 0;

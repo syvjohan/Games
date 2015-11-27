@@ -54,7 +54,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\Programmering\Games\BouncingBall\SDL2-2.0.3\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -76,8 +76,6 @@
     <ClCompile Include="BallSimulation.cpp" />
     <ClCompile Include="BallView.cpp" />
     <ClCompile Include="BoarderView.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Camera.h" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MasterController.cpp" />
     <ClCompile Include="Physics.cpp" />
@@ -90,7 +88,6 @@
     <ClInclude Include="BoarderView.h" />
     <ClInclude Include="Defs.h" />
     <ClInclude Include="MasterController.h" />
-    <ClInclude Include="Outputf.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="Scale.h" />
   </ItemGroup>

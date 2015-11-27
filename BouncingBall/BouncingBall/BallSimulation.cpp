@@ -1,7 +1,5 @@
 #include "BallSimulation.h"
 
-//#include "Outputf.h"
-
 BallSimulation::BallSimulation() {
 }
 
@@ -17,11 +15,11 @@ BallSimulation::~BallSimulation() {
 	}
 }
 
-SDL_Rect BallSimulation::draw(float deltaTime, SDL_Rect area, float scaleX, float scaleY, float scaleH, float scaleW) {
+SDL_Rect BallSimulation::draw(float deltaTime, SDL_Rect area, float scaleH, float scaleW) {
 	ballPhysics->update(deltaTime, area);
 
-	rectBall.x = (int)(ballPhysics->getPosition().x + 0.5f * scaleX);
-	rectBall.y = (int)(ballPhysics->getPosition().y + 0.5f * scaleY);
+	rectBall.x = (int)(ballPhysics->getPosition().x + 0.5f * scaleW);
+	rectBall.y = (int)(ballPhysics->getPosition().y + 0.5f * scaleH);
 	rectBall.h = (int)(ballPhysics->getSize().y * scaleH);
 	rectBall.w = (int)(ballPhysics->getSize().x * scaleW);
 

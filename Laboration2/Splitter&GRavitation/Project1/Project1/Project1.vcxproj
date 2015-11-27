@@ -52,7 +52,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>C:\Programmering\Games\Laboration2\Splitter&amp;GRavitation\Project1\SDL2-2.0.3\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
@@ -73,13 +73,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Defs.h" />
-    <ClInclude Include="Physics.h" />
     <ClInclude Include="SplitterParticle.h" />
     <ClInclude Include="SplitterSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Physics.cpp" />
     <ClCompile Include="SplitterParticle.cpp" />
     <ClCompile Include="SplitterSystem.cpp" />
   </ItemGroup>

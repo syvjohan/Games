@@ -48,7 +48,6 @@ class Physics {
 		void setRestitution(float restitution);
 
 		void update(float delta, const SDL_Rect &area);
-		void applyForce(const v2 &force);
 
 	private:
 		v2 position;

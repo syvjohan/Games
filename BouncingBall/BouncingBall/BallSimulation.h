@@ -11,7 +11,7 @@ class BallSimulation {
 		BallSimulation();
 		~BallSimulation();
 
-		SDL_Rect draw(float deltaTime, SDL_Rect area, float scaleX, float scaleY, float scaleH, float scaleW);
+		SDL_Rect draw(float deltaTime, SDL_Rect area, float scaleH, float scaleW);
 		void init(); //Need to be called before enter gameLoop
 
 		SDL_Surface *loadImage(char *cStr, SDL_Surface &surfaceScreen);
