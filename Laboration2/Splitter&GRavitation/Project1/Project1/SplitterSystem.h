@@ -1,21 +1,27 @@
 #pragma once
 
-#include "SplitterParticle.h"
+#include <SDL.h>
+#include <SDL_image.h>
+
+#include "Particle.h"
 
 class SplitterSystem {
 	public:
 		SplitterSystem();
-		SplitterSystem(SDL_Surface *screenSurface);
 		~SplitterSystem();
 
-		void drawParticles(float dt, SDL_Rect area);
+		void init(SDL_Surface *surfaceScreen);
+
+		void drawParticles(float dt);
 
 	private:
 		SDL_Surface *surfaceScreen;
-		SplitterParticle particles[1];
-		SDL_Surface *surfaceImg;
+		Particle particles[100];
 
-		void loadImage(char *path);
-		void fillRect(SplitterParticle particle, SDL_Surface *surfaceImg);
+		ParticleParams params;
+
+		void fillRect(Particle particle, SDL_Surface *surfaceImg);
+		float generateRandomNumber(float min, float max);
+		SDL_Surface *loadImage(char *path);
 };
 

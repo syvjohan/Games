@@ -1,16 +1,15 @@
 #pragma once
 
 #include <iostream>
-#include <SDL.h>
+
 #include <cfloat>
 #include <math.h>
-#include <stdlib.h>
 #include <time.h>
 #include <cassert>
-#include <SDL.h>
-#include <SDL_image.h>
 
-#define SIZE 10
+#include <SDL.h>
+
+#define SIZE 5
 
 //vector to use in physic object.
 struct v2 {
@@ -44,6 +43,11 @@ struct v2 {
 		return v;
 	}
 
+	void operator+=(float s) {
+		x = x + s;
+		y = y + s;
+	}
+
 	void operator+=(const v2& v1) {
 		x = x + v1.x;
 		y = y + v1.y;
@@ -59,6 +63,11 @@ struct v2 {
 		y = y / v1.y;
 	}
 
+	void operator*=(float s) {
+		x = x * s;
+		y = y * s;
+	}
+
 	void operator*=(const v2& v1) {
 		x = x * v1.x;
 		y = y * v1.y;
@@ -72,30 +81,15 @@ struct v2 {
 	}
 };
 
-class SplitterParticle {
-public:
-	SplitterParticle();
-	~SplitterParticle();
-	
-	void update(float dt, SDL_Rect area);
+struct ParticleParams {
+	SDL_Surface *imgParticle;
+	SDL_Surface *imgSmoke;
+};
 
-	SDL_Surface* getSurface();
-
-	int x;
-	int y;
-	int w;
-	int h;
-	const Uint32 color = 0xFFFFFF;
-private:
-	float generateRandomNumber(float min, float max);
-
+struct Particle {
 	v2 position;
 	v2 size;
-	v2 velocity; //speed. 
-	v2 restitution; //speed slowingdown.
+	v2 velocity;
 	v2 acceleration;
-
-	float speedMin;
-	float speedMax;
 };
 

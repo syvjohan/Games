@@ -73,12 +73,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Defs.h" />
-    <ClInclude Include="SplitterParticle.h" />
+    <ClInclude Include="Particle.h" />
     <ClInclude Include="SplitterSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="SplitterParticle.cpp" />
     <ClCompile Include="SplitterSystem.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

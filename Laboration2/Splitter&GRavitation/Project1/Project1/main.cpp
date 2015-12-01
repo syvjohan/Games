@@ -11,7 +11,7 @@ SDL_Surface *surfaceScreen = NULL;
 #define SCREENWIDTH 1000
 #define SCREENHEIGHT 500
 
-SDL_Rect rectArea;
+SplitterSystem splitterSystem;
 
 void gameLoop() {
 	SDL_Init(SDL_INIT_EVERYTHING);
@@ -20,12 +20,7 @@ void gameLoop() {
 	render = SDL_CreateRenderer(window, 0, 0);
 	surfaceScreen = SDL_GetWindowSurface(window);
 
-	SplitterSystem splitterSystem(surfaceScreen);
-
-	rectArea.h = SCREENHEIGHT;
-	rectArea.w = SCREENWIDTH;
-	rectArea.x = 10;
-	rectArea.y = 10;
+	splitterSystem.init(surfaceScreen);
 
 	Uint64 frequency = SDL_GetPerformanceFrequency();
 	Uint64 thisTick = SDL_GetPerformanceCounter();
@@ -51,7 +46,7 @@ void gameLoop() {
 		lastTick = thisTick;
 
 		
-		splitterSystem.drawParticles(deltaTime, rectArea);
+		splitterSystem.drawParticles(deltaTime);
 
 
 		SDL_UpdateWindowSurface(window);
