@@ -134,12 +134,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Defs.h" />
-    <ClInclude Include="SplitterParticle.h" />
-    <ClInclude Include="SplitterSystem.h" />
+    <ClInclude Include="Sprite.h" />
+    <ClInclude Include="AnimationSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="SplitterSystem.cpp" />
+    <ClCompile Include="AnimationSystem.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

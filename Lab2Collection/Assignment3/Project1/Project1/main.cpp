@@ -1,6 +1,6 @@
 #include <framework.h>
 #include "Defs.h"
-#include "SplitterSystem.h"
+#include "AnimationSystem.h"
 #include <cstdlib>
 #include <ctime>
 
@@ -28,7 +28,7 @@ void gameLoop() {
 
 	if (common.init(wParams)) {
 
-		common.registerTextureResource("smoke", "image/particlesmoke.tga");
+		common.registerTextureResource("explosion", "image/explosion.png");
 		
 		EventManager em;
 		common.setEventProcessor(&em);
@@ -45,12 +45,13 @@ void gameLoop() {
 		timer.restart();
 
 		//Set program scale.
-		SplitterSystem splitterSystem(common, screenHeight, screenWidth);
+		AnimationSystem animationSystem(common);
 		
 		const float TIME_STEP = 1.0 / 50.0f;
 		float accumulator = 0.0f;
 
 		while (gRunning) {
+			common.getInputState(&inputState);
 
 			if (inputState.isDown(Button::BUTTON_ESCAPE)) {
 				gRunning = 0;
@@ -59,18 +60,18 @@ void gameLoop() {
 			common.frame();
 			timer.tick();
 
-			g->clear(Color::White, true);
+			g->clear(Color::Black, true);
 
 			accumulator += timer.getDeltaSeconds();
 
 			while (accumulator >= TIME_STEP) {
 				accumulator -= TIME_STEP;
-				splitterSystem.UpdateEmitter(TIME_STEP);
+				animationSystem.UpdateEmitter(TIME_STEP);
 			}
 
 			renderer->begin(Renderer2D::SPRITE_SORT_DEFERRED, Renderer2D::SPRITE_BLEND_ALPHA);
 
-			splitterSystem.RenderEmitter(renderer);
+			animationSystem.RenderEmitter(renderer);
 
 			rot += timer.getDeltaSeconds() * 0.1f;
 
@@ -79,7 +80,7 @@ void gameLoop() {
 			g->present();
 		}
 
-		splitterSystem.FreeMem();
+		animationSystem.FreeMem();
 	}
 }
 
