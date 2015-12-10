@@ -1,6 +1,10 @@
 #include <framework.h>
-#include "Defs.h"
+
+#include "SmokeSystem.h"
+#include "SplitterSystem.h"
 #include "AnimationSystem.h"
+#include "Shockwave.h"
+
 #include <cstdlib>
 #include <ctime>
 
@@ -28,6 +32,9 @@ void gameLoop() {
 
 	if (common.init(wParams)) {
 
+		//Load all textures
+		common.registerTextureResource("smoke", "image/particlesmoke.tga");
+		common.registerTextureResource("spark", "image/spark.png");
 		common.registerTextureResource("explosion", "image/explosion.png");
 		
 		EventManager em;
@@ -44,9 +51,12 @@ void gameLoop() {
 		HiResTimer timer;
 		timer.restart();
 
-		//Set program scale.
-		AnimationSystem animationSystem(common);
-		
+		//Init and set program scale.
+		SplitterSystem splitterSystem(common, Vec2(1.f, 1.f), Vec2(screenWidth, screenHeight));
+		SmokeSystem smokeSystem(common, Vec2(1.f, 1.f), Vec2(screenWidth, screenHeight));
+		AnimationSystem animationSystem(common, Vec2(1.f, 1.f), Vec2(screenWidth, screenHeight));
+		Shockwave shockwave(common, Vec2(1.f, 1.f), Vec2(screenHeight, screenWidth));
+
 		const float TIME_STEP = 1.0 / 50.0f;
 		float accumulator = 0.0f;
 
@@ -60,18 +70,24 @@ void gameLoop() {
 			common.frame();
 			timer.tick();
 
-			g->clear(Color::Black, true);
+			g->clear(Color::White, true);
 
 			accumulator += timer.getDeltaSeconds();
 
 			while (accumulator >= TIME_STEP) {
 				accumulator -= TIME_STEP;
+				smokeSystem.UpdateEmitter(TIME_STEP);
+				splitterSystem.UpdateEmitter(TIME_STEP);
 				animationSystem.UpdateEmitter(TIME_STEP);
+				shockwave.UpdateEmitter(TIME_STEP);
 			}
 
 			renderer->begin(Renderer2D::SPRITE_SORT_DEFERRED, Renderer2D::SPRITE_BLEND_ALPHA);
 
+			splitterSystem.RenderEmitter(renderer);
+			smokeSystem.RenderEmitter(renderer);
 			animationSystem.RenderEmitter(renderer);
+			shockwave.RenderEmitter(renderer);
 
 			rot += timer.getDeltaSeconds() * 0.1f;
 
@@ -79,8 +95,6 @@ void gameLoop() {
 
 			g->present();
 		}
-
-		animationSystem.FreeMem();
 	}
 }
 
