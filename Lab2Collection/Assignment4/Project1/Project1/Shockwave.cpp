@@ -10,7 +10,8 @@ Shockwave::Shockwave(Common &common, Vec2 scale, Vec2(screen)) {
 }
 
 Shockwave::~Shockwave() {
-	delete emitter.mParticles;
+	delete [] emitter.mParticles;
+	emitter.mParticles = NULL;
 }
 
 float Shockwave::r1() {

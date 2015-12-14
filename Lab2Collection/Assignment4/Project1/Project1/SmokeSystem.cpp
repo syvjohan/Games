@@ -9,7 +9,8 @@ SmokeSystem::SmokeSystem(Common &common, Vec2 scale, Vec2 screen) {
 }
 
 SmokeSystem::~SmokeSystem() {
-	delete emitter.mParticles;
+	delete [] emitter.mParticles;
+	emitter.mParticles = NULL;
 }
 
 float SmokeSystem::r1() {
@@ -129,4 +130,3 @@ void SmokeSystem::RenderEmitter(Renderer2D *renderer) {
 					   );
 	}
 }
-

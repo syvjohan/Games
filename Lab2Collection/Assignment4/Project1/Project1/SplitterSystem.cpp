@@ -9,7 +9,8 @@ SplitterSystem::SplitterSystem(Common &common, Vec2 scale, Vec2 screen) {
 }
 
 SplitterSystem::~SplitterSystem() {
-	delete emitter.mParticles;
+	delete [] emitter.mParticles;
+	emitter.mParticles = NULL;
 }
 
 float SplitterSystem::r1() {

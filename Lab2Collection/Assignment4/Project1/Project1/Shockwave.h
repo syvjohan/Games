@@ -13,7 +13,6 @@ class Shockwave {
 
 		void UpdateEmitter(const float dt);
 		void RenderEmitter(Renderer2D *renderer);
-		void FreeMem();
 
 	private:
 		float r1();

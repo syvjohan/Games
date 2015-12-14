@@ -3,7 +3,7 @@
 #include "SplitterSystem.h"
 #include <cstdlib>
 #include <ctime>
-
+//2
 int screenWidth = 1280;
 int screenHeight = 720;
 

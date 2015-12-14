@@ -46,5 +46,3 @@ void AnimationSystem::RenderEmitter(Renderer2D *renderer) {
 				   Color::White,
 				   0.0f);
 }
-
-void AnimationSystem::FreeMem() {}

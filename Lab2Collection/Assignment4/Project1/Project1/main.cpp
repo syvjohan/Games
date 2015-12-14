@@ -1,5 +1,6 @@
 #include <framework.h>
 
+#include "Defs.h"
 #include "SmokeSystem.h"
 #include "SplitterSystem.h"
 #include "AnimationSystem.h"
@@ -7,7 +8,7 @@
 
 #include <cstdlib>
 #include <ctime>
-
+//4
 int screenWidth = 1280;
 int screenHeight = 720;
 
@@ -50,14 +51,14 @@ void gameLoop() {
 
 		HiResTimer timer;
 		timer.restart();
-
+		
 		//Init and set program scale.
 		SplitterSystem splitterSystem(common, Vec2(1.f, 1.f), Vec2(screenWidth, screenHeight));
 		SmokeSystem smokeSystem(common, Vec2(1.f, 1.f), Vec2(screenWidth, screenHeight));
 		AnimationSystem animationSystem(common, Vec2(1.f, 1.f), Vec2(screenWidth, screenHeight));
 		Shockwave shockwave(common, Vec2(1.f, 1.f), Vec2(screenHeight, screenWidth));
 
-		const float TIME_STEP = 1.0 / 50.0f;
+		const float TIME_STEP = 1.0 / 50.0f; //0.02
 		float accumulator = 0.0f;
 
 		while (gRunning) {
@@ -95,6 +96,7 @@ void gameLoop() {
 
 			g->present();
 		}
+
 	}
 }
 
