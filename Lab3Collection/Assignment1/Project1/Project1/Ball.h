@@ -21,6 +21,7 @@ namespace Model {
 	struct Ball {
 		Vec2 mSize;
 		Vec2 mPos;
+		Vec2 mDir;
 		Vec2 mScale;
 
 		Vec2 mVel;

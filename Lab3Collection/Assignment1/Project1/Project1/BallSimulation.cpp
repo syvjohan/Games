@@ -4,9 +4,9 @@
 namespace Model {
 	BallSimulation::BallSimulation() {}
 
-	BallSimulation::BallSimulation(Common &common, Vec2 scale, Vec2 screen) {
+	BallSimulation::BallSimulation(Common &common, Vec2 scale, Vec2 screen, const float boarderMargin) {
 		InitParams(common);
-		InitEmitter(screen, scale);
+		InitEmitter(screen, scale, boarderMargin);
 	}
 	BallSimulation::~BallSimulation() {}
 
@@ -22,22 +22,27 @@ namespace Model {
 
 	void BallSimulation::InitBall(Model::Ball *b, Vec2 scale) {
 		b->mPos = emitter.mPosition;
-		b->mSize.x = 40;
-		b->mSize.y = 40;	
+		
 		b->mScale = scale;
 		b->mTint = Color::White;
 		b->mAngularVelocity = 0;
 		b->mOrientation = 0;
 		b->mMaxTime = 10000;
 		b->mTime = b->mMaxTime;
-		b->mVel = Vec2(.1f, .1f);
+		b->mVel = Vec2(100.f, 100.f);
+		b->mDir = Vec2(-10, -10);
+
+		int width, height;
+		emitter.mParams.mTexture->getDimensions(&width, &height);
+		b->mSize.x = width;
+		b->mSize.y = height;
 	}
 
-	void BallSimulation::InitEmitter(Vec2 screen, Vec2 scale) {
+	void BallSimulation::InitEmitter(Vec2 screen, Vec2 scale, const float boarderMargin) { 
 		emitter.mPosition.x = screen.x / 2; //screen.x / 2 * scale.x;
 		emitter.mPosition.y = screen.y / 2; // screen.y / 2 * scale.y;
 
-		emitter.mPlayArea = screen;
+		emitter.mPlayArea = Vec2(screen.x -= boarderMargin, screen.y -= boarderMargin);
 
 		emitter.mParams = params;
 
@@ -45,8 +50,6 @@ namespace Model {
 		emitter.mBallCapacity = params.mMaxBalls;
 		emitter.mBalls = DBG_NEW Model::Ball[emitter.mBallCapacity];
 		emitter.mBallCount = emitter.mParams.mMinBalls;
-
-		emitter.mBalls->mScale = scale;
 
 		for (int i = 0; i < emitter.mParams.mMinBalls; ++i) {
 			InitBall(emitter.mBalls + i, scale);

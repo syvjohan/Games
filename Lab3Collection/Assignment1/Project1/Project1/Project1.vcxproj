@@ -137,6 +137,7 @@
     <ClInclude Include="Ball.h" />
     <ClInclude Include="BallSimulation.h" />
     <ClInclude Include="BallView.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Defs.h" />
     <ClInclude Include="GameController.h" />
     <ClInclude Include="Particle.h" />

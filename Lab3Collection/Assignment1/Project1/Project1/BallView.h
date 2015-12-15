@@ -12,7 +12,7 @@ namespace View {
 			~BallView();
 
 			void RenderEmitter(Renderer2D *renderer);
-			void UpdateEmitter(const float dt);
+			void UpdateEmitter(const float dt, const float BoarderMargin);
 
 		private:
 		Model::BallEmitter emitter;

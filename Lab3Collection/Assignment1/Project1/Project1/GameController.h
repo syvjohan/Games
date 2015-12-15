@@ -9,6 +9,7 @@
 #include "Shockwave.h"
 #include "BallSimulation.h"
 #include "BallView.h"
+#include "Camera.h"
 
 #include <cstdlib>
 #include <ctime>
@@ -24,19 +25,20 @@ namespace Controller {
 
 	class GameController {
 		public:
-		GameController();
-		~GameController();
+			GameController();
+			~GameController();
 
-		void gameLoop();
+			void gameLoop();
 
 		private:
+			int screenWidth = 1280;
+			int screenHeight = 720;
 
-		int screenWidth = 1280;
-		int screenHeight = 720;
+			const float boarderMargin = 20;
 
-		InputState inputState;
-		WindowParams wParams;
-		Common common;
+			InputState inputState;
+			WindowParams wParams;
+			Common common;
 	};
 
 }

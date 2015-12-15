@@ -6,6 +6,16 @@ namespace Controller {
 	GameController::~GameController() {}
 
 	void GameController::gameLoop() {
+		//set program scale.
+		View::Camera camera;
+		camera.scale = Vec2(.5f, .5f);
+
+		screenHeight *= camera.scale.y;
+		screenWidth *= camera.scale.x;
+
+		Vec2 boarder = Vec2((screenWidth / 2) - (boarderMargin * camera.scale.x), (screenHeight / 2) - (boarderMargin * camera.scale.y));
+		Vec2 origin = Vec2(screenWidth / 2, screenHeight / 2);
+
 		wParams.mFullscreen = false;
 		wParams.mHeight = screenHeight;
 		wParams.mWidth = screenWidth;
@@ -35,15 +45,15 @@ namespace Controller {
 			HiResTimer timer;
 			timer.restart();
 
-			//Init and set program scale.
-			View::SplitterSystem splitterSystem(common, Vec2(1.f, 1.f), Vec2(screenWidth, screenHeight));
-			View::SmokeSystem smokeSystem(common, Vec2(1.f, 1.f), Vec2(screenWidth, screenHeight));
-			View::AnimationSystem animationSystem(common, Vec2(1.f, 1.f), Vec2(screenWidth, screenHeight));
-			View::Shockwave shockwave(common, Vec2(1.f, 1.f), Vec2(screenHeight, screenWidth));
-			Model::BallSimulation ballSimulation(common, Vec2(1.f, 1.f), Vec2(screenHeight, screenWidth));
+			//Init
+			View::SplitterSystem splitterSystem(common, camera.scale, Vec2(screenWidth, screenHeight));
+			View::SmokeSystem smokeSystem(common, camera.scale, Vec2(screenWidth, screenHeight));
+			View::AnimationSystem animationSystem(common, camera.scale, Vec2(screenWidth, screenHeight));
+			View::Shockwave shockwave(common, camera.scale, Vec2(screenHeight, screenWidth));
+			Model::BallSimulation ballSimulation(common, camera.scale, Vec2(screenWidth, screenHeight), boarderMargin);
 			View::BallView ballView(ballSimulation.getEmitter(), ballSimulation.getParams());
 
-			const float TIME_STEP = 1.0 / 50.0f; //0.02
+			const float TIME_STEP = 1.0 / 60.0f; //0.02
 			float accumulator = 0.0f;
 
 			while (gRunning) {
@@ -66,7 +76,7 @@ namespace Controller {
 					splitterSystem.UpdateEmitter(TIME_STEP);
 					animationSystem.UpdateEmitter(TIME_STEP);
 					shockwave.UpdateEmitter(TIME_STEP);
-					ballView.UpdateEmitter(TIME_STEP);
+					ballView.UpdateEmitter(TIME_STEP, boarderMargin);
 				}
 
 				renderer->begin(Renderer2D::SPRITE_SORT_DEFERRED, Renderer2D::SPRITE_BLEND_ALPHA);
@@ -76,6 +86,8 @@ namespace Controller {
 				animationSystem.RenderEmitter(renderer);
 				shockwave.RenderEmitter(renderer);
 				ballView.RenderEmitter(renderer);
+
+				renderer->debugRect(origin, boarder, Color::Black);
 
 				rot += timer.getDeltaSeconds() * 0.1f;
 
