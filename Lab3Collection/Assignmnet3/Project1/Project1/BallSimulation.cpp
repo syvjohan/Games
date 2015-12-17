@@ -42,7 +42,8 @@ namespace Model {
 		b->mOrientation = 0;
 		b->mMaxTime = 10000;
 		b->mTime = b->mMaxTime;
-		b->mVel = Vec2(InRange(100, 250), InRange(100, 250));
+
+		b->mVel = Vec2(200 * scale.x, 200 * scale.y);
 		b->mDir = Vec2(InRange(-10, 10), InRange(-10, 10));
 
 		int width, height;

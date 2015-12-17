@@ -57,16 +57,8 @@ namespace View {
 	}
 
 	void SplitterSystem::InitEmitter(float metersToPixels, Vec2 scale, Vec2 screen, Vec2 startPosition) {
-		emitter.mPosition.x = startPosition.x * scale.x;
-		emitter.mPosition.y = startPosition.y * scale.y;
-
-		/*if (scale.x <= .7f && scale.x >= .5f) {
-			emitter.mPosition.x -= 1.3;
-			emitter.mPosition.y += 1.f;
-		} else if (scale.x <= .5f) {
-			emitter.mPosition.x -= 3;
-			emitter.mPosition.y += 2;
-		}*/
+		emitter.mPosition.x = startPosition.x;
+		emitter.mPosition.y = startPosition.y;
 
 		emitter.mParams = params;
 

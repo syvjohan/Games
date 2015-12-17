@@ -115,7 +115,7 @@ namespace Controller {
 				renderer->debugRect(origin, boarder, Color::Black);
 
 				//Aim
-				renderer->debugCircle(inputState.mMouseX, inputState.mMouseY, aimRadie, Color::Black);
+				renderer->debugCircle(inputState.mMouseX, inputState.mMouseY, aimRadie * camera.scale.x, Color::Black);
 
 				rot += timer.getDeltaSeconds() * 0.1f;
 

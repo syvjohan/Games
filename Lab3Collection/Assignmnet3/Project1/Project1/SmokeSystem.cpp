@@ -56,8 +56,8 @@ namespace View {
 	}
 
 	void SmokeSystem::InitEmitter(float metersToPixels, Vec2 scale, Vec2 screen, Vec2 startPosition) {
-		emitter.mPosition.x = startPosition.x * scale.x;
-		emitter.mPosition.y = startPosition.y * scale.y;
+		emitter.mPosition.x = startPosition.x;
+		emitter.mPosition.y = startPosition.y;
 
 		emitter.mParams = params;
 
