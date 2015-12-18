@@ -72,11 +72,11 @@ namespace View {
 		for (int ballIndex = 0; ballIndex < emitter.mBallCount; ++ballIndex) {
 			Model::Ball *ball = emitter.mBalls + ballIndex;
 
-			if ((ball->mPos.x > hitArea.x) && (ball->mPos.x < hitArea.x + hitArea.w)) {
-				return ballIndex;
-			}
+			Vec2 cursor(hitArea.x, hitArea.y);
 
-			if ((ball->mPos.y > hitArea.y) && (ball->mPos.y < hitArea.y + hitArea.w)) {
+			Vec2 diff = ball->mPos - cursor;
+
+			if (Vec2::length(diff) < (hitArea.w + ball->mSize.x))  {
 				return ballIndex;
 			}
 		}

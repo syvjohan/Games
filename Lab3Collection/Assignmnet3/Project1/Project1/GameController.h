@@ -37,7 +37,9 @@ namespace Controller {
 
 			const float boarderMargin = 20;
 
-			const float aimRadie = 60;
+			const float aimDiameter = 60;
+
+			AudioSource *source;
 
 			InputState inputState;
 			WindowParams wParams;

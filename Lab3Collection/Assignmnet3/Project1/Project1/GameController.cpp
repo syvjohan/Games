@@ -31,7 +31,8 @@ namespace Controller {
 			common.registerTextureResource("explosion", "image/explosion.png");
 			common.registerTextureResource("ball", "image/ball.png"); 		
 
-			common.registerSoundResource("shoot", "sound/fire.wav");
+			common.registerSoundResource("shoot", "sound/fire.ogg");
+			
 
 			EventManager em;
 			common.setEventProcessor(&em);
@@ -56,15 +57,19 @@ namespace Controller {
 			float accumulatorKeyPress = 0.0f;
 			float oldAccumulatorKeyPress = 0.0f;
 
-			while (gRunning) {
+			float frames = 0, oldFrames = 0;
+			float frameTimer = 0.0f;
 
-				common.getInputState(&inputState);
+			ShowCursor(FALSE);
+
+			while (gRunning) {
+				common.frame();
+				timer.tick();
+
+				
 				if (inputState.isDown(Button::BUTTON_ESCAPE)) {
 					gRunning = 0;
 				}
-
-				common.frame();
-				timer.tick();
 
 				g->clear(Color::White, true);
 
@@ -78,7 +83,7 @@ namespace Controller {
 					if (inputState.isDown(Button::BUTTON_MOUSELEFT)) {
 						oldAccumulatorKeyPress = accumulatorKeyPress;
 						
-						Vec4 hitArea = Vec4(inputState.mMouseX, inputState.mMouseY, 0, aimRadie);
+						Vec4 hitArea = Vec4(inputState.mMouseX, inputState.mMouseY, 0, aimDiameter);
 						int ballIndex = ballView.Collision(hitArea);
 						if (ballIndex != -1) {
 							ballView.StopBall(ballIndex);
@@ -86,8 +91,10 @@ namespace Controller {
 							//init effect.
 							splitter.push_back(new View::SplitterSystem(common, camera.scale, Vec2(screenWidth, screenHeight), Vec2(inputState.mMouseX, inputState.mMouseY)));
 							smoke.push_back(new View::SmokeSystem(common, camera.scale, Vec2(screenWidth, screenHeight), Vec2(inputState.mMouseX, inputState.mMouseY)));
-
-							common.getAudio();
+							
+							if (source = common.getAudio()->getSource()) {
+								source->play(common.getSoundResource("shoot"));
+							}	
 						}
 					}
 				}
@@ -114,8 +121,20 @@ namespace Controller {
 				//boarder
 				renderer->debugRect(origin, boarder, Color::Black);
 
+				frameTimer += timer.getDeltaSeconds();
+				frames++;
+				if (frameTimer >= 1.0f) {
+					frameTimer = 0.0f;
+					oldFrames = frames;
+					printf("Fps: %.2f\n", frames);
+					frames = 0;
+					
+				}
+
+				
 				//Aim
-				renderer->debugCircle(inputState.mMouseX, inputState.mMouseY, aimRadie * camera.scale.x, Color::Black);
+				common.getInputState(&inputState);
+				renderer->debugCircle(inputState.mMouseX, inputState.mMouseY, aimDiameter * camera.scale.x, Color::Black);
 
 				rot += timer.getDeltaSeconds() * 0.1f;
 
@@ -126,6 +145,7 @@ namespace Controller {
 
 		}
 	}
+
 
 
 }
