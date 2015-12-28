@@ -9,7 +9,7 @@ namespace View {
 	class ShootSystem {
 		public:
 		ShootSystem();
-		ShootSystem(Common &common, Vec2 scale, Vec2 screen);
+		ShootSystem(Common &common, Vec2 scale, Vec2 playArea);
 		~ShootSystem();
 
 		void AddShoot(Vec2 startPosition);
@@ -18,7 +18,7 @@ namespace View {
 
 		private:
 		void InitParticle(Model::Particle *p, Vec2 scale);
-		void InitEmitter(float metersToPixels, Vec2 scale, Vec2 screen);
+		void InitEmitter(float metersToPixels, Vec2 scale, Vec2 playArea);
 		void InitParams(Common &common);
 		void GetParams();
 

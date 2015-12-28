@@ -55,27 +55,27 @@ namespace View {
 		InitParticle(emitter.mParticles + 0, scale);
 	}
 
-	void PlaneSystem::UpdateEmitter(const float dt, const float BoarderMargin) {
+	void PlaneSystem::UpdateEmitter(const float dt, const float boarderMargin) {
 		Model::Particle *plane = emitter.mParticles + 0;
 
 		//Game physics
 		plane->mPos = plane->mVel * dt * dt;
 		plane->mPos += plane->mDir;
 
-		if (plane->mPos.x < BoarderMargin) {
-			plane->mPos.x = BoarderMargin;
+		if (plane->mPos.x < boarderMargin) {
+			plane->mPos.x = boarderMargin;
 		}
 
-		if (plane->mPos.x > emitter.mPlayArea.x - plane->mSize.x - BoarderMargin) {
-			plane->mPos.x = emitter.mPlayArea.x - plane->mSize.x - BoarderMargin;
+		if (plane->mPos.x > emitter.mPlayArea.x - plane->mSize.x - boarderMargin) {
+			plane->mPos.x = emitter.mPlayArea.x - plane->mSize.x - boarderMargin;
 		}
 
-		if (plane->mPos.y < plane->mSize.y - BoarderMargin) {
-			plane->mPos.y = plane->mSize.y - BoarderMargin;
+		if (plane->mPos.y < plane->mSize.y - boarderMargin) {
+			plane->mPos.y = plane->mSize.y - boarderMargin;
 		}
 
-		if (plane->mPos.y > emitter.mPlayArea.y - BoarderMargin) {
-			plane->mPos.y = emitter.mPlayArea.y - BoarderMargin;
+		if (plane->mPos.y > emitter.mPlayArea.y - boarderMargin) {
+			plane->mPos.y = emitter.mPlayArea.y - boarderMargin;
 		}
 	}
 
@@ -94,24 +94,26 @@ namespace View {
 						);
 	}
 
-	void PlaneSystem::Upp() {
+	void PlaneSystem::Move(int dir) {
 		Model::Particle *plane = emitter.mParticles + 0;
-		plane->mDir.y -= 10;
-	}
+		//plane->mVel = Vec2(.0001f, .0001f);
 
-	void PlaneSystem::Down() {
-		Model::Particle *plane = emitter.mParticles + 0;
-		plane->mDir.y += 10;
-	}
-
-	void PlaneSystem::Back() {
-		Model::Particle *plane = emitter.mParticles + 0;
-		plane->mDir.x -= 10;
-	}
-
-	void PlaneSystem::Forward() {
-		Model::Particle *plane = emitter.mParticles + 0;
-		plane->mDir.x += 10;
+		switch (dir) {
+			case 1:
+				plane->mDir.y -= 10; //Upp
+				break;
+			case 2:
+				plane->mDir.y += 10; //Down
+				break;
+			case 3:
+				plane->mDir.x -= 10; //Back
+				break;
+			case 4:
+				plane->mDir.x += 10; //Forward
+				break;
+			default:
+				break;
+		}
 	}
 
 	Vec2 PlaneSystem::GetFirePosition() {

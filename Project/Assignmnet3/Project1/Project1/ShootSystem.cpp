@@ -3,10 +3,10 @@
 namespace View {
 	ShootSystem::ShootSystem() {}
 
-	ShootSystem::ShootSystem(Common &common, Vec2 scale, Vec2 screen) {
+	ShootSystem::ShootSystem(Common &common, Vec2 scale, Vec2 playArea) {
 		InitParams(common);
 		//128 size of image.
-		InitEmitter(128 / 1.f, scale, screen);
+		InitEmitter(128 / 1.f, scale, playArea);
 	}
 
 	ShootSystem::~ShootSystem() {}
@@ -33,7 +33,7 @@ namespace View {
 		p->mAcc = Vec2(1, 0);
 	}
 
-	void ShootSystem::InitEmitter(float metersToPixels, Vec2 scale, Vec2 screen) {
+	void ShootSystem::InitEmitter(float metersToPixels, Vec2 scale, Vec2 playArea) {
 		emitter.mParams = params;
 
 		emitter.mParticleCapacity = params.mMaxParticles;
@@ -42,6 +42,8 @@ namespace View {
 
 		emitter.mMetersToPixels = metersToPixels * scale.x;
 
+		emitter.mPlayArea = playArea;
+
 		emitter.mParticles->mScale = scale;
 	}
 
@@ -49,9 +51,14 @@ namespace View {
 		for (int particleIndex = 0; particleIndex < emitter.mParticleCount; ++particleIndex) {
 			Model::Particle *part = emitter.mParticles + particleIndex;
 
-			//Game physics!
-			part->mAcc += Vec2(.1f, 0);
-			part->mPos += part->mVel + part->mAcc * dt / 2;
+			if (part->mPos.x < emitter.mPlayArea.x && part->mPos.y < emitter.mPlayArea.y) {
+
+				//Game physics!
+				part->mAcc += Vec2(.1f, 0);
+				part->mPos += part->mVel + part->mAcc * dt / 2;
+			} else {
+				//Remove from array.
+			}
 		}
 	}
 
@@ -71,15 +78,17 @@ namespace View {
 		Vec2 origin = { width / 2.0f, height / 2.0f };
 
 		for (int i = 0; i < emitter.mParticleCount; ++i) {
-			renderer->draw(emitter.mParams.mTexture,
-						   (emitter.mParticles[i].mPos),
-						   clip,
-						   origin,
-						   emitter.mParticles[i].mOrientation,
-						   emitter.mParticles[i].mScale * .15f,
-						   Color::White,
-						   0.0f
-						   );
+			if (emitter.mParticles[i].mPos.x < emitter.mPlayArea.x && emitter.mParticles[i].mPos.y < emitter.mPlayArea.y) {
+				renderer->draw(emitter.mParams.mTexture,
+							   emitter.mParticles[i].mPos,
+							   clip,
+							   origin,
+							   emitter.mParticles[i].mOrientation,
+							   emitter.mParticles[i].mScale * .15f,
+							   Color::White,
+							   0.0f
+							   );
+			}
 		}
 	}
 }

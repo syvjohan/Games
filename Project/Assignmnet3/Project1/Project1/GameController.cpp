@@ -28,6 +28,8 @@ namespace Controller {
 			//Load all textures	
 			common.registerTextureResource("plane", "image/plane.png");
 			common.registerTextureResource("shoot", "image/spark.png");
+			common.registerTextureResource("asteroid1", "image/asteroid1.png");
+			common.registerTextureResource("asteroid3", "image/asteroid3.png");
 
 			EventManager em;
 			common.setEventProcessor(&em);
@@ -44,7 +46,8 @@ namespace Controller {
 			timer.restart();
 
 			View::PlaneSystem planeSystem(common, camera.scale, Vec2(screenWidth, screenHeight), boarderMargin);
-			View::ShootSystem shootSystem(common, camera.scale, Vec2(screenWidth, screenHeight));
+			View::ShootSystem shootSystem(common, camera.scale, Vec2(screenWidth - boarderMargin, screenHeight - boarderMargin));
+			View::AsteroidSystem asteroidSystem(common, camera.scale, Vec2(screenWidth - boarderMargin, screenHeight - boarderMargin));
 
 			const float TIME_STEP = 1.0 / 60.0f;
 			float accumulator = 0.0f;
@@ -71,19 +74,19 @@ namespace Controller {
 				}
 
 				if (inputState.isDown(Button::BUTTON_A)) {
-					planeSystem.Back();
+					planeSystem.Move(3);
 				} 
 				
 				if (inputState.isDown(Button::BUTTON_W)) {
-					planeSystem.Upp();
+					planeSystem.Move(1);
 				} 
 				
 				if (inputState.isDown(Button::BUTTON_D)) {
-					planeSystem.Forward();
+					planeSystem.Move(4);
 				} 
 				
 				if (inputState.isDown(Button::BUTTON_S)) {
-					planeSystem.Down();
+					planeSystem.Move(2);
 				} 
 				
 				//setting timer for key pressing.
@@ -102,28 +105,17 @@ namespace Controller {
 
 					planeSystem.UpdateEmitter(TIME_STEP, boarderMargin);
 					shootSystem.UpdateEmitter(TIME_STEP);
+					asteroidSystem.UpdateAnimation(TIME_STEP);
 				}
 
 				renderer->begin(Renderer2D::SPRITE_SORT_DEFERRED, Renderer2D::SPRITE_BLEND_ALPHA);
 
 				planeSystem.RenderEmitter(renderer);
 				shootSystem.RenderEmitter(renderer);
+				asteroidSystem.RenderAnimation(renderer);
 
 				//boarder
 				renderer->debugRect(origin, boarder, Color::Black);
-
-				//Print FPS in console.
-				frameTimer += timer.getDeltaSeconds();
-				frames++;
-				if (frameTimer >= 1.0f) {
-					frameTimer = 0.0f;
-					oldFrames = frames;
-					printf("Fps: %.2f\n", frames);
-					frames = 0;
-					
-				}
-
-				rot += timer.getDeltaSeconds() * 0.1f;
 
 				renderer->end();
 

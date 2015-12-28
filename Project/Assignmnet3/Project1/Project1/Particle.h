@@ -1,5 +1,6 @@
 #pragma once
 #include <framework.h>
+#include "Sprite.h"
 
 class Texture2D;
 
