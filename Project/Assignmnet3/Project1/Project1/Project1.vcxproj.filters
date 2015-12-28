@@ -36,12 +36,6 @@
     <ClInclude Include="GameController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BallSimulation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BallView.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -55,9 +49,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AsteroidSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Ball.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Asteroid.h">
@@ -78,12 +69,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameController.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BallSimulation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BallView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ExplosionAnimation.cpp">

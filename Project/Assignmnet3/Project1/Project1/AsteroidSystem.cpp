@@ -4,7 +4,11 @@ namespace View {
 	AsteroidSystem::AsteroidSystem() {}
 
 	AsteroidSystem::AsteroidSystem(Common &common, Vec2 scale, Vec2 playArea) {
-		InitAnimation(common, scale, playArea);
+		this->common = common;
+		this->scale = scale;
+		this->playArea = playArea;
+
+		InitAnimation();
 	}
 
 	AsteroidSystem::~AsteroidSystem() {}
@@ -21,97 +25,204 @@ namespace View {
 		return min + (max - min) * r1();
 	}
 
-	void AsteroidSystem::InitAnimation(Common &common, Vec2 scale, Vec2 playArea) {
-		for (int i = 0; i != 3; ++i) {
-			Model::Asteroid a;
-			a.animation.mTexture = common.getTextureResource("asteroid1");
+	void AsteroidSystem::ExtendAsteroidBelt(const float dt) {
+		time += dt; //Seconds
+		if (time > 6) {
+			AddAsteroids(InRange(1, 10), 1);
+			AddAsteroids(InRange(1, 10), 2);
 
-			a.mPos.x = InRange((playArea.x / 2) * scale.x, playArea.x * scale.x);
-			a.mPos.y = InRange(100 * scale.y, playArea.y * scale.y);
-			a.animation.mCurrentFrame = 0;
-			a.animation.mFrameTime = 0.0f;
-			a.mScale = scale;
-			asteroids1.push_back(a);
-		}
-
-		for (int i = 0; i != 4; ++i) {
-			Model::Asteroid a;
-			a.animation.mTexture = common.getTextureResource("asteroid3");
-
-			a.mPos.x = InRange((playArea.x / 2) * scale.x, playArea.x * scale.x);
-			a.mPos.y = InRange(100 * scale.y, playArea.y * scale.y);
-			a.animation.mCurrentFrame = 0;
-			a.animation.mFrameTime = 0.0f;
-			a.mScale = scale;
-			asteroids2.push_back(a);
+			time = 0;
 		}
 	}
 
-	void AsteroidSystem::RenderAnimation(Renderer2D *renderer) {
-		RectangleF clip1 = { 0, 0, 72, 72 };
-		for (int i = 0; i != asteroids1.size(); ++i) {
-			clip1.x = (asteroids1[i].animation.mCurrentFrame % 5) * 72;
-			clip1.y = (asteroids1[i].animation.mCurrentFrame / 5) * 72;
+	void AsteroidSystem::AddAsteroids(int length, int type) {
+		int width = 0, height = 0;
+		switch (type) {
+			case 1:
+				for (int i = 0; i != length; ++i) {
+					Model::Asteroid a;
+					a.animation.mTexture = common.getTextureResource("asteroid1");
 
-			renderer->draw(asteroids1[i].animation.mTexture,
-						   asteroids1[i].mPos, //position
-						   clip1,
-						   Vec2(36, 36),
-						   0.0f,
-						   asteroids1[i].mScale,
-						   Color::White,
-						   0.0f);
+					a.animation.mTexture->getDimensions(&width, &height);
+					a.mPos.x = playArea.x + width;
+					a.mPos.y = InRange(100 * scale.y, playArea.y * scale.y);
+					a.mDir = Vec2(InRange(-1, -10));
+					a.mScale = scale;
+					a.mVel = Vec2(InRange(.1f, 1.f), InRange(.1f, 1.f));
+					a.mSize = Vec2(72, 72);
+
+					a.animation.mCurrentFrame = 0;
+					a.animation.mFrameTime = 0.0f;
+
+					asteroids1.push_back(a);
+				}
+				break;
+			case 2:
+				for (int i = 0; i != length; ++i) {
+					Model::Asteroid a;
+					a.animation.mTexture = common.getTextureResource("asteroid2");
+					
+					a.animation.mTexture->getDimensions(&width, &height);
+					a.mPos.x = playArea.x + width;
+					a.mPos.y = InRange(100 * scale.y, playArea.y * scale.y);
+					a.mDir = Vec2(InRange(-1, -10));
+					a.mScale = scale;
+					a.mVel = Vec2(InRange(.1f, 1.f), InRange(.1f, 1.f));
+					a.mSize = Vec2(64, 64);
+
+					a.animation.mCurrentFrame = 0;
+					a.animation.mFrameTime = 0.0f;
+
+					asteroids2.push_back(a);
+				}
+				break;
+			case 3:
+				for (int i = 0; i != length; ++i) {
+					Model::Asteroid a;
+					a.animation.mTexture = common.getTextureResource("asteroid3");
+
+					a.animation.mTexture->getDimensions(&width, &height);
+					a.mPos.x = playArea.x + width;
+					a.mPos.y = InRange(100 * scale.y, playArea.y * scale.y);
+					a.mDir = Vec2(InRange(-1, -10));
+					a.mScale = scale;
+					a.mVel = Vec2(InRange(.1f, 1.f), InRange(.1f, 1.f));
+					a.mSize = Vec2(32, 32);
+
+					a.animation.mCurrentFrame = 0;
+					a.animation.mFrameTime = 0.0f;
+
+					asteroids3.push_back(a);
+				}
+				break;
+			case 4:
+				for (int i = 0; i != length; ++i) {
+					Model::Asteroid a;
+					a.animation.mTexture = common.getTextureResource("asteroid4");
+
+					a.animation.mTexture->getDimensions(&width, &height);
+					a.mPos.x = playArea.x + width;
+					a.mPos.y = InRange(100 * scale.y, playArea.y * scale.y);
+					a.mDir = Vec2(InRange(-1, -10));
+					a.mScale = scale;
+					a.mVel = Vec2(InRange(.1f, 1.f), InRange(.1f, 1.f));
+					a.mSize = Vec2(32, 32);
+	
+					a.animation.mCurrentFrame = 0;
+					a.animation.mFrameTime = 0.0f;
+
+					asteroids4.push_back(a);
+				}
+				break;
+			case 5:
+				for (int i = 0; i != length; ++i) {
+					Model::Asteroid a;
+					a.animation.mTexture = common.getTextureResource("asteroid5");
+
+					a.animation.mTexture->getDimensions(&width, &height);
+					a.mPos.x = playArea.x + width;
+					a.mPos.y = InRange(100 * scale.y, playArea.y * scale.y);
+					a.mDir = Vec2(InRange(-1, -10));
+					a.mScale = scale;
+					a.mVel = Vec2(InRange(.1f, 1.f), InRange(.1f, 1.f));
+					a.mSize = Vec2(72, 72);
+
+					a.animation.mCurrentFrame = 0;
+					a.animation.mFrameTime = 0.0f;
+
+					asteroids4.push_back(a);
+				}
+				break;
+			case 6:
+				for (int i = 0; i != length; ++i) {
+					Model::Asteroid a;
+					a.animation.mTexture = common.getTextureResource("asteroid6");
+
+					a.animation.mTexture->getDimensions(&width, &height);
+					a.mPos.x = playArea.x + width;
+					a.mPos.y = InRange(100 * scale.y, playArea.y * scale.y);
+					a.mDir = Vec2(InRange(-1, -10));
+					a.mScale = scale;
+					a.mVel = Vec2(InRange(.1f, 1.f), InRange(.1f, 1.f));
+					a.mSize = Vec2(64, 64);
+
+					a.animation.mCurrentFrame = 0;
+					a.animation.mFrameTime = 0.0f;
+
+					asteroids4.push_back(a);
+				}
+				break;
 		}
+	}
 
-		RectangleF clip2 = { 0, 0, 32, 32 };
-		for (int i = 0; i != asteroids2.size(); ++i) {
-			clip2.x = (asteroids2[i].animation.mCurrentFrame % 5) * 32;
-			clip2.y = (asteroids2[i].animation.mCurrentFrame / 5) * 32;
+	void AsteroidSystem::InitAnimation() {
+		AddAsteroids(4, 1);
+		AddAsteroids(4, 2);
+		AddAsteroids(3, 3);
+		AddAsteroids(4, 4);
+		AddAsteroids(4, 5);
+		AddAsteroids(4, 6);
+	}
 
-			renderer->draw(asteroids2[i].animation.mTexture,
-						   asteroids2[i].mPos, //position
-						   clip2,   
-						   Vec2(32, 32),
+	void AsteroidSystem::Render(Renderer2D *renderer, std::vector<Model::Asteroid> &container) {
+		RectangleF clip = { 0, 0, 0, 0 };
+		for (int i = 0; i != container.size(); ++i) {
+			clip.x = (container[i].animation.mCurrentFrame % 5) * container[i].mSize.x;
+			clip.y = (container[i].animation.mCurrentFrame / 5) * container[i].mSize.y;
+			clip.w = container[i].mSize.x;
+			clip.h = container[i].mSize.y;
+
+			renderer->draw(container[i].animation.mTexture,
+						   container[i].mPos,
+						   clip,
+						   Vec2(clip.w / 2, clip.h / 2),
 						   0.0f,
-						   asteroids2[i].mScale,
+						   container[i].mScale,
 						   Color::White,
 						   0.0f);
 		}
 	}
 
-	void AsteroidSystem::UpdateAnimation(const float dt) {
-		for (int i = 0; i != asteroids1.size(); ++i) {
-			asteroids1[i].animation.mFrameTime += dt;
+	void AsteroidSystem::RenderAsteroids(Renderer2D *renderer) {
+		Render(renderer, asteroids1);
+		Render(renderer, asteroids2);
+		Render(renderer, asteroids3);
+		Render(renderer, asteroids4);
+		Render(renderer, asteroids5);
+		Render(renderer, asteroids6);
+	}
 
-			if (asteroids1[i].animation.mFrameTime >= 0.4) {
-				asteroids1[i].animation.mFrameTime = 0.0;
+	void AsteroidSystem::Update(const float dt, std::vector<Model::Asteroid> &container) {
+		for (int i = 0; i != container.size(); ++i) {
+			Model::Asteroid *a = &container[i];
+			a->animation.mFrameTime += dt;
 
-				asteroids1[i].animation.mCurrentFrame++;
-				if (asteroids1[i].animation.mCurrentFrame == 19) {
-					asteroids1[i].animation.mCurrentFrame++;
+			if (a->animation.mFrameTime >= 0.041) {
+				//Physics
+				a->mVel += Vec2(.01f, .01f);
+				a->mPos.x += a->mDir.x * a->mVel.x;
+
+				//Animation
+				a->animation.mFrameTime = 0.0;
+
+				a->animation.mCurrentFrame++;
+				if (a->animation.mCurrentFrame == 19) {
+					a->animation.mCurrentFrame++;
 				}
 
-				if (asteroids1[i].animation.mCurrentFrame > 19) {
-					asteroids1[i].animation.mCurrentFrame = 0;
-				}
-			}
-		}
-
-		for (int i = 0; i != asteroids2.size(); ++i) {
-			asteroids2[i].animation.mFrameTime += dt;
-
-			if (asteroids2[i].animation.mFrameTime >= 0.6) {
-				asteroids2[i].animation.mFrameTime = 0.0;
-
-				asteroids2[i].animation.mCurrentFrame++;
-				if (asteroids2[i].animation.mCurrentFrame == 19) {
-					asteroids2[i].animation.mCurrentFrame++;
-				}
-
-				if (asteroids2[i].animation.mCurrentFrame > 19) {
-					asteroids2[i].animation.mCurrentFrame = 0;
+				if (a->animation.mCurrentFrame > 19) {
+					a->animation.mCurrentFrame = 0;
 				}
 			}
 		}
+	}
+
+	void AsteroidSystem::UpdateAsteroids(const float dt) {
+		Update(dt, asteroids1);
+		Update(dt, asteroids2);
+		Update(dt, asteroids3);
+		Update(dt, asteroids4);
+		Update(dt, asteroids5);
+		Update(dt, asteroids6);
 	}
 }

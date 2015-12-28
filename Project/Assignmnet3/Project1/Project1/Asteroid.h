@@ -16,21 +16,12 @@ namespace Model {
 	};
 
 	struct Asteroid {
-		Vec2 mSize;
 		Vec2 mPos;
 		Vec2 mDir;
 		Vec2 mScale;
-
 		Vec2 mVel;
 
-		float mOrientation;
-		float mAngularVelocity;
-
-		Vec4 mTint;
-		float mMaxTime;
-		float mTime;
-
-		int mStop;
+		Vec2 mSize;
 
 		Model::AsteroidAnimation animation;
 	};

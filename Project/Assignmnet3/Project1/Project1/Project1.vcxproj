@@ -136,9 +136,6 @@
     <ClInclude Include="Asteroid.h" />
     <ClInclude Include="AsteroidSystem.h" />
     <ClInclude Include="ExplosionAnimation.h" />
-    <ClInclude Include="Ball.h" />
-    <ClInclude Include="BallSimulation.h" />
-    <ClInclude Include="BallView.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Defs.h" />
     <ClInclude Include="GameController.h" />
@@ -153,8 +150,6 @@
   <ItemGroup>
     <ClCompile Include="AsteroidSystem.cpp" />
     <ClCompile Include="ExplosionAnimation.cpp" />
-    <ClCompile Include="BallSimulation.cpp" />
-    <ClCompile Include="BallView.cpp" />
     <ClCompile Include="GameController.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PlaneSystem.cpp" />

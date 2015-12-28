@@ -29,7 +29,11 @@ namespace Controller {
 			common.registerTextureResource("plane", "image/plane.png");
 			common.registerTextureResource("shoot", "image/spark.png");
 			common.registerTextureResource("asteroid1", "image/asteroid1.png");
+			common.registerTextureResource("asteroid2", "image/asteroid2.png");
 			common.registerTextureResource("asteroid3", "image/asteroid3.png");
+			common.registerTextureResource("asteroid4", "image/asteroid4.png");
+			common.registerTextureResource("asteroid5", "image/asteroid5.png");
+			common.registerTextureResource("asteroid6", "image/asteroid6.png");
 
 			EventManager em;
 			common.setEventProcessor(&em);
@@ -64,7 +68,7 @@ namespace Controller {
 				common.frame();
 				timer.tick();
 
-				g->clear(Color::White, true);
+				g->clear(Color::Black, true);
 
 				accumulator += timer.getDeltaSeconds();
 
@@ -105,17 +109,20 @@ namespace Controller {
 
 					planeSystem.UpdateEmitter(TIME_STEP, boarderMargin);
 					shootSystem.UpdateEmitter(TIME_STEP);
-					asteroidSystem.UpdateAnimation(TIME_STEP);
+					asteroidSystem.UpdateAsteroids(TIME_STEP);
+
+					asteroidSystem.ExtendAsteroidBelt(TIME_STEP);
+
 				}
 
 				renderer->begin(Renderer2D::SPRITE_SORT_DEFERRED, Renderer2D::SPRITE_BLEND_ALPHA);
 
 				planeSystem.RenderEmitter(renderer);
 				shootSystem.RenderEmitter(renderer);
-				asteroidSystem.RenderAnimation(renderer);
+				asteroidSystem.RenderAsteroids(renderer);
 
 				//boarder
-				renderer->debugRect(origin, boarder, Color::Black);
+				renderer->debugRect(origin, boarder, Color::Green);
 
 				renderer->end();
 
