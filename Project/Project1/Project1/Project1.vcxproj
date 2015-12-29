@@ -135,6 +135,8 @@
   <ItemGroup>
     <ClInclude Include="Asteroid.h" />
     <ClInclude Include="AsteroidSystem.h" />
+    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="CollisionDetection.h" />
     <ClInclude Include="ExplosionAnimation.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Defs.h" />
@@ -149,6 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AsteroidSystem.cpp" />
+    <ClCompile Include="CollisionDetection.cpp" />
     <ClCompile Include="ExplosionAnimation.cpp" />
     <ClCompile Include="GameController.cpp" />
     <ClCompile Include="main.cpp" />

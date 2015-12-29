@@ -6,6 +6,7 @@
 #include "PlaneSystem.h"
 #include "ShootSystem.h"
 #include "AsteroidSystem.h"
+#include "CollisionDetection.h"
 #include "Camera.h"
 
 #include <vector>

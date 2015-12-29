@@ -28,12 +28,15 @@ namespace Controller {
 			//Load all textures	
 			common.registerTextureResource("plane", "image/plane.png");
 			common.registerTextureResource("shoot", "image/spark.png");
+
 			common.registerTextureResource("asteroid1", "image/asteroid1.png");
 			common.registerTextureResource("asteroid2", "image/asteroid2.png");
 			common.registerTextureResource("asteroid3", "image/asteroid3.png");
 			common.registerTextureResource("asteroid4", "image/asteroid4.png");
 			common.registerTextureResource("asteroid5", "image/asteroid5.png");
 			common.registerTextureResource("asteroid6", "image/asteroid6.png");
+
+			common.registerFontResource("sans16", 16, "fonts/ARIAL.ttf");
 
 			EventManager em;
 			common.setEventProcessor(&em);
@@ -44,14 +47,14 @@ namespace Controller {
 
 			Renderer2D *renderer = g->createRenderer2D();
 
-			float rot = 0.0f;
-
 			HiResTimer timer;
 			timer.restart();
 
 			View::PlaneSystem planeSystem(common, camera.scale, Vec2(screenWidth, screenHeight), boarderMargin);
-			View::ShootSystem shootSystem(common, camera.scale, Vec2(screenWidth - boarderMargin, screenHeight - boarderMargin));
+			View::ShootSystem shootSystem(common, Vec2(screenWidth - boarderMargin, screenHeight - boarderMargin));
 			View::AsteroidSystem asteroidSystem(common, camera.scale, Vec2(screenWidth - boarderMargin, screenHeight - boarderMargin));
+			Model::CollisionDetection collisionDetection;
+
 
 			const float TIME_STEP = 1.0 / 60.0f;
 			float accumulator = 0.0f;
@@ -100,7 +103,7 @@ namespace Controller {
 					if (inputState.isDown(Button::BUTTON_SPACE)) {
 						oldAccumulatorKeyPress = accumulatorKeyPress;
 
-						shootSystem.AddShoot(planeSystem.GetFirePosition());
+						shootSystem.AddShoot(camera.scale, planeSystem.GetFirePosition());
 					}
 				}
 
@@ -108,8 +111,8 @@ namespace Controller {
 					accumulator -= TIME_STEP;
 
 					planeSystem.UpdateEmitter(TIME_STEP, boarderMargin);
-					shootSystem.UpdateEmitter(TIME_STEP);
-					asteroidSystem.UpdateAsteroids(TIME_STEP);
+					shootSystem.Update(TIME_STEP);
+					asteroidSystem.Update(TIME_STEP);
 
 					asteroidSystem.ExtendAsteroidBelt(TIME_STEP);
 
@@ -118,13 +121,37 @@ namespace Controller {
 				renderer->begin(Renderer2D::SPRITE_SORT_DEFERRED, Renderer2D::SPRITE_BLEND_ALPHA);
 
 				planeSystem.RenderEmitter(renderer);
-				shootSystem.RenderEmitter(renderer);
-				asteroidSystem.RenderAsteroids(renderer);
+				shootSystem.Render(renderer);
+				asteroidSystem.Render(renderer);
+
+				RenderFont *font = common.getFontResource("sans16");
+				RenderText *text = g->createRenderText(font, "gg");
+
+				char buffer[128];
+				sprintf(buffer, "Score: , %s!", "Poäng");
+
+				text->setText(buffer);
+
+				int width, height;
+
+				text->getTexture()->getDimensions(&width, &height);
+
+				renderer->draw(text->getTexture(), Vec2(20, 20), { 0, 0, width, height },
+							   Vec2(0), 0.0f, Vec2(1, 1), Color::White, 0.0f
+							   );
+
+				//Collision
+				PairCollision pairCollision;
+				pairCollision = collisionDetection.AsteroidAndBullet(shootSystem.GetBulletsPositions(), asteroidSystem.GetAsteroidPositions());		
+				asteroidSystem.AsteroidIsHit(pairCollision.first);
+				shootSystem.RemoveBullet(pairCollision.second);
 
 				//boarder
 				renderer->debugRect(origin, boarder, Color::Green);
 
 				renderer->end();
+
+				delete text;
 
 				g->present();
 			}
