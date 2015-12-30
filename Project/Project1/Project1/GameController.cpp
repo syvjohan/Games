@@ -47,6 +47,9 @@ namespace Controller {
 
 			Renderer2D *renderer = g->createRenderer2D();
 
+			RenderFont *font = common.getFontResource("sans16");
+			RenderText *text = g->createRenderText(font, "gg");
+
 			HiResTimer timer;
 			timer.restart();
 
@@ -54,7 +57,7 @@ namespace Controller {
 			View::ShootSystem shootSystem(common, Vec2(screenWidth - boarderMargin, screenHeight - boarderMargin));
 			View::AsteroidSystem asteroidSystem(common, camera.scale, Vec2(screenWidth - boarderMargin, screenHeight - boarderMargin));
 			Model::CollisionDetection collisionDetection;
-
+			View::Score score(*text);
 
 			const float TIME_STEP = 1.0 / 60.0f;
 			float accumulator = 0.0f;
@@ -113,6 +116,7 @@ namespace Controller {
 					planeSystem.UpdateEmitter(TIME_STEP, boarderMargin);
 					shootSystem.Update(TIME_STEP);
 					asteroidSystem.Update(TIME_STEP);
+					//score.Update(TIME_STEP);
 
 					asteroidSystem.ExtendAsteroidBelt(TIME_STEP);
 
@@ -123,22 +127,7 @@ namespace Controller {
 				planeSystem.RenderEmitter(renderer);
 				shootSystem.Render(renderer);
 				asteroidSystem.Render(renderer);
-
-				RenderFont *font = common.getFontResource("sans16");
-				RenderText *text = g->createRenderText(font, "gg");
-
-				char buffer[128];
-				sprintf(buffer, "Score: , %s!", "Poäng");
-
-				text->setText(buffer);
-
-				int width, height;
-
-				text->getTexture()->getDimensions(&width, &height);
-
-				renderer->draw(text->getTexture(), Vec2(20, 20), { 0, 0, width, height },
-							   Vec2(0), 0.0f, Vec2(1, 1), Color::White, 0.0f
-							   );
+				//score.Render(renderer);
 
 				//Collision
 				PairCollision pairCollision;
@@ -151,10 +140,10 @@ namespace Controller {
 
 				renderer->end();
 
-				delete text;
-
 				g->present();
 			}
+
+			delete text;
 		}
 	}
 }

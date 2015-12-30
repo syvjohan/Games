@@ -65,7 +65,7 @@ namespace View {
 	std::vector<Vec4> ShootSystem::GetBulletsPositions() {
 		std::vector<Vec4> b;
 		for (auto it = bullets.begin(); it != bullets.end(); ++it) {
-			b.push_back(Vec4(it->mPos.x, it->mPos.y, it->mSize.x, it->mSize.y));
+			b.push_back(Vec4(it->mPos.x, it->mPos.y, (it->mSize.x * .15f) * it->mScale.x, (it->mSize.y * .15f) * it->mScale.y));
 		}
 		return b;
 	}

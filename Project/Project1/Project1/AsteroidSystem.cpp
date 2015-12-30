@@ -254,7 +254,7 @@ namespace View {
 	std::vector<Vec4> AsteroidSystem::GetAsteroidPositions() {
 		std::vector<Vec4> a;
 		for (auto it = asteroids.begin(); it != asteroids.end(); ++it) {
-			a.push_back(Vec4(it->mPos.x, it->mPos.y, it->mSize.x, it->mSize.y));
+			a.push_back(Vec4(it->mPos.x, it->mPos.y, it->mSize.x * it->mScale.x, it->mSize.y * it->mScale.y));
 		}
 		return a;
 	}

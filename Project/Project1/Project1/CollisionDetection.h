@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <framework.h>
+#include <algorithm>
 
 #include "Asteroid.h"
 

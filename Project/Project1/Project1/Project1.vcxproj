@@ -143,6 +143,7 @@
     <ClInclude Include="GameController.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="PlaneSystem.h" />
+    <ClInclude Include="Score.h" />
     <ClInclude Include="Shockwave.h" />
     <ClInclude Include="ShootSystem.h" />
     <ClInclude Include="SmokeSystem.h" />
@@ -156,6 +157,7 @@
     <ClCompile Include="GameController.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PlaneSystem.cpp" />
+    <ClCompile Include="Score.cpp" />
     <ClCompile Include="Shockwave.cpp" />
     <ClCompile Include="ShootSystem.cpp" />
     <ClCompile Include="SmokeSystem.cpp" />
