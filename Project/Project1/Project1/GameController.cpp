@@ -80,30 +80,29 @@ namespace Controller {
 				g->clear(Color::Black, true);
 
 				accumulator += timer.getDeltaSeconds();
+				accumulatorKeyPress += timer.getDeltaSeconds(); //setting timer for key pressing.
 
 				common.getInputState(&inputState);
+
 				if (inputState.isDown(Button::BUTTON_ESCAPE)) {
 					gRunning = 0;
 				}
 
 				if (inputState.isDown(Button::BUTTON_A)) {
 					player.Move(3);
-				} 
-				
+				}
+
 				if (inputState.isDown(Button::BUTTON_W)) {
 					player.Move(1);
-				} 
-				
+				}
+
 				if (inputState.isDown(Button::BUTTON_D)) {
 					player.Move(4);
-				} 
-				
+				}
+
 				if (inputState.isDown(Button::BUTTON_S)) {
 					player.Move(2);
-				} 
-				
-				//setting timer for key pressing.
-				accumulatorKeyPress += timer.getDeltaSeconds();
+				}
 
 				if (accumulatorKeyPress - oldAccumulatorKeyPress > .5f) {
 					if (inputState.isDown(Button::BUTTON_SPACE)) {

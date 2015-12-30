@@ -23,6 +23,7 @@ namespace View {
 
 		player.animation.mCurrentFrame = 0;
 		player.animation.mFrameTime = 0.0f;
+		player.animation.mFrameTime2 = 0.0f;
 	}
 
 	void Player::Update(const float dt, float boarderMargin) {
@@ -69,106 +70,119 @@ namespace View {
 	}
 
 	void Player::Move(int dir) {
+		player.animation.mFrameTime2 = 0.0f;
+
 		switch (dir) {
 			case 1:
 				player.mDir.y -= 1; //Upp
-				btnUp++;
+				if (btnUp != 4) { btnUp++; }
 				btnDown = 0;
 				btnForward = 0;
 				btnBack = 0;
 				break;
 			case 2:
 				player.mDir.y += 1; //Down
-				btnDown++;
+				if (btnDown != 4) { btnDown++; }
 				btnUp = 0;
 				btnForward = 0;
 				btnBack = 0;
 				break;
 			case 3:
 				player.mDir.x -= 1; //Back
-				btnBack++;
+				if (btnBack != 4) { btnBack++; }
 				btnForward = 0;
 				btnUp = 0;
 				btnDown = 0;
 				break;
 			case 4:
 				player.mDir.x += 1; //Forward
-				btnForward++;
+				if (btnForward != 4) { btnForward++; }
 				btnBack = 0;
 				btnUp = 0;
 				btnDown = 0;
 				break;
-			default:
-				break;
+			case 5:
+				btnBack = 0;
+				btnForward = 0;
+				btnUp = 0;
+				btnDown = 0;
 		}
 	}
 
 	void Player::Animation(const float dt) {
 		player.animation.mFrameTime += dt;
-		if (player.animation.mFrameTime >= 0.021) {
-			player.animation.mFrameTime = 0.0;
+		
+		player.animation.mFrameTime2 += dt;
+		if (player.animation.mFrameTime2 > .7f) {
+			player.animation.mCurrentFrame = 0;
+		} else {
+			if (player.animation.mFrameTime >= 0.58) {
+				player.animation.mFrameTime = 0.0;
 
-			if (btnBack > 0) {
-				switch (btnBack) {
-					case 1:
-						player.animation.mCurrentFrame = 0;
-						break;
-					case 2:
-						player.animation.mCurrentFrame = 1;
-						break;
-					case 3:
-						player.animation.mCurrentFrame = 2;
-						break;
-					case 4:
-						player.animation.mCurrentFrame = 3;
-						break;
+				if (btnBack > 0) {
+					switch (btnBack) {
+						case 1:
+							player.animation.mCurrentFrame = 0;
+							break;
+						case 2:
+							player.animation.mCurrentFrame = 1;
+							break;
+						case 3:
+							player.animation.mCurrentFrame = 2;
+							break;
+						case 4:
+							player.animation.mCurrentFrame = 3;
+							break;
+					}
+				} else if (btnForward > 0) {
+					switch (btnForward) {
+						case 1:
+							player.animation.mCurrentFrame = 0;
+							break;
+						case 2:
+							player.animation.mCurrentFrame = 1;
+							break;
+						case 3:
+							player.animation.mCurrentFrame = 2;
+							break;
+						case 4:
+							player.animation.mCurrentFrame = 3;
+							break;
+					}
+				} else if (btnDown > 0) {
+					switch (btnDown) {
+						case 1:
+							player.animation.mCurrentFrame = 0;
+							break;
+						case 2:
+							player.animation.mCurrentFrame = 1;
+							break;
+						case 3:
+							player.animation.mCurrentFrame = 2;
+							break;
+						case 4:
+							player.animation.mCurrentFrame = 3;
+							break;
+					}
+				} else if (btnUp > 0) {
+					switch (btnUp) {
+						case 1:
+							player.animation.mCurrentFrame = 0;
+							break;
+						case 2:
+							player.animation.mCurrentFrame = 1;
+							break;
+						case 3:
+							player.animation.mCurrentFrame = 2;
+							break;
+						case 4:
+							player.animation.mCurrentFrame = 3;
+							break;
+					}
 				}
-			} else if (btnForward > 0) {
-				switch (btnForward) {
-					case 1:
-						player.animation.mCurrentFrame = 0;
-						break;
-					case 2:
-						player.animation.mCurrentFrame = 1;
-						break;
-					case 3:
-						player.animation.mCurrentFrame = 2;
-						break;
-					case 4:
-						player.animation.mCurrentFrame = 3;
-						break;
-				}
-			} else if (btnDown > 0) {
-				switch (btnDown) {
-					case 1:
-						player.animation.mCurrentFrame = 0;
-						break;
-					case 2:
-						player.animation.mCurrentFrame = 1;
-						break;
-					case 3:
-						player.animation.mCurrentFrame = 2;
-						break;
-					case 4:
-						player.animation.mCurrentFrame = 3;
-						break;
-				}
-			} else if (btnUp > 0) {
-				switch (btnUp) {
-					case 1:
-						player.animation.mCurrentFrame = 0;
-						break;
-					case 2:
-						player.animation.mCurrentFrame = 1;
-						break;
-					case 3:
-						player.animation.mCurrentFrame = 2;
-						break;
-					case 4:
-						player.animation.mCurrentFrame = 3;
-						break;
-				}
-			}
+		}
+
+		
 		}
 	}
 

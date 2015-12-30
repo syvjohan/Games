@@ -4,6 +4,8 @@ namespace Model {
 	struct PlaneAnimation {
 		float mFrameTime;
 		int mCurrentFrame;
+
+		float mFrameTime2;
 	};
 
 	struct Plane {
