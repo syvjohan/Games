@@ -6,6 +6,8 @@ namespace View {
 	ShootSystem::ShootSystem(Common &common, Vec2 playArea) {
 		this->playArea = playArea;
 		this->common = common;
+
+		source = common.getAudio()->getSource();
 	}
 
 	ShootSystem::~ShootSystem() {}
@@ -24,6 +26,8 @@ namespace View {
 		b.mSize = Vec2(width, height);
 
 		bullets.push_back(b);
+
+		SoundEffect();
 	}
 
 	void ShootSystem::Update(const float dt) {
@@ -73,6 +77,13 @@ namespace View {
 	void ShootSystem::RemoveBullet(int index) {
 		if (index != -1) {
 			bullets.erase(bullets.begin() + index);
+		}
+	}
+
+	void ShootSystem::SoundEffect() {
+		if (source) {
+			source->play(common.getSoundResource("soundShoot"));
+
 		}
 	}
 }

@@ -148,7 +148,7 @@
     <ClInclude Include="ShootSystem.h" />
     <ClInclude Include="SmokeSystem.h" />
     <ClInclude Include="SplitterSystem.h" />
-    <ClInclude Include="Sprite.h" />
+    <ClInclude Include="Explosion.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AsteroidSystem.cpp" />

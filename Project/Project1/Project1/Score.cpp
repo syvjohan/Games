@@ -1,17 +1,21 @@
 #include "Score.h"
 
 namespace View {
-	Score::Score(RenderText &text) {
+	Score::Score(Common &common, Graphics *graphics) {
 		score = 0;
-		text = text;
+
+		font = common.getFontResource("sans16");
+		text = graphics->createRenderText(font, "gg");	
 	}
 
 	Score::Score() {}
 
-	Score::~Score() {}
+	Score::~Score() {
+		delete text;
+	}
 
-	void Score::Update(const float dt) {
-		sprintf(buffer, "Score: , %i", score);
+	void Score::Update() {
+		sprintf(buffer, "Score: %i", score);
 		text->setText(buffer);
 	}
 

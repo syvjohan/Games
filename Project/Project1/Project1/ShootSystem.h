@@ -8,24 +8,27 @@
 namespace View {
 	class ShootSystem {
 		public:
-		ShootSystem();
-		ShootSystem(Common &common, Vec2 playArea);
-		~ShootSystem();
+			ShootSystem();
+			ShootSystem(Common &common, Vec2 playArea);
+			~ShootSystem();
 
-		void AddShoot(Vec2 scale, Vec2 startPosition);
-		void Update(const float dt);
-		void Render(Renderer2D *renderer);
-		void RemoveBullet(int index);
+			void AddShoot(Vec2 scale, Vec2 startPosition);
+			void Update(const float dt);
+			void Render(Renderer2D *renderer);
+			void RemoveBullet(int index);
 
-		std::vector<Vec4> GetBulletsPositions();
+			std::vector<Vec4> GetBulletsPositions();
 
 		private:
-		void InitBullet(Model::Bullet *p, Vec2 scale);
-		void Init(Common &common, Vec2 scale, Vec2 playArea);
+			void InitBullet(Model::Bullet *p, Vec2 scale);
+			void Init(Common &common, Vec2 scale, Vec2 playArea);
 
-		Vec2 playArea;
-		Common common;
+			void SoundEffect();
 
-		std::vector<Model::Bullet> bullets;
+			AudioSource *source;
+			Vec2 playArea;
+			Common common;
+
+			std::vector<Model::Bullet> bullets;
 	};
 }

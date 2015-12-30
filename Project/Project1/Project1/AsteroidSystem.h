@@ -5,6 +5,7 @@
 
 #include "Asteroid.h"
 #include "Defs.h"
+#include "ExplosionAnimation.h"
 
 namespace View {
 	class AsteroidSystem {
@@ -21,6 +22,8 @@ namespace View {
 			
 			void AsteroidIsHit(int index);
 			std::vector<Vec4> GetAsteroidPositions();
+			int GetHitScore();
+			void ResetHitScore();
 
 		private:
 			float r1();
@@ -30,12 +33,17 @@ namespace View {
 			void AddAsteroids(int length, int type, Vec2 startPosition);
 			void RemoveAsteroids(int index);
 
+			void RenderExplosions(Renderer2D *renderer);
+			void UpdateExplosions(const float dt);
+
 			Common common;
 			Vec2 playArea;
 
 			float time;
+			int hitScore;
 
 			std::vector<Model::Asteroid> asteroids;
+			std::vector<View::ExplosionAnimation> explosions;
 	};
 
 }

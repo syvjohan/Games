@@ -41,6 +41,7 @@ namespace Model {
 		Vec2 mScale;
 		Vec2 mPlayArea;
 		int mType;
+		float mHealth;
 
 		Model::AsteroidAnimation animation;
 	};

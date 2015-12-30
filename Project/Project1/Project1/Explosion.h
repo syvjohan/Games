@@ -4,7 +4,7 @@ class Texture2D;
 
 namespace Model {
 
-	struct Animation {
+	struct ExplosionAnimation {
 		Vec2 mPos;
 		Vec2 mStart;
 		Vec2 mFrameSize;
@@ -13,6 +13,7 @@ namespace Model {
 		int mFrameCount;
 		Texture2D* mTexture;
 		int mCurrentFrame;
+		float lifetime;
 	};
 }
 

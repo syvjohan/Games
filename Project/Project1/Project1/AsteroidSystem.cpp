@@ -45,10 +45,12 @@ namespace View {
 					if (startPosition.x == -1 && startPosition.y == -1) {
 						a.mPos.x = playArea.x + 72;
 						a.mPos.y = InRange(72 * a.mScale.y, playArea.y * a.mScale.y);
+						a.mHealth = 1;
 					} else {
 						a.mScale = Vec2(a.mScale / 2);
 						a.mPos = startPosition;
 						a.mVel.y = InRange(-10, 10);
+						a.mHealth = .5f;
 					}
 					
 					a.mDir = Vec2(InRange(-1, -10), InRange(-1, 1));
@@ -70,10 +72,12 @@ namespace View {
 					if (startPosition.x == -1 && startPosition.y == -1) {
 						a.mPos.x = playArea.x + 64;
 						a.mPos.y = InRange(64 * a.mScale.y, playArea.y * a.mScale.y);
+						a.mHealth = 1;
 					} else {
 						a.mScale = Vec2(a.mScale / 2);
 						a.mPos = startPosition;
 						a.mVel.y = InRange(-10, 10);
+						a.mHealth = .5f;
 					}
 
 					a.mDir = Vec2(InRange(-1, -10), InRange(-1, 1));
@@ -95,10 +99,12 @@ namespace View {
 					if (startPosition.x == -1 && startPosition.y == -1) {
 						a.mPos.x = playArea.x + 32;
 						a.mPos.y = InRange(32 * a.mScale.y, playArea.y * a.mScale.y);
+						a.mHealth = 1;
 					} else {
 						a.mScale = Vec2(a.mScale / 2);
 						a.mPos = startPosition;
 						a.mVel.y = InRange(-10, 10);
+						a.mHealth = .5f;
 					}
 
 					a.mDir = Vec2(InRange(-1, -10), InRange(-1, 1));
@@ -120,10 +126,12 @@ namespace View {
 					if (startPosition.x == -1 && startPosition.y == -1) {
 						a.mPos.x = playArea.x + 32;
 						a.mPos.y = InRange(32 * a.mScale.y, playArea.y * a.mScale.y);
+						a.mHealth = 1;
 					} else {
 						a.mScale = Vec2(a.mScale / 2);
 						a.mPos = startPosition;
 						a.mVel.y = InRange(-10, 10);
+						a.mHealth = .5f;
 					}
 
 					a.mDir = Vec2(InRange(-1, -10), InRange(-1, 1));
@@ -145,10 +153,12 @@ namespace View {
 					if (startPosition.x == -1 && startPosition.y == -1) {
 						a.mPos.x = playArea.x + 72;
 						a.mPos.y = InRange(72 * a.mScale.y, playArea.y * a.mScale.y);
+						a.mHealth = 1;
 					} else {
 						a.mScale = Vec2(a.mScale / 2);
 						a.mPos = startPosition;
 						a.mVel.y = InRange(-10, 10);
+						a.mHealth = .5f;
 					}
 
 					a.mDir = Vec2(InRange(-1, -10), InRange(-1, 1));
@@ -170,10 +180,12 @@ namespace View {
 					if (startPosition.x == -1 && startPosition.y == -1) {
 						a.mPos.x = playArea.x + 64;
 						a.mPos.y = InRange(64 * a.mScale.y, playArea.y * a.mScale.y);
+						a.mHealth = 1;
 					} else {
 						a.mScale = Vec2(a.mScale / 2);
 						a.mPos = startPosition;
 						a.mVel.y = InRange(-10, 10);
+						a.mHealth = .5f;
 					}
 
 					a.mDir = Vec2(InRange(-1, -10), InRange(-1, 1));
@@ -200,26 +212,26 @@ namespace View {
 
 	void AsteroidSystem::Render(Renderer2D *renderer) {
 		RectangleF clip = { 0, 0, 0, 0 };
-		for (int i = 0; i != asteroids.size(); ++i) {
-			Model::Asteroid *a = &asteroids[i];
-			clip.x = (a->animation.mCurrentFrame % 5) * a->mSize.x;
-			clip.y = (a->animation.mCurrentFrame / 5) * a->mSize.y;
-			clip.w = a->mSize.x;
-			clip.h = a->mSize.y;
+		for (auto it = asteroids.begin(); it != asteroids.end(); ++it) {
+			clip.x = (it->animation.mCurrentFrame % 5) * it->mSize.x;
+			clip.y = (it->animation.mCurrentFrame / 5) * it->mSize.y;
+			clip.w = it->mSize.x;
+			clip.h = it->mSize.y;
 
-			renderer->draw(a->animation.mTexture,
-						   a->mPos,
+			renderer->draw(it->animation.mTexture,
+						   it->mPos,
 						   clip,
 						   Vec2(clip.w / 2, clip.h / 2),
 						   0.0f,
-						   a->mScale,
+						   it->mScale,
 						   Color::White,
 						   0.0f);
 		}
+
+		RenderExplosions(renderer);
 	}
 
 	void AsteroidSystem::Update(const float dt) {
-
 		for (auto it = asteroids.begin(); it != asteroids.end(); ++it) {
 			if (it->mPos.x + it->mSize.x < 0) {
 				it = asteroids.erase(it);
@@ -249,6 +261,8 @@ namespace View {
 				}
 			}
 		}
+
+		UpdateExplosions(dt);
 	}
 
 	std::vector<Vec4> AsteroidSystem::GetAsteroidPositions() {
@@ -261,12 +275,59 @@ namespace View {
 
 	void AsteroidSystem::AsteroidIsHit(int index) {
 		if (index != -1) {
-			AddAsteroids(2, asteroids.at(index).mType, Vec2(asteroids.at(index).mPos));
-			RemoveAsteroids(index);
+			Model::Asteroid *a = &asteroids[index];
+			if (a->mHealth == 1) {
+				//Create 2 new asteroids.
+				AddAsteroids(2, a->mType, Vec2(a->mPos));
+				RemoveAsteroids(index);
+				hitScore = 1;
+			} else if (a->mHealth == .5f) {
+				//Explosion
+				View::ExplosionAnimation explosion(common, Vec2(1, 1), a->mPos);
+				explosions.push_back(explosion);
+
+				//Erase asteroid.
+				asteroids.erase(asteroids.begin() + index);
+				hitScore = 2;
+			}
 		}
 	}
 
 	void AsteroidSystem::RemoveAsteroids(int index) {
 		asteroids.erase(asteroids.begin() + index);
+	}
+
+	void AsteroidSystem::RenderExplosions(Renderer2D *renderer) {
+		for (auto it = explosions.begin(); it != explosions.end(); ++it) {
+			if (it->HasEnd() == 1) {
+				it = explosions.erase(it);
+				if (it == explosions.end()) {
+					break;
+				}
+			} else {
+				it->Render(renderer);
+			}
+		}
+	}
+
+	void AsteroidSystem::UpdateExplosions(const float dt) {
+		for (auto it = explosions.begin(); it != explosions.end(); ++it) {
+			if (it->HasEnd() == 1) {				
+				it = explosions.erase(it);
+				if (it == explosions.end()) {
+					break;
+				}
+			} else {
+				it->Update(dt);
+			}
+		}
+	}
+
+	int AsteroidSystem::GetHitScore() {
+		return hitScore;
+	}
+
+	void AsteroidSystem::ResetHitScore() {
+		hitScore = 0;
 	}
 }

@@ -2,14 +2,16 @@
 
 #include <framework.h>
 
+class RenderText;
+
 namespace View {
 	class Score {
 		public:
-			Score(RenderText &text);
+			Score(Common &common, Graphics *graphics);
 			Score();
 			~Score();
 
-			void Update(const float dt);
+			void Update();
 			void Render(Renderer2D *renderer);
 			void UpdateScore(int i);
 
@@ -17,5 +19,6 @@ namespace View {
 			int score;
 			char buffer[128];
 			RenderText *text;
+			RenderFont *font;
 	};
 }

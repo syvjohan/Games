@@ -26,8 +26,12 @@ namespace Controller {
 		if (common.init(wParams)) {
 
 			//Load all textures	
+			common.registerSoundResource("soundExplosion", "sound/explosion.ogg");
+			common.registerSoundResource("soundShoot", "sound/fire.ogg");
+
 			common.registerTextureResource("plane", "image/plane.png");
 			common.registerTextureResource("shoot", "image/spark.png");
+			common.registerTextureResource("explosion", "image/explosion.png");
 
 			common.registerTextureResource("asteroid1", "image/asteroid1.png");
 			common.registerTextureResource("asteroid2", "image/asteroid2.png");
@@ -47,8 +51,7 @@ namespace Controller {
 
 			Renderer2D *renderer = g->createRenderer2D();
 
-			RenderFont *font = common.getFontResource("sans16");
-			RenderText *text = g->createRenderText(font, "gg");
+			
 
 			HiResTimer timer;
 			timer.restart();
@@ -57,7 +60,7 @@ namespace Controller {
 			View::ShootSystem shootSystem(common, Vec2(screenWidth - boarderMargin, screenHeight - boarderMargin));
 			View::AsteroidSystem asteroidSystem(common, camera.scale, Vec2(screenWidth - boarderMargin, screenHeight - boarderMargin));
 			Model::CollisionDetection collisionDetection;
-			View::Score score(*text);
+			View::Score score(common, g);
 
 			const float TIME_STEP = 1.0 / 60.0f;
 			float accumulator = 0.0f;
@@ -116,7 +119,7 @@ namespace Controller {
 					planeSystem.UpdateEmitter(TIME_STEP, boarderMargin);
 					shootSystem.Update(TIME_STEP);
 					asteroidSystem.Update(TIME_STEP);
-					//score.Update(TIME_STEP);
+					score.Update();
 
 					asteroidSystem.ExtendAsteroidBelt(TIME_STEP);
 
@@ -127,13 +130,16 @@ namespace Controller {
 				planeSystem.RenderEmitter(renderer);
 				shootSystem.Render(renderer);
 				asteroidSystem.Render(renderer);
-				//score.Render(renderer);
+				score.Render(renderer);
 
 				//Collision
 				PairCollision pairCollision;
 				pairCollision = collisionDetection.AsteroidAndBullet(shootSystem.GetBulletsPositions(), asteroidSystem.GetAsteroidPositions());		
 				asteroidSystem.AsteroidIsHit(pairCollision.first);
 				shootSystem.RemoveBullet(pairCollision.second);
+
+				score.UpdateScore(asteroidSystem.GetHitScore());
+				asteroidSystem.ResetHitScore();
 
 				//boarder
 				renderer->debugRect(origin, boarder, Color::Green);
@@ -142,8 +148,6 @@ namespace Controller {
 
 				g->present();
 			}
-
-			delete text;
 		}
 	}
 }

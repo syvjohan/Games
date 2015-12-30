@@ -14,10 +14,10 @@ struct PairCollision {
 namespace Model {
 	class CollisionDetection {
 		public:
-		CollisionDetection();
-		~CollisionDetection();
+			CollisionDetection();
+			~CollisionDetection();
 
-		PairCollision AsteroidAndBullet(std::vector<Vec4> bullets, std::vector<Vec4> asteroids);
+			PairCollision AsteroidAndBullet(std::vector<Vec4> bullets, std::vector<Vec4> asteroids);
 	
 	};
 }

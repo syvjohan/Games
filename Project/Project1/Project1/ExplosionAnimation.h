@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Sprite.h"
+#include "Explosion.h"
 
 #include <framework.h>
 
@@ -8,16 +8,20 @@ namespace View {
 	class ExplosionAnimation {
 		public:
 		ExplosionAnimation();
-		ExplosionAnimation(Common &common, Vec2 scale, Vec2 screen);
+		ExplosionAnimation(Common &common, Vec2 scale, Vec2 startPosition);
 		~ExplosionAnimation();
 
-		void UpdateEmitter(const float dt);
-		void RenderEmitter(Renderer2D *renderer);
-		void FreeMem();
+		void Update(const float dt);
+		void Render(Renderer2D *renderer);
+		int HasEnd();
+		void PlaySoundEffect();
 
 		private:
-		void InitAnimation(Common &common, Vec2 scale, Vec2 screen);
+		void InitAnimation(Vec2 scale, Vec2 startPosition);
 
-		Model::Animation animation;
+		Model::ExplosionAnimation animation;
+
+		AudioSource *source;
+		Common common;
 	};
 }
