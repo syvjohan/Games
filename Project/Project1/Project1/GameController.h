@@ -3,7 +3,7 @@
 #include <framework.h>
 
 #include "Defs.h"
-#include "PlaneSystem.h"
+#include "player.h"
 #include "ShootSystem.h"
 #include "AsteroidSystem.h"
 #include "CollisionDetection.h"

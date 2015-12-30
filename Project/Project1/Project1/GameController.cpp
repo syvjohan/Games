@@ -56,7 +56,7 @@ namespace Controller {
 			HiResTimer timer;
 			timer.restart();
 
-			View::PlaneSystem planeSystem(common, camera.scale, Vec2(screenWidth, screenHeight), boarderMargin);
+			View::Player player(common, camera.scale, Vec2(screenWidth - boarderMargin, screenHeight - boarderMargin));
 			View::ShootSystem shootSystem(common, Vec2(screenWidth - boarderMargin, screenHeight - boarderMargin));
 			View::AsteroidSystem asteroidSystem(common, camera.scale, Vec2(screenWidth - boarderMargin, screenHeight - boarderMargin));
 			Model::CollisionDetection collisionDetection;
@@ -87,19 +87,19 @@ namespace Controller {
 				}
 
 				if (inputState.isDown(Button::BUTTON_A)) {
-					planeSystem.Move(3);
+					player.Move(3);
 				} 
 				
 				if (inputState.isDown(Button::BUTTON_W)) {
-					planeSystem.Move(1);
+					player.Move(1);
 				} 
 				
 				if (inputState.isDown(Button::BUTTON_D)) {
-					planeSystem.Move(4);
+					player.Move(4);
 				} 
 				
 				if (inputState.isDown(Button::BUTTON_S)) {
-					planeSystem.Move(2);
+					player.Move(2);
 				} 
 				
 				//setting timer for key pressing.
@@ -109,14 +109,14 @@ namespace Controller {
 					if (inputState.isDown(Button::BUTTON_SPACE)) {
 						oldAccumulatorKeyPress = accumulatorKeyPress;
 
-						shootSystem.AddShoot(camera.scale, planeSystem.GetFirePosition());
+						shootSystem.AddShoot(camera.scale, player.GetFirePosition());
 					}
 				}
 
 				while (accumulator >= TIME_STEP) {
 					accumulator -= TIME_STEP;
 
-					planeSystem.UpdateEmitter(TIME_STEP, boarderMargin);
+					player.Update(TIME_STEP, boarderMargin);
 					shootSystem.Update(TIME_STEP);
 					asteroidSystem.Update(TIME_STEP);
 					score.Update();
@@ -127,7 +127,7 @@ namespace Controller {
 
 				renderer->begin(Renderer2D::SPRITE_SORT_DEFERRED, Renderer2D::SPRITE_BLEND_ALPHA);
 
-				planeSystem.RenderEmitter(renderer);
+				player.Render(renderer);
 				shootSystem.Render(renderer);
 				asteroidSystem.Render(renderer);
 				score.Render(renderer);
