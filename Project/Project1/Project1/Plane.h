@@ -5,7 +5,7 @@ namespace Model {
 		float mFrameTime;
 		int mCurrentFrame;
 
-		float mFrameTime2;
+		float mFrameTimeBtnRelease;
 	};
 
 	struct Plane {

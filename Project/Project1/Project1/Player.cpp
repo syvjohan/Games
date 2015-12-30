@@ -15,7 +15,7 @@ namespace View {
 		player.mPos.y = playArea.y / 2;
 		player.mPlayArea = playArea;
 		player.mVel = Vec2(1, 1);
-		player.mAcc = Vec2(1, 1);
+		player.mAcc = Vec2(3, 3);
 		player.mDir = Vec2(0, 0);
 		player.mScale = scale;
 		player.mOrientation = 1.58f;
@@ -23,15 +23,15 @@ namespace View {
 
 		player.animation.mCurrentFrame = 0;
 		player.animation.mFrameTime = 0.0f;
-		player.animation.mFrameTime2 = 0.0f;
+		player.animation.mFrameTimeBtnRelease = 0.0f;
 	}
 
 	void Player::Update(const float dt, float boarderMargin) {
 		Animation(dt);
 
 		//Game physics
-		player.mPos.x += player.mDir.x * player.mVel.x * dt;
-		player.mPos.y += player.mDir.y * player.mVel.y * dt;
+		player.mPos.x += player.mDir.x * player.mAcc.x * dt;
+		player.mPos.y += player.mDir.y * player.mAcc.y * dt;
 
 		if (player.mPos.x < boarderMargin) {
 			player.mPos.x = boarderMargin;
@@ -70,7 +70,7 @@ namespace View {
 	}
 
 	void Player::Move(int dir) {
-		player.animation.mFrameTime2 = 0.0f;
+		player.animation.mFrameTimeBtnRelease = 0.0f;
 
 		switch (dir) {
 			case 1:
@@ -112,8 +112,8 @@ namespace View {
 	void Player::Animation(const float dt) {
 		player.animation.mFrameTime += dt;
 		
-		player.animation.mFrameTime2 += dt;
-		if (player.animation.mFrameTime2 > .7f) {
+		player.animation.mFrameTimeBtnRelease += dt;
+		if (player.animation.mFrameTimeBtnRelease > .7f) {
 			player.animation.mCurrentFrame = 0;
 		} else {
 			if (player.animation.mFrameTime >= 0.58) {
