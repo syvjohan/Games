@@ -61,6 +61,7 @@ namespace Controller {
 			View::AsteroidSystem asteroidSystem(common, camera.scale, Vec2(screenWidth - boarderMargin, screenHeight - boarderMargin));
 			Model::CollisionDetection collisionDetection;
 			View::Score score(common, g);
+			View::PlayerHealth playerHealth(common, g);
 
 			const float TIME_STEP = 1.0 / 60.0f;
 			float accumulator = 0.0f;
@@ -119,6 +120,7 @@ namespace Controller {
 					shootSystem.Update(TIME_STEP);
 					asteroidSystem.Update(TIME_STEP);
 					score.Update();
+					playerHealth.Update();
 
 					asteroidSystem.ExtendAsteroidBelt(TIME_STEP);
 
@@ -130,15 +132,25 @@ namespace Controller {
 				shootSystem.Render(renderer);
 				asteroidSystem.Render(renderer);
 				score.Render(renderer);
+				playerHealth.Render(renderer);
 
 				//Collision
-				PairCollision pairCollision;
-				pairCollision = collisionDetection.AsteroidAndBullet(shootSystem.GetBulletsPositions(), asteroidSystem.GetAsteroidPositions());		
-				asteroidSystem.AsteroidIsHit(pairCollision.first);
-				shootSystem.RemoveBullet(pairCollision.second);
+				PairCollision pairCollision1;
+				pairCollision1 = collisionDetection.AsteroidAndBullet(shootSystem.GetBulletsPositions(), asteroidSystem.GetAsteroidPositions());		
+				asteroidSystem.AsteroidIsHit(pairCollision1.first);
+				shootSystem.RemoveBullet(pairCollision1.second);
 
 				score.UpdateScore(asteroidSystem.GetHitScore());
 				asteroidSystem.ResetHitScore();
+
+				//Collision
+				PairCollision pairCollision2;
+				pairCollision2 = collisionDetection.AsteroidAndPlayer(player.GetPosition(), asteroidSystem.GetAsteroidPositions());
+				player.IsHit(pairCollision2.second);
+				asteroidSystem.AsteroidIsHit(pairCollision2.first);
+
+				playerHealth.UpdateHealth(player.GetHealth());
+
 
 				//boarder
 				renderer->debugRect(origin, boarder, Color::Green);

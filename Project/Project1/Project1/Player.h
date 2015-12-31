@@ -2,6 +2,7 @@
 
 #include "Defs.h"
 #include "Plane.h"
+#include "ExplosionAnimation.h"
 
 #include <framework.h>
 
@@ -18,10 +19,16 @@ namespace View {
 			void Move(int dir);
 
 			Vec2 GetFirePosition();
+			Vec4 GetPosition();
+			int GetHealth();
+			void IsHit(int  i);
 
 		private:
-			void Init(Common &common, Vec2 scale, Vec2 playArea);
+			void Init(Vec2 scale, Vec2 playArea);
 			void Animation(const float dt);
+
+			void UpdateExplosion(const float dt);
+			void RenderExplosion(Renderer2D *renderer);
 
 			int btnUp = 0; //4 steps.
 			int btnDown = 0; //4 steps.
@@ -29,6 +36,8 @@ namespace View {
 			int btnForward = 0; //4 steps.
 
 			Model::Plane player;
+			View::ExplosionAnimation *explosion;
+			Common common;
 	};
 }
 

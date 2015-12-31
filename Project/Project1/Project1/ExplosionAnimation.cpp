@@ -1,7 +1,6 @@
 #include "ExplosionAnimation.h"
 
 namespace View {
-
 	ExplosionAnimation::ExplosionAnimation() {}
 
 	ExplosionAnimation::ExplosionAnimation(Common &common, Vec2 scale, Vec2 startPosition) {
@@ -12,7 +11,9 @@ namespace View {
 		PlaySoundEffect();
 	}
 
-	ExplosionAnimation::~ExplosionAnimation() {}
+	ExplosionAnimation::~ExplosionAnimation() {
+
+	}
 
 	void ExplosionAnimation::InitAnimation(Vec2 scale, Vec2 startPosition) {
 		animation.mTexture = common.getTextureResource("explosion");

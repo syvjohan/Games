@@ -283,7 +283,7 @@ namespace View {
 				hitScore = 1;
 			} else if (a->mHealth == .5f) {
 				//Explosion
-				View::ExplosionAnimation explosion(common, Vec2(1, 1), a->mPos);
+				View::ExplosionAnimation explosion(common, Vec2(.6, .6), a->mPos);
 				explosions.push_back(explosion);
 
 				//Erase asteroid.

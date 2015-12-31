@@ -18,7 +18,7 @@ namespace Model {
 			~CollisionDetection();
 
 			PairCollision AsteroidAndBullet(std::vector<Vec4> bullets, std::vector<Vec4> asteroids);
-	
+			PairCollision AsteroidAndPlayer(Vec4 player, std::vector<Vec4> asteroids);
 	};
 }
 

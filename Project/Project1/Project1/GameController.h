@@ -8,6 +8,7 @@
 #include "AsteroidSystem.h"
 #include "CollisionDetection.h"
 #include "Score.h"
+#include "PlayerHealth.h"
 #include "Camera.h"
 
 #include <vector>
