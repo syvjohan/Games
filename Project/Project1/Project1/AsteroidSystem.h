@@ -11,7 +11,7 @@ namespace View {
 	class AsteroidSystem {
 		public:
 			AsteroidSystem();
-			AsteroidSystem(Common &common, Vec2 scale, Vec2 playArea);
+			AsteroidSystem(Common *common, Vec2 scale, Vec2 playArea);
 			~AsteroidSystem();
 
 			void InitAsteroids();
@@ -26,6 +26,8 @@ namespace View {
 			void ResetHitScore();
 
 		private:
+			const int defaultHealth = 100;
+
 			float r1();
 			float r2();
 			float InRange(float min, float max);
@@ -36,7 +38,7 @@ namespace View {
 			void RenderExplosions(Renderer2D *renderer);
 			void UpdateExplosions(const float dt);
 
-			Common common;
+			Common *common;
 			Vec2 playArea;
 
 			float time;

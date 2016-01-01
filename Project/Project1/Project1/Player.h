@@ -10,7 +10,7 @@ namespace View {
 	class Player {
 		public:
 			Player();
-			Player(Common &common, Vec2 scale, Vec2 playArea);
+			Player(Common *common, Vec2 scale, Vec2 playArea);
 			~Player();
 
 			void Update(const float dt, float BoarderMargin);
@@ -35,9 +35,11 @@ namespace View {
 			int btnBack = 0; //4 steps.
 			int btnForward = 0; //4 steps.
 
+			const int defaultHealth = 100;
+
 			Model::Plane player;
 			View::ExplosionAnimation *explosion;
-			Common common;
+			Common *common;
 	};
 }
 

@@ -3,11 +3,11 @@
 namespace View {
 	ExplosionAnimation::ExplosionAnimation() {}
 
-	ExplosionAnimation::ExplosionAnimation(Common &common, Vec2 scale, Vec2 startPosition) {
+	ExplosionAnimation::ExplosionAnimation(Common *common, Vec2 scale, Vec2 startPosition) {
 		this->common = common;
 		InitAnimation(scale, startPosition);
 
-		source = common.getAudio()->getSource();
+		source = common->getAudio()->getSource();
 		PlaySoundEffect();
 	}
 
@@ -16,7 +16,7 @@ namespace View {
 	}
 
 	void ExplosionAnimation::InitAnimation(Vec2 scale, Vec2 startPosition) {
-		animation.mTexture = common.getTextureResource("explosion");
+		animation.mTexture = common->getTextureResource("explosion");
 
 		animation.mPos.x = startPosition.x * scale.x;
 		animation.mPos.y = startPosition.y * scale.y;
@@ -69,7 +69,7 @@ namespace View {
 
 	void ExplosionAnimation::PlaySoundEffect() {
 		if (source) {
-			source->play(common.getSoundResource("soundExplosion"));
+			source->play(common->getSoundResource("soundExplosion"));
 		}
 	}
 }

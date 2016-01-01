@@ -3,18 +3,18 @@
 namespace View {
 	ShootSystem::ShootSystem() {}
 
-	ShootSystem::ShootSystem(Common &common, Vec2 playArea) {
+	ShootSystem::ShootSystem(Common *common, Vec2 playArea) {
 		this->playArea = playArea;
 		this->common = common;
 
-		source = common.getAudio()->getSource();
+		source = common->getAudio()->getSource();
 	}
 
 	ShootSystem::~ShootSystem() {}
 
-	void ShootSystem::AddShoot(Vec2 scale, Vec2 startPosition) {
+	void ShootSystem::AddBullet(Vec2 scale, Vec2 startPosition) {
 		Model::Bullet b;
-		b.mTexture = common.getTextureResource("shoot");
+		b.mTexture = common->getTextureResource("shoot");
 		b.mPos = startPosition;
 		b.mVel = Vec2(10, 0);
 		b.mDir = Vec2(10, 0);
@@ -82,7 +82,7 @@ namespace View {
 
 	void ShootSystem::SoundEffect() {
 		if (source) {
-			source->play(common.getSoundResource("soundShoot"));
+			source->play(common->getSoundResource("soundShoot"));
 
 		}
 	}

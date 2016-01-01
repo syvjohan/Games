@@ -8,7 +8,7 @@ namespace View {
 	class ExplosionAnimation {
 		public:
 		ExplosionAnimation();
-		ExplosionAnimation(Common &common, Vec2 scale, Vec2 startPosition);
+		ExplosionAnimation(Common *common, Vec2 scale, Vec2 startPosition);
 		~ExplosionAnimation();
 
 		void Update(const float dt);
@@ -22,6 +22,6 @@ namespace View {
 		Model::ExplosionAnimation animation;
 
 		AudioSource *source;
-		Common common;
+		Common *common;
 	};
 }

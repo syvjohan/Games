@@ -9,10 +9,10 @@ namespace View {
 	class ShootSystem {
 		public:
 			ShootSystem();
-			ShootSystem(Common &common, Vec2 playArea);
+			ShootSystem(Common *common, Vec2 playArea);
 			~ShootSystem();
 
-			void AddShoot(Vec2 scale, Vec2 startPosition);
+			void AddBullet(Vec2 scale, Vec2 startPosition);
 			void Update(const float dt);
 			void Render(Renderer2D *renderer);
 			void RemoveBullet(int index);
@@ -27,7 +27,7 @@ namespace View {
 
 			AudioSource *source;
 			Vec2 playArea;
-			Common common;
+			Common *common;
 
 			std::vector<Model::Bullet> bullets;
 	};

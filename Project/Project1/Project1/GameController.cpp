@@ -56,9 +56,9 @@ namespace Controller {
 			HiResTimer timer;
 			timer.restart();
 
-			View::Player player(common, camera.scale, Vec2(screenWidth - boarderMargin, screenHeight - boarderMargin));
-			View::ShootSystem shootSystem(common, Vec2(screenWidth - boarderMargin, screenHeight - boarderMargin));
-			View::AsteroidSystem asteroidSystem(common, camera.scale, Vec2(screenWidth - boarderMargin, screenHeight - boarderMargin));
+			View::Player player(&common, camera.scale, Vec2(screenWidth - boarderMargin, screenHeight - boarderMargin));
+			View::ShootSystem shootSystem(&common, Vec2(screenWidth - boarderMargin, screenHeight - boarderMargin));
+			View::AsteroidSystem asteroidSystem(&common, camera.scale, Vec2(screenWidth - boarderMargin, screenHeight - boarderMargin));
 			Model::CollisionDetection collisionDetection;
 			View::Score score(common, g);
 			View::PlayerHealth playerHealth(common, g);
@@ -109,7 +109,7 @@ namespace Controller {
 					if (inputState.isDown(Button::BUTTON_SPACE)) {
 						oldAccumulatorKeyPress = accumulatorKeyPress;
 
-						shootSystem.AddShoot(camera.scale, player.GetFirePosition());
+						shootSystem.AddBullet(camera.scale, player.GetFirePosition());
 					}
 				}
 
@@ -123,7 +123,6 @@ namespace Controller {
 					playerHealth.Update();
 
 					asteroidSystem.ExtendAsteroidBelt(TIME_STEP);
-
 				}
 
 				renderer->begin(Renderer2D::SPRITE_SORT_DEFERRED, Renderer2D::SPRITE_BLEND_ALPHA);
@@ -146,7 +145,9 @@ namespace Controller {
 				//Collision
 				PairCollision pairCollision2;
 				pairCollision2 = collisionDetection.AsteroidAndPlayer(player.GetPosition(), asteroidSystem.GetAsteroidPositions());
+				
 				player.IsHit(pairCollision2.second);
+				
 				asteroidSystem.AsteroidIsHit(pairCollision2.first);
 
 				playerHealth.UpdateHealth(player.GetHealth());

@@ -4,24 +4,6 @@
 
 #include <vector>
 
-class Texture2D;
-
-//class GameObject {
-//
-//};
-//
-//class Player : public GameObject {
-//
-//};
-//
-//class Asteroid : public GameObject {
-//
-//};
-//
-//std::vector<GameObject*> objects;
-//objects.push_back(new Player());
-//objects.push_back(new Asteroid());
-
 namespace Model {
 	struct AsteroidAnimation {
 		Vec2 mStart;
@@ -42,6 +24,7 @@ namespace Model {
 		Vec2 mPlayArea;
 		int mType;
 		float mHealth;
+		Color mColor;
 
 		Model::AsteroidAnimation animation;
 	};

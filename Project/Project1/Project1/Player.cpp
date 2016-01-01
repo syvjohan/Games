@@ -3,7 +3,7 @@
 namespace View {
 	Player::Player() {}
 
-	Player::Player(Common &common, Vec2 scale, Vec2 playerArea) {
+	Player::Player(Common *common, Vec2 scale, Vec2 playerArea) {
 		this->common = common;
 		explosion = NULL;
 		Init(scale, playerArea);
@@ -12,7 +12,7 @@ namespace View {
 	Player::~Player() {}
 
 	void Player::Init( Vec2 scale, Vec2 playArea) {
-		player.mTexture = common.getTextureResource("plane");
+		player.mTexture = common->getTextureResource("plane");
 		player.mPos.x = playArea.x / 12;
 		player.mPos.y = playArea.y / 2;
 		player.mPlayArea = playArea;
@@ -23,7 +23,7 @@ namespace View {
 		player.mOrientation = 1.58f;
 		player.mSize = Vec2(116, 140);
 		player.mColor = Color::White;
-		player.mHealth = 100;
+		player.mHealth = defaultHealth;
 
 		player.animation.mCurrentFrame = 0;
 		player.animation.mFrameTime = 0.0f;
@@ -121,12 +121,11 @@ namespace View {
 	void Player::Animation(const float dt) {
 		if (player.animation.mFramTimeIsHit > 0) {
 			player.animation.mFramTimeIsHit += dt;
-			if (player.animation.mFramTimeIsHit == .6f) {
+			if (player.animation.mFramTimeIsHit >= .25f) {
 				player.mColor = Color::White;
 				player.animation.mFramTimeIsHit = 0;
 			}
 		}
-
 
 		player.animation.mFrameTime += dt;
 		
@@ -212,20 +211,23 @@ namespace View {
 
 	void Player::IsHit(int i) {
 		if (i != -1) {
-			player.animation.mFramTimeIsHit = .016f;
-			player.mColor = Color::Red;
-			player.mHealth -= 50;
+			if (player.mHealth == defaultHealth) {
+				player.animation.mFramTimeIsHit = .001f;
+				player.mColor = Color::Red;
+				player.mHealth = defaultHealth / 2;
+			}
 
 			//Explosion
-			if (player.mHealth <= 0) {
-				View::ExplosionAnimation e(common, Vec2(1, 1), player.mPos);
-				explosion = &e;
+			if (player.mHealth == (defaultHealth / 2) && player.animation.mFramTimeIsHit == 0) {
+				player.mHealth = 0;
 
-				//Position player outside screen.
-				///*player.mPos = Vec2(-200, -200);
-				//player.mDir = Vec2(0, 0);
-				//player.mVel = Vec2(0, 0);
-				//player.mAcc = Vec2(0, 0);*/
+				explosion = DBG_NEW View::ExplosionAnimation(common, Vec2(1, 1), player.mPos);
+				exit(0);
+				//Player is dead, remove player.
+				player.mPos = Vec2(0, 0);
+				player.mDir = Vec2(0, 0);
+				player.mVel = Vec2(0, 0);
+				player.mAcc = Vec2(0, 0);
 			}
 		}
 	}
