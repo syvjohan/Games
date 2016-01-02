@@ -53,9 +53,14 @@ namespace Model {
 			if (e->Type() == ENTITY_PLAYER) {
 				for (auto view : mViews) {
 					bool btnIsPressed = view->OnPlayerUpdatedAnimation((NewPlayer*)e);
-					((NewPlayer*)e)->OnUpdateFrameTimes(btnIsPressed); //Update frame
+					((NewPlayer*)e)->OnUpdateFrameTimes(btnIsPressed);
 
+					((NewPlayer*)e)->OnUpdatePlayerPhysics(timer);
 					view->OnPlayerUpdatedPhysics((NewPlayer*)e, timer);
+				}
+			} else if (e->Type() == ENTITY_BULLET) {
+				for (auto view : mViews) {
+
 				}
 			}
 		}
@@ -70,20 +75,20 @@ namespace Model {
 			if (e->Type() == ENTITY_PLAYER) {
 				NewPlayer *player = ((NewPlayer*)e);
 
-				if (player->params.mPos.x < border.x) {
-					player->params.mPos.x = border.x;
+				if (player->planeParams.mPos.x < border.x) {
+					player->planeParams.mPos.x = border.x;
 				}
 
-				if (player->params.mPos.x + player->params.mSize.x + (border.x * 2) > mPlayArea.x) {
-					player->params.mPos.x = mPlayArea.x - player->params.mSize.x - (border.x * 2);
+				if (player->planeParams.mPos.x + player->planeParams.mSize.x + (border.x * 2) > mPlayArea.x) {
+					player->planeParams.mPos.x = mPlayArea.x - player->planeParams.mSize.x - (border.x * 2);
 				}
 
-				if (player->params.mPos.y < border.y + player->params.mSize.x) {
-					player->params.mPos.y = border.y + player->params.mSize.x; //Sprite is rotated.
+				if (player->planeParams.mPos.y < border.y + player->planeParams.mSize.x) {
+					player->planeParams.mPos.y = border.y + player->planeParams.mSize.x; //Sprite is rotated.
 				}
 
-				if (player->params.mPos.y > mPlayArea.y) {
-					player->params.mPos.y = mPlayArea.y;
+				if (player->planeParams.mPos.y > mPlayArea.y) {
+					player->planeParams.mPos.y = mPlayArea.y;
 				}
 			}
 		}
@@ -102,8 +107,14 @@ namespace Model {
 	void ManagerModel::OnMovePlayer(const Vec2 &delta) {
 		for (Entity *e : mEntities) {
 			if (e->Type() == ENTITY_PLAYER) {
-				((NewPlayer*)e)->params.mDir += delta;
+				((NewPlayer*)e)->planeParams.mDir += delta;
 			}
+		}
+	}
+
+	void ManagerModel::OnShotMoved(Shot *p) {
+		for (View::ManagerView *v : mViews) {
+			v->OnShotMoved(p);
 		}
 	}
 

@@ -9,32 +9,37 @@ namespace Model {
 	void NewPlayer::OnInit(ManagerModel *m) {
 		Entity::OnInit(m);
 
-		params.mPos.y = m->GetPlayArea().x / 12;
-		params.mPos.y = m->GetPlayArea().y / 2;
-		params.mVel = Vec2(1, 1);
-		params.mAcc = Vec2(5, 5);
-		params.mDir = Vec2(0, 0);
-		params.mScale = Vec2(1, 1);
-		params.mRotation = 1.58f;
-		params.mSize = Vec2(116, 140);
-		params.mColor = Color::White;
-		params.mHealth = defaultHealth;
+		planeParams.mPos.y = m->GetPlayArea().x / 12;
+		planeParams.mPos.y = m->GetPlayArea().y / 2;
+		planeParams.mVel = Vec2(1, 1);
+		planeParams.mAcc = Vec2(5, 5);
+		planeParams.mDir = Vec2(0, 0);
+		planeParams.mScale = Vec2(1, 1);
+		planeParams.mRotation = 1.58f;
+		planeParams.mSize = Vec2(116, 140);
+		planeParams.mColor = Color::White;
+		planeParams.mHealth = defaultHealth;
 
-		params.animation.mCurrentFrame = 0;
-		params.animation.mFrameTime = 0.0f;
-		params.animation.mFrameTimeIsHit = 0.0f;
+		planeParams.animation.mCurrentFrame = 0;
+		planeParams.animation.mFrameTime = 0.0f;
+		planeParams.animation.mFrameTimeIsHit = 0.0f;
 	}
 
 	void NewPlayer::OnUpdate(const HiResTimer &timer) {
 		GetModel()->OnPlayerMoved(this);
 	}
 
+	void NewPlayer::OnUpdatePlayerPhysics(const HiResTimer &timer) {
+		planeParams.mPos.x += planeParams.mDir.x * planeParams.mAcc.x * timer.getDeltaSeconds();
+		planeParams.mPos.y += planeParams.mDir.y * planeParams.mAcc.y * timer.getDeltaSeconds();
+	}
+
 	void NewPlayer::OnUpdateFrameTimes(bool btnIsPressed) {		
 		if (btnIsPressed) {
-			if (params.animation.mCurrentFrame >= 3) {
-				params.animation.mCurrentFrame = 3;
+			if (planeParams.animation.mCurrentFrame >= 3) {
+				planeParams.animation.mCurrentFrame = 3;
 			} else {
-				params.animation.mCurrentFrame++;
+				planeParams.animation.mCurrentFrame++;
 			}
 			coolDown = 0;
 			oldCoolDown = 0;
@@ -42,10 +47,10 @@ namespace Model {
 			coolDown++;
 			int diff = coolDown - oldCoolDown;
 			if (diff >= 80) {
-				if (params.animation.mCurrentFrame <= 0) {
-					params.animation.mCurrentFrame = 0;
+				if (planeParams.animation.mCurrentFrame <= 0) {
+					planeParams.animation.mCurrentFrame = 0;
 				} else {
-					params.animation.mCurrentFrame--;
+					planeParams.animation.mCurrentFrame--;
 					oldCoolDown = coolDown;
 				}
 			}
@@ -53,7 +58,7 @@ namespace Model {
 	}
 			
 	bool NewPlayer::IsDead() {
-		if (params.mHealth <= 0) {
+		if (planeParams.mHealth <= 0) {
 			return true;
 		}
 		return false;

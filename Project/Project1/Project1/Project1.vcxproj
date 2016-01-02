@@ -149,6 +149,7 @@
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Score.h" />
+    <ClInclude Include="Shot.h" />
     <ClInclude Include="ShootSystem.h" />
     <ClInclude Include="Explosion.h" />
     <ClInclude Include="ManagerView.h" />
@@ -164,6 +165,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Score.cpp" />
+    <ClCompile Include="Shot.cpp" />
     <ClCompile Include="ShootSystem.cpp" />
     <ClCompile Include="ManagerView.cpp" />
   </ItemGroup>

@@ -1,6 +1,7 @@
 #include "ManagerView.h"
 #include "ManagerModel.h"
 #include "NewPlayer.h"
+#include "Shot.h"
 
 namespace View {
 	ManagerView::ManagerView() {
@@ -67,8 +68,8 @@ namespace View {
 	bool ManagerView::OnPlayerUpdatedAnimation(const Model::NewPlayer *player) {
 		for (auto &sprite : mSprites) {
 			if (sprite.mEntity == player) {
-				sprite.mClip.x = (player->params.animation.mCurrentFrame % 4) * player->params.mSize.x;
-				sprite.mClip.y = (player->params.animation.mCurrentFrame / 4) * player->params.mSize.y;
+				sprite.mClip.x = (player->planeParams.animation.mCurrentFrame % 4) * player->planeParams.mSize.x;
+				sprite.mClip.y = (player->planeParams.animation.mCurrentFrame / 4) * player->planeParams.mSize.y;
 				
 				if (btnIsPressed) {
 					btnIsPressed = false;
@@ -82,12 +83,8 @@ namespace View {
 	void ManagerView::OnPlayerUpdatedPhysics(Model::NewPlayer *player, const HiResTimer &timer) {
 		for (auto &sprite : mSprites) {
 			if (sprite.mEntity == player) {
-
-				player->params.mPos.x += player->params.mDir.x * player->params.mAcc.x * timer.getDeltaSeconds();
-				player->params.mPos.y += player->params.mDir.y * player->params.mAcc.y * timer.getDeltaSeconds();
-
-				sprite.mPosition.x = player->params.mPos.x;
-				sprite.mPosition.y = player->params.mPos.y;
+				sprite.mPosition.x = player->planeParams.mPos.x;
+				sprite.mPosition.y = player->planeParams.mPos.y;
 			}
 		}
 	}
@@ -113,13 +110,13 @@ namespace View {
 		SpriteDef sprite;
 		sprite.mEntity = player;
 		sprite.mTexture = mCommon->getTextureResource("plane");
-		sprite.mPosition = player->params.mPos;
+		sprite.mPosition = player->planeParams.mPos;
 
-		sprite.mScale = player->params.mScale;
+		sprite.mScale = player->planeParams.mScale;
 		sprite.mOrigin = Vec2(0);
 		sprite.mClip = { 0, 0, 116, 140 };
 		sprite.mTint = Color::White;
-		sprite.mRotation = player->params.mRotation;
+		sprite.mRotation = player->planeParams.mRotation;
 
 		mSprites.push_back(sprite);
 	}
@@ -127,13 +124,44 @@ namespace View {
 	void ManagerView::OnPlayerMoved(const Model::NewPlayer *player) {
 		for (SpriteDef &sprite : mSprites) {
 			if (sprite.mEntity == player) {
-				sprite.mPosition = player->params.mPos;
+				sprite.mPosition = player->planeParams.mPos;
 			}
 		}
 	}
 
 	void ManagerView::OnPlayerDied(const Model::NewPlayer *player) {
 		//Remove player.
+	}
+
+	void ManagerView::OnShotSpawned(Model::Shot *shot) {
+		SpriteDef sprite;
+		sprite.mEntity = shot;
+		sprite.mTexture = mCommon->getTextureResource("spark");
+		sprite.mPosition = shot->bulletParams.mPos;
+
+		sprite.mScale = shot->bulletParams.mScale;
+		sprite.mOrigin = Vec2(0);
+		sprite.mClip = { 0, 0, 116, 140 };
+		sprite.mTint = Color::Red;
+		sprite.mRotation = shot->bulletParams.mRotation;
+
+		mSprites.push_back(sprite);
+	}
+
+	void ManagerView::OnShotMoved(const Model::Shot *shot) {
+		for (SpriteDef &sprite : mSprites) {
+			if (sprite.mEntity == shot) {
+				sprite.mPosition = shot->bulletParams.mPos;
+			}
+		}
+	}
+
+	void ManagerView::OnShotDied(const Model::Shot *shot) {
+
+	}
+
+	void ManagerView::OnShotUpdatedPhysics(const Model::Shot *shot, const HiResTimer &timer) {
+
 	}
 
 }

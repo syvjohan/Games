@@ -5,7 +5,7 @@ namespace Model {
 		ENTITY_NONE = 0,
 		ENTITY_PLAYER,
 		ENTITY_ASTEROID,
-		ENTity_BULLET
+		ENTITY_BULLET
 	};
 
 	class ManagerModel;

@@ -14,6 +14,7 @@ namespace Model {
 
 	class ManagerModel;
 	class NewPlayer;
+	class Shot;
 
 	class ManagerModel {
 		public:
@@ -28,6 +29,8 @@ namespace Model {
 		void OnPlayerMoved(NewPlayer *p); //outgoing..
 		void OnMovePlayer(const Vec2 &delta); //incoming..
 		
+		void OnShotMoved(Shot *p);
+
 		void OnColissionWall();
 		void OnCollisionUnits();
 

@@ -14,7 +14,7 @@ namespace Model {
 		float mFrameTimeIsHit;
 	};
 
-	struct Params {
+	struct PlaneParams {
 		Texture2D *mTexture;
 		Vec2 mPos;
 		Vec2 mVel;
@@ -43,8 +43,9 @@ namespace Model {
 			inline EntityType Type() { return ENTITY_PLAYER; }
 
 			void OnUpdateFrameTimes(bool btnIsPressed);
+			void OnUpdatePlayerPhysics(const HiResTimer &timer);
 
-			Params params;
+			PlaneParams planeParams;
 
 			int coolDown = 0;
 			int oldCoolDown = 0;

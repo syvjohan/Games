@@ -7,6 +7,7 @@ namespace Model {
 	class Entity;
 	class ManagerModel;
 	class NewPlayer;
+	class Shot;
 }
 
 namespace View {
@@ -43,9 +44,10 @@ namespace View {
 		//void        OnAsteroidsDied(Player *player);
 
 		////Bullets
-		//void        OnBulletsSpawned(Player *player);
-		//void        OnBulletsMoved(Player *player);
-		//void        OnBulletsDied(Player *player);
+		void OnShotSpawned(Model::Shot *shot);
+		void OnShotMoved(const Model::Shot *shot);
+		void OnShotDied(const Model::Shot *shot);
+		void OnShotUpdatedPhysics(const Model::Shot *shot, const HiResTimer &timer);
 
 		private:
 		Common *mCommon;
