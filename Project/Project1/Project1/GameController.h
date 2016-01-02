@@ -11,6 +11,9 @@
 #include "PlayerHealth.h"
 #include "Camera.h"
 
+#include "ManagerModel.h"
+#include "ManagerView.h"
+
 #include <vector>
 #include <cstdlib>
 #include <ctime>
@@ -35,7 +38,8 @@ namespace Controller {
 			int screenWidth = 1280;
 			int screenHeight = 720;
 
-			const float boarderMargin = 10;
+			const float borderW = 10;
+			const float borderH = 10;
 
 			AudioSource *source;
 

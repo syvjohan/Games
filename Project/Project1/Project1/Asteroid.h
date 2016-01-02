@@ -24,7 +24,6 @@ namespace Model {
 		Vec2 mPlayArea;
 		int mType;
 		float mHealth;
-		Color mColor;
 
 		Model::AsteroidAnimation animation;
 	};

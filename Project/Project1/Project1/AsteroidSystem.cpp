@@ -45,7 +45,6 @@ namespace View {
 			a.animation.mTexture = common->getTextureResource(std::string("asteroid") + std::to_string(type));
 			a.mType = 2;
 			a.mScale = Vec2(1);
-			a.mColor = Color::White;
 
 			if (startPosition.x == -1 && startPosition.y == -1) {
 				a.mPos.x = playArea.x + Sizes[type - 1].x;
@@ -92,7 +91,7 @@ namespace View {
 						   Vec2(clip.w / 2, clip.h / 2),
 						   0.0f,
 						   it->mScale,
-						   it->mColor,
+						   Color::White,
 						   0.0f);
 		}
 
@@ -144,7 +143,6 @@ namespace View {
 	void AsteroidSystem::AsteroidIsHit(int index) {
 		if (index != -1) {
  			auto a = asteroids.begin() + index;
-			a->mColor = Color::Red;
   			if (a->mHealth == defaultHealth) {
 				//Create 2 new asteroids.
 				AddAsteroids(2, a->mType, Vec2(a->mPos));

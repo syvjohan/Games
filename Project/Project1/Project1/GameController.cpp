@@ -6,15 +6,15 @@ namespace Controller {
 	GameController::~GameController() {}
 
 	void GameController::gameLoop() {
-		//set program scale.
-		View::Camera camera;
-		camera.scale = Vec2(1.f, 1.f);
+		////set program scale.
+		//View::Camera camera;
+		//camera.scale = Vec2(1.f, 1.f);
 
-		screenHeight *= camera.scale.y;
-		screenWidth *= camera.scale.x;
+		//screenHeight *= camera.scale.y;
+		//screenWidth *= camera.scale.x;
 
-		Vec2 boarder = Vec2((screenWidth / 2) - (boarderMargin * camera.scale.x), (screenHeight / 2) - (boarderMargin * camera.scale.y));
-		Vec2 origin = Vec2(screenWidth / 2, screenHeight / 2);
+		//Vec2 boarder = Vec2((screenWidth / 2) - (boarderMargin * camera.scale.x), (screenHeight / 2) - (boarderMargin * camera.scale.y));
+		//Vec2 origin = Vec2(screenWidth / 2, screenHeight / 2);
 
 		wParams.mFullscreen = false;
 		wParams.mHeight = screenHeight;
@@ -51,39 +51,59 @@ namespace Controller {
 
 			Renderer2D *renderer = g->createRenderer2D();
 
-			
-
 			HiResTimer timer;
 			timer.restart();
 
-			View::Player player(&common, camera.scale, Vec2(screenWidth - boarderMargin, screenHeight - boarderMargin));
+			Model::ManagerModel model;
+			View::ManagerView view(&common, &model);
+			model.AddView(&view);
+			int width, height;
+			common.getGraphics()->getContextSize(&width, &height);
+			model.Init(Vec2(width, height), Vec2(borderW, borderH));
+
+		/*	View::Player player(&common, camera.scale, Vec2(screenWidth - boarderMargin, screenHeight - boarderMargin));
 			View::ShootSystem shootSystem(&common, Vec2(screenWidth - boarderMargin, screenHeight - boarderMargin));
 			View::AsteroidSystem asteroidSystem(&common, camera.scale, Vec2(screenWidth - boarderMargin, screenHeight - boarderMargin));
 			Model::CollisionDetection collisionDetection;
 			View::Score score(common, g);
-			View::PlayerHealth playerHealth(common, g);
+			View::PlayerHealth playerHealth(common, g);*/
 
-			const float TIME_STEP = 1.0 / 60.0f;
-			float accumulator = 0.0f;
+			//const float TIME_STEP = 1.0 / 60.0f;
+			//float accumulator = 0.0f;
 
-			float accumulatorKeyPress = 0.0f;
-			float oldAccumulatorKeyPress = 0.0f;
+			//float accumulatorKeyPress = 0.0f;
+			//float oldAccumulatorKeyPress = 0.0f;
 
-			float frames = 0, oldFrames = 0;
-			float frameTimer = 0.0f;
+			//float frames = 0, oldFrames = 0;
+			//float frameTimer = 0.0f;
 
-			ShowCursor(FALSE);
+			//ShowCursor(FALSE);
 
 			while (gRunning) {
-				common.frame();
+
 				timer.tick();
+
+				// Process OS events.
+				common.frame();
+
+				view.OnUpdate(timer);
+				model.OnUpdate(timer);
 
 				g->clear(Color::Black, true);
 
-				accumulator += timer.getDeltaSeconds();
-				accumulatorKeyPress += timer.getDeltaSeconds(); //setting timer for key pressing.
+				view.OnRender();
 
-				common.getInputState(&inputState);
+				g->present();
+
+			//	common.frame();
+			//	timer.tick();
+
+			//	g->clear(Color::Black, true);
+
+			//	accumulator += timer.getDeltaSeconds();
+			//	accumulatorKeyPress += timer.getDeltaSeconds(); //setting timer for key pressing.
+
+				/*common.getInputState(&inputState);
 
 				if (inputState.isDown(Button::BUTTON_ESCAPE)) {
 					gRunning = 0;
@@ -111,55 +131,59 @@ namespace Controller {
 
 						shootSystem.AddBullet(camera.scale, player.GetFirePosition());
 					}
-				}
+				}*/
 
-				while (accumulator >= TIME_STEP) {
-					accumulator -= TIME_STEP;
+				//while (accumulator >= TIME_STEP) {
+				//	accumulator -= TIME_STEP;
 
-					player.Update(TIME_STEP, boarderMargin);
-					shootSystem.Update(TIME_STEP);
-					asteroidSystem.Update(TIME_STEP);
-					score.Update();
-					playerHealth.Update();
+				//	player.Update(TIME_STEP, boarderMargin);
+				//	shootSystem.Update(TIME_STEP);
+				//	asteroidSystem.Update(TIME_STEP);
+				//	score.Update();
+				//	playerHealth.Update();
 
-					asteroidSystem.ExtendAsteroidBelt(TIME_STEP);
-				}
+				//	asteroidSystem.ExtendAsteroidBelt(TIME_STEP);
+				//}
 
-				renderer->begin(Renderer2D::SPRITE_SORT_DEFERRED, Renderer2D::SPRITE_BLEND_ALPHA);
+				//renderer->begin(Renderer2D::SPRITE_SORT_DEFERRED, Renderer2D::SPRITE_BLEND_ALPHA);
 
-				player.Render(renderer);
-				shootSystem.Render(renderer);
-				asteroidSystem.Render(renderer);
-				score.Render(renderer);
-				playerHealth.Render(renderer);
+				//player.Render(renderer);
+				//shootSystem.Render(renderer);
+				//asteroidSystem.Render(renderer);
+				//score.Render(renderer);
+				//playerHealth.Render(renderer);
 
-				//Collision
-				PairCollision pairCollision1;
-				pairCollision1 = collisionDetection.AsteroidAndBullet(shootSystem.GetBulletsPositions(), asteroidSystem.GetAsteroidPositions());		
-				asteroidSystem.AsteroidIsHit(pairCollision1.first);
-				shootSystem.RemoveBullet(pairCollision1.second);
+				////Collision
+				//PairCollision pairCollision1;
+				//pairCollision1 = collisionDetection.AsteroidAndBullet(shootSystem.GetBulletsPositions(), asteroidSystem.GetAsteroidPositions());		
+				//asteroidSystem.AsteroidIsHit(pairCollision1.first);
+				//shootSystem.RemoveBullet(pairCollision1.second);
 
-				score.UpdateScore(asteroidSystem.GetHitScore());
-				asteroidSystem.ResetHitScore();
+				//score.UpdateScore(asteroidSystem.GetHitScore());
+				//asteroidSystem.ResetHitScore();
 
-				//Collision
-				PairCollision pairCollision2;
-				pairCollision2 = collisionDetection.AsteroidAndPlayer(player.GetPosition(), asteroidSystem.GetAsteroidPositions());
+				////Collision
+				//PairCollision pairCollision2;
+				//pairCollision2 = collisionDetection.AsteroidAndPlayer(player.GetPosition(), asteroidSystem.GetAsteroidPositions());
+				//
+				//player.IsHit(pairCollision2.second);
+				//
+				//asteroidSystem.AsteroidIsHit(pairCollision2.first);
+
+				//playerHealth.UpdateHealth(player.GetHealth());
+
+
+				////boarder
+				//renderer->debugRect(origin, boarder, Color::Green);
+
+				//renderer->end();
+
+				//g->present();
+
 				
-				player.IsHit(pairCollision2.second);
-				
-				asteroidSystem.AsteroidIsHit(pairCollision2.first);
-
-				playerHealth.UpdateHealth(player.GetHealth());
-
-
-				//boarder
-				renderer->debugRect(origin, boarder, Color::Green);
-
-				renderer->end();
-
-				g->present();
 			}
+
+
 		}
 	}
 }
