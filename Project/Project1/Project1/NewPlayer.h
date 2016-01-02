@@ -11,8 +11,7 @@ namespace Model {
 		float mFrameTime;
 		int mCurrentFrame;
 
-		float mFrameTimeBtnRelease;
-		float mFramTimeIsHit;
+		float mFrameTimeIsHit;
 	};
 
 	struct Params {
@@ -34,18 +33,24 @@ namespace Model {
 
 	class NewPlayer : public Entity {
 		public:
-		NewPlayer();
-		~NewPlayer();
+			NewPlayer();
+			~NewPlayer();
 
-		void OnInit(ManagerModel *m);
-		void OnUpdate(const HiResTimer &timer);
-		bool IsDead();
+			void OnInit(ManagerModel *m);
+			void OnUpdate(const HiResTimer &timer);
+			bool IsDead();
 
-		inline EntityType Type() { return ENTITY_PLAYER; }
+			inline EntityType Type() { return ENTITY_PLAYER; }
 
-		Params params;
+			void OnUpdateFrameTimes(bool btnIsPressed);
+
+			Params params;
+
+			int coolDown = 0;
+			int oldCoolDown = 0;
 
 		private:
-		const int defaultHealth = 100;
+			const int defaultHealth = 100;
+			float oldTime = 80;
 	};
 }

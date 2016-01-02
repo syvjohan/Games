@@ -6,7 +6,6 @@
 #include "Defs.h"
 #include "entity.h"
 
-
 namespace View {
 	class ManagerView;
 }
@@ -31,7 +30,6 @@ namespace Model {
 		
 		void OnColissionWall();
 		void OnCollisionUnits();
-
 
 		Vec2 GetPlayArea();
 

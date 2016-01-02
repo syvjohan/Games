@@ -10,7 +10,6 @@ namespace Model {
 }
 
 namespace View {
-
 	struct SpriteDef {
 		Texture2D   *mTexture;
 		Vec2         mPosition;
@@ -21,8 +20,6 @@ namespace View {
 		Vec4         mTint;
 		Model::Entity *mEntity;
 	};
-
-	
 
 	class ManagerView {
 		public:
@@ -35,9 +32,9 @@ namespace View {
 
 		// Player
 		void OnPlayerSpawned(Model::NewPlayer *player);
-		void OnPlayerMoved(Model::NewPlayer *player);
-		void OnPlayerDied(Model::NewPlayer *player);
-		void OnPlayerUpdatedAnimation(Model::NewPlayer *player);
+		void OnPlayerMoved(const Model::NewPlayer *player);
+		void OnPlayerDied(const Model::NewPlayer *player);
+		bool OnPlayerUpdatedAnimation(const Model::NewPlayer *player);
 		void OnPlayerUpdatedPhysics(Model::NewPlayer *player, const HiResTimer &timer);
 
 		////Asteroids
@@ -56,7 +53,10 @@ namespace View {
 		Renderer2D *mRenderer;
 		std::vector<SpriteDef> mSprites;
 
+		bool btnIsPressed = false; //controlling frames from fires behind plane.
+		int OldKeyPress = 0;
+		int keyPress = 0;
+
 		void OnUpdatePlayer(const HiResTimer &timer);
 	};
-
 }

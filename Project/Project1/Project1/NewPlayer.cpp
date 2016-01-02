@@ -22,17 +22,36 @@ namespace Model {
 
 		params.animation.mCurrentFrame = 0;
 		params.animation.mFrameTime = 0.0f;
-		params.animation.mFrameTimeBtnRelease = 0.0f;
-		params.animation.mFramTimeIsHit = 0.0f;
+		params.animation.mFrameTimeIsHit = 0.0f;
 	}
 
 	void NewPlayer::OnUpdate(const HiResTimer &timer) {
 		GetModel()->OnPlayerMoved(this);
-
-		//Uppdate animation time.
-
 	}
 
+	void NewPlayer::OnUpdateFrameTimes(bool btnIsPressed) {		
+		if (btnIsPressed) {
+			if (params.animation.mCurrentFrame >= 3) {
+				params.animation.mCurrentFrame = 3;
+			} else {
+				params.animation.mCurrentFrame++;
+			}
+			coolDown = 0;
+			oldCoolDown = 0;
+		} else {
+			coolDown++;
+			int diff = coolDown - oldCoolDown;
+			if (diff >= 80) {
+				if (params.animation.mCurrentFrame <= 0) {
+					params.animation.mCurrentFrame = 0;
+				} else {
+					params.animation.mCurrentFrame--;
+					oldCoolDown = coolDown;
+				}
+			}
+		}
+	}
+			
 	bool NewPlayer::IsDead() {
 		if (params.mHealth <= 0) {
 			return true;

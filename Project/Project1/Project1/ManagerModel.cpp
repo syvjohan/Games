@@ -52,9 +52,9 @@ namespace Model {
 			e->OnUpdate(timer);
 			if (e->Type() == ENTITY_PLAYER) {
 				for (auto view : mViews) {
-					//Timeframe.
-					view->OnPlayerUpdatedAnimation((NewPlayer*)e);
-				
+					bool btnIsPressed = view->OnPlayerUpdatedAnimation((NewPlayer*)e);
+					((NewPlayer*)e)->OnUpdateFrameTimes(btnIsPressed); //Update frame
+
 					view->OnPlayerUpdatedPhysics((NewPlayer*)e, timer);
 				}
 			}

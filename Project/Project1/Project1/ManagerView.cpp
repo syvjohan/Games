@@ -3,7 +3,6 @@
 #include "NewPlayer.h"
 
 namespace View {
-
 	ManagerView::ManagerView() {
 
 	}
@@ -50,16 +49,34 @@ namespace View {
 			playerDelta = Vec2::normalize(playerDelta) * timer.getDeltaSeconds() * 50.0f;
 
 			mModel->OnMovePlayer(playerDelta);
+
+			++keyPress;
+			int diff = keyPress - OldKeyPress;
+			if (diff >= 80) {
+				btnIsPressed = true;
+				OldKeyPress = keyPress;
+
+				if (keyPress == INT_MAX) {
+					keyPress = 0;
+					OldKeyPress = 0;
+				}
+			}
 		}
 	}
 
-	void ManagerView::OnPlayerUpdatedAnimation(Model::NewPlayer *player) {
+	bool ManagerView::OnPlayerUpdatedAnimation(const Model::NewPlayer *player) {
 		for (auto &sprite : mSprites) {
 			if (sprite.mEntity == player) {
-				sprite.mClip.x = player->params.animation.mCurrentFrame % 4 * sprite.mClip.x;
-				sprite.mClip.y = player->params.animation.mCurrentFrame / 4 * sprite.mClip.y;
+				sprite.mClip.x = (player->params.animation.mCurrentFrame % 4) * player->params.mSize.x;
+				sprite.mClip.y = (player->params.animation.mCurrentFrame / 4) * player->params.mSize.y;
+				
+				if (btnIsPressed) {
+					btnIsPressed = false;
+					return true;
+				}
 			}
 		}
+		return false;
 	}
 
 	void ManagerView::OnPlayerUpdatedPhysics(Model::NewPlayer *player, const HiResTimer &timer) {
@@ -107,7 +124,7 @@ namespace View {
 		mSprites.push_back(sprite);
 	}
 
-	void ManagerView::OnPlayerMoved(Model::NewPlayer *player) {
+	void ManagerView::OnPlayerMoved(const Model::NewPlayer *player) {
 		for (SpriteDef &sprite : mSprites) {
 			if (sprite.mEntity == player) {
 				sprite.mPosition = player->params.mPos;
@@ -115,7 +132,7 @@ namespace View {
 		}
 	}
 
-	void ManagerView::OnPlayerDied(Model::NewPlayer *player) {
+	void ManagerView::OnPlayerDied(const Model::NewPlayer *player) {
 		//Remove player.
 	}
 
