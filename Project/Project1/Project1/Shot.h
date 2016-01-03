@@ -20,6 +20,7 @@ namespace Model {
 
 	class Shot : public Entity {
 		public:
+		Shot(Vec2 startPosition);
 		Shot();
 		~Shot();
 
@@ -29,9 +30,10 @@ namespace Model {
 
 		inline EntityType Type() { return ENTITY_BULLET; }
 
+		void OnUpdatedPhysics(const HiResTimer &timer);
+
 		BulletParams bulletParams;
 
-		private:
 		bool isDead;
 	};
 }

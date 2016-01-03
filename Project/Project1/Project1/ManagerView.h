@@ -34,9 +34,8 @@ namespace View {
 		// Player
 		void OnPlayerSpawned(Model::NewPlayer *player);
 		void OnPlayerMoved(const Model::NewPlayer *player);
-		void OnPlayerDied(const Model::NewPlayer *player);
 		bool OnPlayerUpdatedAnimation(const Model::NewPlayer *player);
-		void OnPlayerUpdatedPhysics(Model::NewPlayer *player, const HiResTimer &timer);
+		void OnPlayerUpdatedPhysics(const Model::NewPlayer *player);
 
 		////Asteroids
 		//void        OnAsteroidsSpawned(Model::NewPlayer *player);
@@ -45,9 +44,9 @@ namespace View {
 
 		////Bullets
 		void OnShotSpawned(Model::Shot *shot);
+		void OnMoveShot(const Model::Shot *shot);
 		void OnShotMoved(const Model::Shot *shot);
-		void OnShotDied(const Model::Shot *shot);
-		void OnShotUpdatedPhysics(const Model::Shot *shot, const HiResTimer &timer);
+		void OnShotUpdatedPhysics(const Model::Shot *shot);
 
 		private:
 		Common *mCommon;
@@ -55,10 +54,15 @@ namespace View {
 		Renderer2D *mRenderer;
 		std::vector<SpriteDef> mSprites;
 
-		bool btnIsPressed = false; //controlling frames from fires behind plane.
-		int OldKeyPress = 0;
-		int keyPress = 0;
+		bool btnIsPressedPlane = false; //controlling frames from fires behind plane.
+		int OldKeyPressPlane = 0;
+		int keyPressPlane = 0;
+
+		bool btnIsPressedShot = false;
+		int oldKeyPressShot = 0;
+		int keyPressShot = 0;
 
 		void OnUpdatePlayer(const HiResTimer &timer);
+		void OnUpdateShot(const HiResTimer &timer);
 	};
 }

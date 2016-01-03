@@ -22,6 +22,7 @@ namespace View {
 
 	void ManagerView::OnUpdate(const HiResTimer &timer) {
 		OnUpdatePlayer(timer);
+		OnUpdateShot(timer);
 	}
 
 	void ManagerView::OnUpdatePlayer(const HiResTimer &timer) {
@@ -51,15 +52,15 @@ namespace View {
 
 			mModel->OnMovePlayer(playerDelta);
 
-			++keyPress;
-			int diff = keyPress - OldKeyPress;
+			++keyPressPlane;
+			int diff = keyPressPlane - OldKeyPressPlane;
 			if (diff >= 80) {
-				btnIsPressed = true;
-				OldKeyPress = keyPress;
+				btnIsPressedPlane = true;
+				OldKeyPressPlane = keyPressPlane;
 
-				if (keyPress == INT_MAX) {
-					keyPress = 0;
-					OldKeyPress = 0;
+				if (keyPressPlane == INT_MAX) {
+					keyPressPlane = 0;
+					OldKeyPressPlane = 0;
 				}
 			}
 		}
@@ -71,8 +72,8 @@ namespace View {
 				sprite.mClip.x = (player->planeParams.animation.mCurrentFrame % 4) * player->planeParams.mSize.x;
 				sprite.mClip.y = (player->planeParams.animation.mCurrentFrame / 4) * player->planeParams.mSize.y;
 				
-				if (btnIsPressed) {
-					btnIsPressed = false;
+				if (btnIsPressedPlane) {
+					btnIsPressedPlane = false;
 					return true;
 				}
 			}
@@ -80,7 +81,7 @@ namespace View {
 		return false;
 	}
 
-	void ManagerView::OnPlayerUpdatedPhysics(Model::NewPlayer *player, const HiResTimer &timer) {
+	void ManagerView::OnPlayerUpdatedPhysics(const Model::NewPlayer *player) {
 		for (auto &sprite : mSprites) {
 			if (sprite.mEntity == player) {
 				sprite.mPosition.x = player->planeParams.mPos.x;
@@ -91,7 +92,6 @@ namespace View {
 
 	void ManagerView::OnRender() {
 		mRenderer->begin(Renderer2D::SPRITE_SORT_DEFERRED, Renderer2D::SPRITE_BLEND_ALPHA);
-
 		for (auto &sprite : mSprites) {
 			mRenderer->draw(sprite.mTexture,
 							sprite.mPosition,
@@ -129,14 +129,32 @@ namespace View {
 		}
 	}
 
-	void ManagerView::OnPlayerDied(const Model::NewPlayer *player) {
-		//Remove player.
+	void ManagerView::OnUpdateShot(const HiResTimer &timer) {
+		InputState input;
+		mCommon->getInputState(&input);
+
+		if (input.isDown(Button::BUTTON_SPACE)) {
+			++keyPressShot;
+			int diff = keyPressShot - oldKeyPressShot;
+			if (diff >= 60) {
+ 				mModel->AddShot(mModel->GetStartPositionForShot());
+
+				oldKeyPressShot = keyPressShot;
+
+				if (keyPressShot == INT_MAX) {
+					keyPressShot = 0;
+					oldKeyPressShot = 0;
+				}
+			}
+		}
+
+		mModel->OnMoveShot();
 	}
 
 	void ManagerView::OnShotSpawned(Model::Shot *shot) {
 		SpriteDef sprite;
 		sprite.mEntity = shot;
-		sprite.mTexture = mCommon->getTextureResource("spark");
+		sprite.mTexture = mCommon->getTextureResource("shoot");
 		sprite.mPosition = shot->bulletParams.mPos;
 
 		sprite.mScale = shot->bulletParams.mScale;
@@ -148,6 +166,14 @@ namespace View {
 		mSprites.push_back(sprite);
 	}
 
+	void ManagerView::OnMoveShot(const Model::Shot *shot) {
+		for (SpriteDef &sprite : mSprites) {
+			if (sprite.mEntity == shot) {
+				sprite.mPosition = shot->bulletParams.mPos;
+			}
+		}
+	}
+
 	void ManagerView::OnShotMoved(const Model::Shot *shot) {
 		for (SpriteDef &sprite : mSprites) {
 			if (sprite.mEntity == shot) {
@@ -156,12 +182,13 @@ namespace View {
 		}
 	}
 
-	void ManagerView::OnShotDied(const Model::Shot *shot) {
-
-	}
-
-	void ManagerView::OnShotUpdatedPhysics(const Model::Shot *shot, const HiResTimer &timer) {
-
+	void ManagerView::OnShotUpdatedPhysics(const Model::Shot *shot) {
+		for (auto &sprite : mSprites) {
+			if (sprite.mEntity == shot) {
+				sprite.mPosition.x = shot->bulletParams.mPos.x;
+				sprite.mPosition.y = shot->bulletParams.mPos.y;
+			}
+		}
 	}
 
 }

@@ -21,18 +21,21 @@ namespace Model {
 		ManagerModel();
 		~ManagerModel();
 
-		void Init(Vec2 screen, Vec2 border);
+		void Init(Vec2 screen);
 		void AddView(View::ManagerView *v);
 		void RemoveView(View::ManagerView *v);
 		void OnUpdate(const HiResTimer &timer);
 
 		void OnPlayerMoved(NewPlayer *p); //outgoing..
 		void OnMovePlayer(const Vec2 &delta); //incoming..
+		Vec2 GetStartPositionForShot();
 		
-		void OnShotMoved(Shot *p);
+		void OnMoveShot(); //incoming..
+		void OnShotMoved(Shot *s); //outgoing..
+		void AddShot(Vec2 startPosition);
 
 		void OnColissionWall();
-		void OnCollisionUnits();
+		void OnCollisionEntities();
 
 		Vec2 GetPlayArea();
 
@@ -40,9 +43,9 @@ namespace Model {
 		std::vector<View::ManagerView*> mViews;
 		std::vector<Entity*> mEntities;
 
-		void SetPlayArea(Vec2 screen, Vec2 border);
+		void RemoveEntity(int index);
+		void SetPlayArea(Vec2 screen);
 		Vec2 mPlayArea;
-		Vec2 border;
 	};
 
 }

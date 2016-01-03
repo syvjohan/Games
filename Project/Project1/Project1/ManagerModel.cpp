@@ -1,14 +1,15 @@
 #include "ManagerModel.h"
 #include "ManagerView.h"
 #include "NewPlayer.h"
+#include "Shot.h"
 
 namespace Model {
 	ManagerModel::ManagerModel() {}
 
 	ManagerModel::~ManagerModel() {}
 
-	void ManagerModel::Init(Vec2 screen, Vec2 border) {
-		SetPlayArea(screen, border);
+	void ManagerModel::Init(Vec2 screen) {
+		SetPlayArea(screen);
 
 		// Create a player..
 		NewPlayer *player = DBG_NEW NewPlayer();
@@ -56,45 +57,55 @@ namespace Model {
 					((NewPlayer*)e)->OnUpdateFrameTimes(btnIsPressed);
 
 					((NewPlayer*)e)->OnUpdatePlayerPhysics(timer);
-					view->OnPlayerUpdatedPhysics((NewPlayer*)e, timer);
+					view->OnPlayerUpdatedPhysics((NewPlayer*)e);
 				}
 			} else if (e->Type() == ENTITY_BULLET) {
 				for (auto view : mViews) {
-
+					((Shot*)e)->OnUpdatedPhysics(timer);
+					view->OnShotUpdatedPhysics((Shot*)e);
 				}
 			}
 		}
 
 		//Collision
 		OnColissionWall();
-		OnCollisionUnits();
+		OnCollisionEntities();
 	}
 
 	void ManagerModel::OnColissionWall() {
-		for (Entity *e : mEntities) {
+		int index = 0;
+		while(index < mEntities.size()) {
+			Entity *e = mEntities[index];
 			if (e->Type() == ENTITY_PLAYER) {
 				NewPlayer *player = ((NewPlayer*)e);
 
-				if (player->planeParams.mPos.x < border.x) {
-					player->planeParams.mPos.x = border.x;
+				if (player->planeParams.mPos.x < 0) {
+					player->planeParams.mPos.x = 0;
 				}
 
-				if (player->planeParams.mPos.x + player->planeParams.mSize.x + (border.x * 2) > mPlayArea.x) {
-					player->planeParams.mPos.x = mPlayArea.x - player->planeParams.mSize.x - (border.x * 2);
+				if (player->planeParams.mPos.x + player->planeParams.mSize.x > mPlayArea.x - 25) {
+					player->planeParams.mPos.x = mPlayArea.x - player->planeParams.mSize.x -25;//Sprite is rotated.
 				}
 
-				if (player->planeParams.mPos.y < border.y + player->planeParams.mSize.x) {
-					player->planeParams.mPos.y = border.y + player->planeParams.mSize.x; //Sprite is rotated.
+				if (player->planeParams.mPos.y < player->planeParams.mSize.x) {
+					player->planeParams.mPos.y = player->planeParams.mSize.x;
 				}
 
 				if (player->planeParams.mPos.y > mPlayArea.y) {
 					player->planeParams.mPos.y = mPlayArea.y;
 				}
+			} else if (e->Type() == ENTITY_BULLET) {
+				Shot *bullet = ((Shot*)e);
+				if (bullet->bulletParams.mPos.x > mPlayArea.x) {
+					RemoveEntity(index);
+					--index;
+				}
 			}
+			++index;
 		}
 	}
 
-	void ManagerModel::OnCollisionUnits() {
+	void ManagerModel::OnCollisionEntities() {
 
 	}
 
@@ -112,15 +123,51 @@ namespace Model {
 		}
 	}
 
-	void ManagerModel::OnShotMoved(Shot *p) {
-		for (View::ManagerView *v : mViews) {
-			v->OnShotMoved(p);
+	Vec2 ManagerModel::GetStartPositionForShot() {
+		Vec2 position = Vec2(0, 0);
+		for (Entity *e : mEntities) {
+			if (e->Type() == ENTITY_PLAYER) {
+				float x = ((NewPlayer*)e)->planeParams.mPos.x + ((NewPlayer*)e)->planeParams.mSize.x + 6;
+				float y = ((NewPlayer*)e)->planeParams.mPos.y - 65;
+				position = Vec2(x, y);
+			}
+		}
+		return position;
+	}
+
+	void ManagerModel::OnMoveShot() {
+		for (Entity *e : mEntities) {
+			if (e->Type() == ENTITY_BULLET) {
+				((Shot*)e)->bulletParams.mPos.x += 1;
+			}
 		}
 	}
 
-	void ManagerModel::SetPlayArea(Vec2 screen, Vec2 border) {
-		this->border = border;
+	void ManagerModel::OnShotMoved(Shot *s) {
+		for (auto *view : mViews) {
+			view->OnShotMoved(s);
+		}
+	}
 
+	void ManagerModel::AddShot(Vec2 startPosition) {
+		Shot *shot = DBG_NEW Shot(startPosition);
+		mEntities.push_back(shot);
+
+		for (Entity *e : mEntities) {
+			e->OnInit(this);
+			for (auto *view : mViews) {
+				view->OnShotSpawned((Shot*)shot);
+			}
+		}
+	}
+
+	void ManagerModel::RemoveEntity(int index) {
+		if (mEntities.size() > 0 && mEntities.size() >= index) {
+			mEntities.erase(mEntities.begin() + index);
+		}
+	}
+
+	void ManagerModel::SetPlayArea(Vec2 screen) {
 		mPlayArea.x = screen.x;
 		mPlayArea.y = screen.y;
 	}

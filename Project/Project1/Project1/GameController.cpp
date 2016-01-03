@@ -29,8 +29,8 @@ namespace Controller {
 			common.registerSoundResource("soundExplosion", "sound/explosion.ogg");
 			common.registerSoundResource("soundShoot", "sound/fire.ogg");
 
-			common.registerTextureResource("plane", "image/plane.png");
 			common.registerTextureResource("shoot", "image/spark.png");
+			common.registerTextureResource("plane", "image/plane.png");
 			common.registerTextureResource("explosion", "image/explosion.png");
 
 			common.registerTextureResource("asteroid1", "image/asteroid1.png");
@@ -59,7 +59,7 @@ namespace Controller {
 			model.AddView(&view);
 			int width, height;
 			common.getGraphics()->getContextSize(&width, &height);
-			model.Init(Vec2(width, height), Vec2(borderW, borderH));
+			model.Init(Vec2(width, height));
 
 		/*	View::Player player(&common, camera.scale, Vec2(screenWidth - boarderMargin, screenHeight - boarderMargin));
 			View::ShootSystem shootSystem(&common, Vec2(screenWidth - boarderMargin, screenHeight - boarderMargin));
@@ -85,6 +85,12 @@ namespace Controller {
 
 				// Process OS events.
 				common.frame();
+
+				InputState input;
+				common.getInputState(&input);
+				if (input.isDown(Button::BUTTON_ESCAPE)) {
+					gRunning = 0;
+				}
 
 				view.OnUpdate(timer);
 				model.OnUpdate(timer);
