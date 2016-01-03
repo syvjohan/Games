@@ -2,6 +2,7 @@
 #include "ManagerModel.h"
 #include "NewPlayer.h"
 #include "Shot.h"
+#include "NewAsteroid.h"
 
 namespace View {
 	ManagerView::ManagerView() {
@@ -20,12 +21,14 @@ namespace View {
 
 	}
 
-	void ManagerView::OnUpdate(const HiResTimer &timer) {
-		OnUpdatePlayer(timer);
-		OnUpdateShot(timer);
+	void ManagerView::OnUpdate(const HiResTimer timer) {
+		const float dt = timer.getDeltaSeconds();
+		OnUpdatePlayer(dt);
+		OnUpdateShot(dt);
+		OnUpdateAsteroid(dt);
 	}
 
-	void ManagerView::OnUpdatePlayer(const HiResTimer &timer) {
+	void ManagerView::OnUpdatePlayer(const float dt) {
 		InputState input;
 		mCommon->getInputState(&input);
 
@@ -48,21 +51,15 @@ namespace View {
 		}
 
 		if (Vec2::length(playerDelta) > 0) {
-			playerDelta = Vec2::normalize(playerDelta) * timer.getDeltaSeconds() * 50.0f;
+			playerDelta = Vec2::normalize(playerDelta) * dt * 50.0f;
+			frameTimePlane += dt;
+			if (frameTimePlane > 0.8) {
+				frameTimePlane = 0.0f;
+				mModel->AddShot(mModel->GetStartPositionForShot());
+			}
 
 			mModel->OnMovePlayer(playerDelta);
 
-			++keyPressPlane;
-			int diff = keyPressPlane - OldKeyPressPlane;
-			if (diff >= 80) {
-				btnIsPressedPlane = true;
-				OldKeyPressPlane = keyPressPlane;
-
-				if (keyPressPlane == INT_MAX) {
-					keyPressPlane = 0;
-					OldKeyPressPlane = 0;
-				}
-			}
 		}
 	}
 
@@ -129,22 +126,15 @@ namespace View {
 		}
 	}
 
-	void ManagerView::OnUpdateShot(const HiResTimer &timer) {
+	void ManagerView::OnUpdateShot(const float dt) {
 		InputState input;
 		mCommon->getInputState(&input);
 
+		frameTimeBullet += dt;
 		if (input.isDown(Button::BUTTON_SPACE)) {
-			++keyPressShot;
-			int diff = keyPressShot - oldKeyPressShot;
-			if (diff >= 60) {
- 				mModel->AddShot(mModel->GetStartPositionForShot());
-
-				oldKeyPressShot = keyPressShot;
-
-				if (keyPressShot == INT_MAX) {
-					keyPressShot = 0;
-					oldKeyPressShot = 0;
-				}
+			if (frameTimeBullet > 0.4) {
+				frameTimeBullet = 0.0f;
+				mModel->AddShot(mModel->GetStartPositionForShot());
 			}
 		}
 
@@ -182,7 +172,7 @@ namespace View {
 		}
 	}
 
-	void ManagerView::OnShotUpdatedPhysics(const Model::Shot *shot) {
+	void ManagerView::OnShotUpdatePhysics(const Model::Shot *shot) {
 		for (auto &sprite : mSprites) {
 			if (sprite.mEntity == shot) {
 				sprite.mPosition.x = shot->bulletParams.mPos.x;
@@ -191,4 +181,56 @@ namespace View {
 		}
 	}
 
+	void ManagerView::OnAsteroidSpawned(Model::NewAsteroid *asteroid) {
+		SpriteDef sprite;
+		sprite.mEntity = asteroid;
+		sprite.mTexture = mCommon->getTextureResource("asteroid1");
+		sprite.mPosition = asteroid->asteroidParams.mPos;
+
+		sprite.mScale = asteroid->asteroidParams.mScale;
+		sprite.mOrigin = Vec2(0);
+		sprite.mClip = { 0, 0, 72, 72 };
+		sprite.mTint = Color::White;
+		sprite.mRotation = asteroid->asteroidParams.mRotation;
+
+		mSprites.push_back(sprite);
+	}
+
+	void ManagerView::OnAsteroidMoved(Model::NewAsteroid *asteroid) {
+		for (SpriteDef &sprite : mSprites) {
+			if (sprite.mEntity == asteroid) {
+				sprite.mPosition = asteroid->asteroidParams.mPos;
+			}
+		}
+	}
+
+	void ManagerView::OnMoveAsteroid(const Model::NewAsteroid *asteroid) {
+		for (SpriteDef &sprite : mSprites) {
+			if (sprite.mEntity == asteroid) {
+				sprite.mPosition = asteroid->asteroidParams.mPos;
+			}
+		}
+	}
+
+	void ManagerView::OnAsteroidUpdatedPhysics(Model::NewAsteroid *asteroid) {
+		for (auto &sprite : mSprites) {
+			if (sprite.mEntity == asteroid) {
+				sprite.mPosition.x = asteroid->asteroidParams.mPos.x;
+				sprite.mPosition.y = asteroid->asteroidParams.mPos.y;
+			}
+		}
+	}
+
+	void ManagerView::OnAsteroidUpdatedAnimation(const Model::NewAsteroid *asteroid) {
+		for (auto &sprite : mSprites) {
+			if (sprite.mEntity == asteroid) {
+				sprite.mClip.x = (asteroid->asteroidParams.animation.mCurrentFrame % 5) * asteroid->asteroidParams.mSize.x;
+				sprite.mClip.y = (asteroid->asteroidParams.animation.mCurrentFrame / 5) * asteroid->asteroidParams.mSize.y;
+			}
+		}
+	}
+
+	void ManagerView::OnUpdateAsteroid(const float dt) {
+		mModel->OnMoveAsteroid();
+	}
 }

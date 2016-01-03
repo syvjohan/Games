@@ -37,18 +37,19 @@ namespace Model {
 			~NewPlayer();
 
 			void OnInit(ManagerModel *m);
-			void OnUpdate(const HiResTimer &timer);
+			void OnUpdate();
 			bool IsDead();
 
 			inline EntityType Type() { return ENTITY_PLAYER; }
 
-			void OnUpdateFrameTimes(bool btnIsPressed);
-			void OnUpdatePlayerPhysics(const HiResTimer &timer);
+			void OnUpdateAnimation(bool btnIsPressed, const float dt);
+			void OnUpdatePlayerPhysics(const float dt);
 
 			PlaneParams planeParams;
 
-			int coolDown = 0;
-			int oldCoolDown = 0;
+			float frameTimePlane = 0;
+			/*int coolDown = 0;
+			int oldCoolDown = 0;*/
 
 		private:
 			const int defaultHealth = 100;

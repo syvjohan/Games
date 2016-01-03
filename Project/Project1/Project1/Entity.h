@@ -16,7 +16,7 @@ namespace Model {
 			virtual ~Entity() {};
 
 			virtual void OnInit(ManagerModel *m) { mModel = m; }
-			virtual void OnUpdate(const HiResTimer &timer) = 0;
+			virtual void OnUpdate() = 0;
 			virtual bool IsDead() = 0;
 
 			virtual EntityType Type() = 0;

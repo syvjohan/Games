@@ -8,6 +8,7 @@ namespace Model {
 	class ManagerModel;
 	class NewPlayer;
 	class Shot;
+	class NewAsteroid;
 }
 
 namespace View {
@@ -28,7 +29,7 @@ namespace View {
 		ManagerView(Common *common, Model::ManagerModel *m);
 		~ManagerView();
 
-		void OnUpdate(const HiResTimer &timer);
+		void OnUpdate(const HiResTimer timer);
 		void OnRender();
 
 		// Player
@@ -37,16 +38,18 @@ namespace View {
 		bool OnPlayerUpdatedAnimation(const Model::NewPlayer *player);
 		void OnPlayerUpdatedPhysics(const Model::NewPlayer *player);
 
-		////Asteroids
-		//void        OnAsteroidsSpawned(Model::NewPlayer *player);
-		//void        OnAsteroidsMoved(Player *player);
-		//void        OnAsteroidsDied(Player *player);
+		//Asteroids
+		void OnAsteroidSpawned(Model::NewAsteroid *asteroid);
+		void OnAsteroidMoved(Model::NewAsteroid *asteroid);
+		void OnMoveAsteroid(const Model::NewAsteroid *asteroid);
+		void OnAsteroidUpdatedPhysics(Model::NewAsteroid *asteroid);
+		void OnAsteroidUpdatedAnimation(const Model::NewAsteroid *asteroid);
 
-		////Bullets
+		//Bullets
 		void OnShotSpawned(Model::Shot *shot);
 		void OnMoveShot(const Model::Shot *shot);
 		void OnShotMoved(const Model::Shot *shot);
-		void OnShotUpdatedPhysics(const Model::Shot *shot);
+		void OnShotUpdatePhysics(const Model::Shot *shot);
 
 		private:
 		Common *mCommon;
@@ -55,14 +58,12 @@ namespace View {
 		std::vector<SpriteDef> mSprites;
 
 		bool btnIsPressedPlane = false; //controlling frames from fires behind plane.
-		int OldKeyPressPlane = 0;
-		int keyPressPlane = 0;
+		
+		float frameTimeBullet = 0.0f;
+		float frameTimePlane = 0.0f;
 
-		bool btnIsPressedShot = false;
-		int oldKeyPressShot = 0;
-		int keyPressShot = 0;
-
-		void OnUpdatePlayer(const HiResTimer &timer);
-		void OnUpdateShot(const HiResTimer &timer);
+		void OnUpdatePlayer(const float dt);
+		void OnUpdateShot(const float dt);
+		void OnUpdateAsteroid(const float dt);
 	};
 }

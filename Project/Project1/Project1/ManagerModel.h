@@ -15,6 +15,7 @@ namespace Model {
 	class ManagerModel;
 	class NewPlayer;
 	class Shot;
+	class NewAsteroid;
 
 	class ManagerModel {
 		public:
@@ -24,7 +25,7 @@ namespace Model {
 		void Init(Vec2 screen);
 		void AddView(View::ManagerView *v);
 		void RemoveView(View::ManagerView *v);
-		void OnUpdate(const HiResTimer &timer);
+		void OnUpdate(HiResTimer &timer);
 
 		void OnPlayerMoved(NewPlayer *p); //outgoing..
 		void OnMovePlayer(const Vec2 &delta); //incoming..
@@ -33,6 +34,10 @@ namespace Model {
 		void OnMoveShot(); //incoming..
 		void OnShotMoved(Shot *s); //outgoing..
 		void AddShot(Vec2 startPosition);
+
+		void OnMoveAsteroid(); //incoming..
+		void OnAsteroidMoved(NewAsteroid *s); //outgoing..
+		void AddAsteroid();
 
 		void OnColissionWall();
 		void OnCollisionEntities();
@@ -47,5 +52,4 @@ namespace Model {
 		void SetPlayArea(Vec2 screen);
 		Vec2 mPlayArea;
 	};
-
 }

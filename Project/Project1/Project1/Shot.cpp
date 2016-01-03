@@ -21,13 +21,13 @@ namespace Model {
 		Entity::OnInit(m);
 	}
 
-	void Shot::OnUpdate(const HiResTimer &timer) {
+	void Shot::OnUpdate() {
 		GetModel()->OnShotMoved(this);
 	}
 
-	void Shot::OnUpdatedPhysics(const HiResTimer &timer) {
+	void Shot::OnUpdatedPhysics(const float dt) {
 		bulletParams.mAcc += Vec2(.1f, 0);
-		bulletParams.mPos += bulletParams.mVel + bulletParams.mAcc * timer.getDeltaSeconds() / 2;
+		bulletParams.mPos += bulletParams.mVel + bulletParams.mAcc * dt / 2;
 	}
 
 	bool Shot::IsDead() {

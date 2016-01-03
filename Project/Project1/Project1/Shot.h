@@ -8,7 +8,6 @@ namespace Model {
 	class ManageModel;
 
 	struct BulletParams {
-		Texture2D *mTexture;
 		Vec2 mPos;
 		Vec2 mVel;
 		Vec2 mAcc;
@@ -25,12 +24,12 @@ namespace Model {
 		~Shot();
 
 		void OnInit(ManagerModel *m);
-		void OnUpdate(const HiResTimer &timer);
+		void OnUpdate();
 		bool IsDead();
 
 		inline EntityType Type() { return ENTITY_BULLET; }
 
-		void OnUpdatedPhysics(const HiResTimer &timer);
+		void OnUpdatedPhysics(const float dt);
 
 		BulletParams bulletParams;
 

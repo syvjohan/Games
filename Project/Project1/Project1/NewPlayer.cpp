@@ -25,26 +25,36 @@ namespace Model {
 		planeParams.animation.mFrameTimeIsHit = 0.0f;
 	}
 
-	void NewPlayer::OnUpdate(const HiResTimer &timer) {
+	void NewPlayer::OnUpdate() {
 		GetModel()->OnPlayerMoved(this);
 	}
 
-	void NewPlayer::OnUpdatePlayerPhysics(const HiResTimer &timer) {
-		planeParams.mPos.x += planeParams.mDir.x * planeParams.mAcc.x * timer.getDeltaSeconds();
-		planeParams.mPos.y += planeParams.mDir.y * planeParams.mAcc.y * timer.getDeltaSeconds();
+	void NewPlayer::OnUpdatePlayerPhysics(const float dt) {
+		planeParams.mPos.x += planeParams.mDir.x * planeParams.mAcc.x * dt;
+		planeParams.mPos.y += planeParams.mDir.y * planeParams.mAcc.y * dt;
 	}
 
-	void NewPlayer::OnUpdateFrameTimes(bool btnIsPressed) {		
+	void NewPlayer::OnUpdateAnimation(bool btnIsPressed, const float dt) {
+		frameTimePlane += dt;
 		if (btnIsPressed) {
 			if (planeParams.animation.mCurrentFrame >= 3) {
 				planeParams.animation.mCurrentFrame = 3;
 			} else {
 				planeParams.animation.mCurrentFrame++;
 			}
-			coolDown = 0;
-			oldCoolDown = 0;
+			/*coolDown = 0;
+			oldCoolDown = 0;*/
 		} else {
-			coolDown++;
+			if (frameTimePlane > 0.8) {
+				if (planeParams.animation.mCurrentFrame <= 0) {
+					planeParams.animation.mCurrentFrame = 0;
+				} else {
+					planeParams.animation.mCurrentFrame--;
+					frameTimePlane = 0;
+				}
+			} 
+
+			/*coolDown++;
 			int diff = coolDown - oldCoolDown;
 			if (diff >= 80) {
 				if (planeParams.animation.mCurrentFrame <= 0) {
@@ -53,7 +63,7 @@ namespace Model {
 					planeParams.animation.mCurrentFrame--;
 					oldCoolDown = coolDown;
 				}
-			}
+			}*/
 		}
 	}
 			

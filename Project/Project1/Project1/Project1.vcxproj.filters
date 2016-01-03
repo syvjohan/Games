@@ -75,6 +75,9 @@
     <ClInclude Include="Shot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="NewAsteroid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -114,6 +117,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Shot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NewAsteroid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
