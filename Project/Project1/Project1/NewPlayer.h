@@ -3,33 +3,10 @@
 #include <framework.h>
 
 #include "Entity.h"
+#include <algorithm>
 
 namespace Model {
 	class ManagerModel;
-
-	struct Animation { 
-		float mFrameTime;
-		int mCurrentFrame;
-
-		float mFrameTimeIsHit;
-	};
-
-	struct PlaneParams {
-		Texture2D *mTexture;
-		Vec2 mPos;
-		Vec2 mVel;
-		Vec2 mAcc;
-		Vec2 mDir;
-		Vec2 mScale;
-		Vec2 mSize;
-
-		float mRotation;
-		int mHealth;
-
-		Color mColor;
-
-		Animation animation;
-	};
 
 	class NewPlayer : public Entity {
 		public:
@@ -38,18 +15,28 @@ namespace Model {
 
 			void OnInit(ManagerModel *m);
 			void OnUpdate();
-			bool IsDead();
 
 			inline EntityType Type() { return ENTITY_PLAYER; }
 
 			void OnUpdateAnimation(bool btnIsPressed, const float dt);
-			void OnUpdatePlayerPhysics(const float dt);
+			void OnUpdatePhysics(const float dt);
 
-			PlaneParams planeParams;
+			inline  Vec2 GetPosition() const { return mPos; }
+			inline float GetRadius() const { return std::max(mSize.x / 2, mSize.y / 2) * 0.8f; }
+		
+			Vec2 mPos;
+			Vec2 mVel;
+			Vec2 mAcc;
+			Vec2 mDir;
+			Vec2 mScale;
+			Vec2 mSize;
+			float mRotation;
+			int mHealth;
+			Color mColor;
 
-			float frameTimePlane = 0;
-			/*int coolDown = 0;
-			int oldCoolDown = 0;*/
+			float mFrameTime;
+			int mCurrentFrame;
+			float mFrameTimeIsHit;
 
 		private:
 			const int defaultHealth = 100;

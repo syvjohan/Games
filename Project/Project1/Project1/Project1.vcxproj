@@ -144,6 +144,7 @@
     <ClInclude Include="GameController.h" />
     <ClInclude Include="ManagerModel.h" />
     <ClInclude Include="NewAsteroid.h" />
+    <ClInclude Include="NewExplosion.h" />
     <ClInclude Include="NewPlayer.h" />
     <ClInclude Include="PlayerHealth.h" />
     <ClInclude Include="Particle.h" />
@@ -162,6 +163,7 @@
     <ClCompile Include="GameController.cpp" />
     <ClCompile Include="ManagerModel.cpp" />
     <ClCompile Include="NewAsteroid.cpp" />
+    <ClCompile Include="NewExplosion.cpp" />
     <ClCompile Include="NewPlayer.cpp" />
     <ClCompile Include="PlayerHealth.cpp" />
     <ClCompile Include="main.cpp" />

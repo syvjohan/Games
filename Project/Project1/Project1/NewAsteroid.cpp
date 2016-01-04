@@ -9,18 +9,18 @@ namespace Model {
 	void NewAsteroid::OnInit(ManagerModel *m) {
 		Entity::OnInit(m);
 
-		asteroidParams.mPos.x = m->GetPlayArea().x;
-		asteroidParams.mPos.y = InRange(0, m->GetPlayArea().y);
-		asteroidParams.mDir = Vec2(InRange(-1, -10), InRange(-1, 1));
-		asteroidParams.mVel += Vec2(InRange(.2f, .2f), 0);
-		asteroidParams.mSize = Vec2(72, 72);
-		asteroidParams.mScale = Vec2(1, 1);
-		asteroidParams.mType = 1;
-		asteroidParams.mHealth = defaulthealth;
-		asteroidParams.mRotation = 0;
+		mPos.x = m->GetPlayArea().x;
+		mPos.y = InRange(0, m->GetPlayArea().y);
+		mDir = Vec2(InRange(-1, -10), InRange(-2, 2));
+		mVel += Vec2(InRange(.02f, .02f), 0);
+		mSize = Vec2(72, 72);
+		mScale = Vec2(1, 1);
+		mType = 1;
+		mHealth = defaulthealth;
+		mRotation = 0;
 
-		asteroidParams.animation.mFrameTime = 0.0f;
-		asteroidParams.animation.mCurrentFrame = 0;
+		mFrameTime = 0.0f;
+		mCurrentFrame = 0;
 	}
 
 	float NewAsteroid::InRange(float min, float max) {
@@ -35,30 +35,26 @@ namespace Model {
 		GetModel()->OnAsteroidMoved(this);
 	}
 
-	bool NewAsteroid::IsDead() {
-		return false;
-	}
+	void NewAsteroid::OnUpdateAnimation(const float dt) {
+		mFrameTime += dt;
 
-	void NewAsteroid::OnUpdateFrameTimes(const float dt) {
-		asteroidParams.animation.mFrameTime += dt;
+		if (mFrameTime >= 0.09f) {
+			mFrameTime = 0.0;
 
-		if (asteroidParams.animation.mFrameTime >= 0.00028) {
-			asteroidParams.animation.mFrameTime = 0.0;
-
-			asteroidParams.animation.mCurrentFrame++;
-			if (asteroidParams.animation.mCurrentFrame == 19) {
-				asteroidParams.animation.mCurrentFrame++;
+			mCurrentFrame++;
+			if (mCurrentFrame == 19) {
+				mCurrentFrame++;
 			}
 
-			if (asteroidParams.animation.mCurrentFrame > 19) {
-				asteroidParams.animation.mCurrentFrame = 0;
+			if (mCurrentFrame > 19) {
+				mCurrentFrame = 0;
 			}
 		}
 	}
 
 	void NewAsteroid::OnUpdatePhysics(const float dt) {
-		asteroidParams.mVel += Vec2(.0005f, .0005f);
-		asteroidParams.mPos.x += asteroidParams.mDir.x * asteroidParams.mVel.x;
-		asteroidParams.mPos.y += asteroidParams.mDir.y * asteroidParams.mVel.y;
+		mVel += Vec2(.0005f, .0005f);
+		mPos.x += mDir.x * mVel.x;
+		mPos.y += mDir.y * mVel.y;
 	}
 }

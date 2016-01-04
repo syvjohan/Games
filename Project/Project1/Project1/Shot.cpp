@@ -2,23 +2,20 @@
 #include "ManagerModel.h"
 
 namespace Model {
-	Shot::Shot(Vec2 startPosition) {
-		bulletParams.mPos = Vec2(startPosition.x, startPosition.y);
-		bulletParams.mVel = Vec2(8, 0);
-		bulletParams.mDir = Vec2(1, 0);
-		bulletParams.mAcc = Vec2(1, 0);
-		bulletParams.mScale = Vec2(.1, .1);
-		bulletParams.mSize = Vec2(128, 128);
-		bulletParams.mRotation = 0;
-	}
-
 	Shot::Shot() {}
-
 
 	Shot::~Shot() {}
 	
 	void Shot::OnInit(ManagerModel *m) {
 		Entity::OnInit(m);
+
+		mPos = Vec2(startPosition.x, startPosition.y);
+		mVel = Vec2(8, 0);
+		mDir = Vec2(1, 0);
+		mAcc = Vec2(1, 0);
+		mScale = Vec2(.1, .1);
+		mSize = Vec2(128, 128);
+		mRotation = 0;
 	}
 
 	void Shot::OnUpdate() {
@@ -26,15 +23,7 @@ namespace Model {
 	}
 
 	void Shot::OnUpdatedPhysics(const float dt) {
-		bulletParams.mAcc += Vec2(.1f, 0);
-		bulletParams.mPos += bulletParams.mVel + bulletParams.mAcc * dt / 2;
+		mAcc += Vec2(.1f, 0);
+		mPos += mVel + mAcc * dt / 2;
 	}
-
-	bool Shot::IsDead() {
-		if (isDead) {
-			return true;
-		}
-		return false;
-	}
-
 }

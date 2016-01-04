@@ -92,8 +92,8 @@ namespace Controller {
 					gRunning = 0;
 				}
 
-				view.OnUpdate(timer);
-				model.OnUpdate(timer);
+				view.OnUpdate(timer.getDeltaSeconds());
+				model.OnUpdate(timer.getDeltaSeconds());
 
 				g->clear(Color::Black, true);
 
