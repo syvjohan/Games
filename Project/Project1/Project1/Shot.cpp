@@ -26,4 +26,8 @@ namespace Model {
 		mAcc += Vec2(.1f, 0);
 		mPos += mVel + mAcc * dt / 2;
 	}
+
+	bool Shot::IsDead() {
+		return isDead;
+	}
 }

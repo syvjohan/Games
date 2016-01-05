@@ -17,11 +17,13 @@ namespace Model {
 
 			void OnInit(ManagerModel *m);
 			void OnUpdate();
+			bool IsDead();
 
 			inline EntityType Type() { return ENTITY_ASTEROID; }
 
 			void OnUpdateAnimation(const float dt);
 			void OnUpdatePhysics(const float dt);
+			void Cleavage(Vec2 startPosition, float scale);
 
 			float InRange(float min, float max);
 			float r1();
@@ -35,13 +37,12 @@ namespace Model {
 			Vec2 mSize;
 			Vec2 mScale;
 			int mType;
-			float mHealth;
+			int mHealth;
 			float mRotation;
 
 			float mFrameTime;
 			int mCurrentFrame;
 
-		private:
 			const int defaulthealth = 100;
 	};	
 }

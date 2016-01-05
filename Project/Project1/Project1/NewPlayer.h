@@ -7,6 +7,7 @@
 
 namespace Model {
 	class ManagerModel;
+	class Score;
 
 	class NewPlayer : public Entity {
 		public:
@@ -15,6 +16,7 @@ namespace Model {
 
 			void OnInit(ManagerModel *m);
 			void OnUpdate();
+			bool IsDead();
 
 			inline EntityType Type() { return ENTITY_PLAYER; }
 
@@ -23,7 +25,9 @@ namespace Model {
 
 			inline  Vec2 GetPosition() const { return mPos; }
 			inline float GetRadius() const { return std::max(mSize.x / 2, mSize.y / 2) * 0.8f; }
-		
+
+			void Hit();
+
 			Vec2 mPos;
 			Vec2 mVel;
 			Vec2 mAcc;
@@ -37,9 +41,9 @@ namespace Model {
 			float mFrameTime;
 			int mCurrentFrame;
 			float mFrameTimeIsHit;
+			bool isHit = false;
 
-		private:
 			const int defaultHealth = 100;
-			float oldTime = 80;
+
 	};
 }

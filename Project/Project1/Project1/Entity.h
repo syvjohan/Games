@@ -18,6 +18,8 @@ namespace Model {
 
 			virtual void OnInit(ManagerModel *m) { mModel = m; }
 			virtual void OnUpdate() = 0;
+			virtual bool IsDead() = 0;
+
 			virtual Vec2 GetPosition() const = 0;
 			virtual float GetRadius() const = 0;
 

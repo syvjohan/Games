@@ -11,6 +11,14 @@ namespace View {
 }
 
 namespace Model {
+	struct ScoreKeeper {
+		int mScore;
+	};
+
+	struct HealthKeeper {
+		int mMaxHealth;
+		int mHealth;
+	};
 
 	struct CollisionPair {
 		Entity *mEntityA;
@@ -25,7 +33,7 @@ namespace Model {
 	class NewPlayer;
 	class Shot;
 	class NewAsteroid;
-	class NewExplsion;
+	class NewExplosion;
 
 	class ManagerModel {
 		public:
@@ -46,13 +54,18 @@ namespace Model {
 			void AddShot(Vec2 startPosition);
 
 			void OnMoveAsteroid(); //incoming..
-			void OnAsteroidMoved(NewAsteroid *s); //outgoing..
-			void AddAsteroid(int type, int length);
+			void OnAsteroidMoved(NewAsteroid *a); //outgoing..
+			void AddAsteroid(int type, int length, float size, Vec2 startPosition);
 
-			/*void OnExplosion(NewExplosion *e);
-			void AddExplosion(Vec2 startPosition);*/
+			void OnMoveExplosion(NewExplosion *e);
+			void OnExplosionMoved(NewExplosion *e);
+			void AddExplosion(Vec2 startPosition, Model::EntityType);
+			void RemoveDeadExplosion();
 
 			Vec2 GetPlayArea();
+
+			ScoreKeeper scoreKeeper;
+			HealthKeeper healthKeeper;
 
 		private:
 			std::vector<View::ManagerView*> mViews;

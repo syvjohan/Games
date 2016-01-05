@@ -10,16 +10,17 @@ namespace Model {
 		Entity::OnInit(m);
 
 		mPos = startPosition;
+		mSize = Vec2(128, 128);
 		mScale = Vec2(1, 1);
 		mRotation = 0.0f;
 
 		mFrameTime = 0.0f;
 		mCurrentFrame = 0.0f;
-		mLifeTime = 24.0f;
+		mLifeTime = 24;
 	}
 
 	void NewExplosion::OnUpdate() {
-		//GetModel()->OnShotMoved(this);
+		GetModel()->OnExplosionMoved(this);
 	}
 
 	void NewExplosion::OnUpdateAnimation(const float dt) {
@@ -35,5 +36,12 @@ namespace Model {
 				mCurrentFrame = 0;
 			}
 		}
+	}
+
+	bool NewExplosion::IsDead() {
+		if (mLifeTime <= 0) {
+			return true;
+		}
+		return false;
 	}
 }

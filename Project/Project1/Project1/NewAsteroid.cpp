@@ -57,4 +57,19 @@ namespace Model {
 		mPos.x += mDir.x * mVel.x;
 		mPos.y += mDir.y * mVel.y;
 	}
+
+	void NewAsteroid::Cleavage(Vec2 startPosition, float scale) {
+		if (startPosition.x != 0 && startPosition.y != 0) {
+			mPos = startPosition;
+			mHealth /= 2;
+		}
+		mScale *= scale;
+	}
+
+	bool NewAsteroid::IsDead() {
+		if (mHealth <= 0) {
+			return true;
+		}
+		return false;
+	}
 }

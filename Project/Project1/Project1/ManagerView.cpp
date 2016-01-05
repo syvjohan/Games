@@ -3,11 +3,10 @@
 #include "NewPlayer.h"
 #include "Shot.h"
 #include "NewAsteroid.h"
+#include "NewExplosion.h"
 
 namespace View {
-	ManagerView::ManagerView() {
-
-	}
+	ManagerView::ManagerView() {}
 
 	ManagerView::ManagerView(Common *common, Model::ManagerModel *m) {
 		mCommon = common;
@@ -15,14 +14,24 @@ namespace View {
 		Graphics *g = common->getGraphics();
 
 		mRenderer = g->createRenderer2D();
+
+		font = common->getFontResource("sans16");
+		textScore = g->createRenderText(font, "gg");
+		textHealth = g->createRenderText(font, "gg");
 	}
 
-	ManagerView::~ManagerView() {
-
-	}
+	ManagerView::~ManagerView() {}
 
 	void ManagerView::OnRender() {
 		mRenderer->begin(Renderer2D::SPRITE_SORT_DEFERRED, Renderer2D::SPRITE_BLEND_ALPHA);
+		
+		OnRenderSprites();
+		OnRenderText();
+
+		mRenderer->end();
+	}
+
+	void ManagerView::OnRenderSprites() {
 		for (auto &sprite : mSprites) {
 			mRenderer->draw(sprite.mTexture,
 							sprite.mPosition,
@@ -40,14 +49,54 @@ namespace View {
 
 			//}
 		}
+	}
 
-		mRenderer->end();
+	void ManagerView::OnRenderText() {
+		int width, height;
+
+		textScore->getTexture()->getDimensions(&width, &height);
+		mRenderer->draw(textScore->getTexture(),
+					   Vec2(20, 20),
+					   { 0, 0, width, height },
+					   Vec2(0),
+					   0.0f,
+					   Vec2(1, 1),
+					   Color::Yellow,
+					   0.0f
+					   );
+
+		textHealth->getTexture()->getDimensions(&width, &height);
+		Color color = Color::Yellow;
+		if (mModel->healthKeeper.mHealth <= mModel->healthKeeper.mMaxHealth / 2) {
+			color = Color::Red;
+		}
+		mRenderer->draw(textHealth->getTexture(),
+						Vec2(120, 20),
+						{ 0, 0, width, height },
+						Vec2(0),
+						0.0f,
+						Vec2(1, 1),
+						color,
+						0.0f
+						);
 	}
 
 	void ManagerView::OnUpdate(const float dt) {
 		OnUpdatePlayer(dt);
 		OnUpdateShot(dt);
 		OnUpdateAsteroid(dt);
+
+		OnUpdateText();
+	}
+
+	void ManagerView::OnUpdateText() {
+		char buffer[128];
+		sprintf(buffer, "Score: %i", mModel->scoreKeeper.mScore);
+		textScore->setText(buffer);
+
+		char buffer2[128];
+		sprintf(buffer2, "HP: %i%%", mModel->healthKeeper.mHealth);
+		textHealth->setText(buffer2);
 	}
 
 	void ManagerView::OnUpdatePlayer(const float dt) {
@@ -115,9 +164,9 @@ namespace View {
 		sprite.mPosition = player->mPos;
 
 		sprite.mScale = player->mScale;
-		sprite.mOrigin = Vec2(player->mSize.x / 2, player->mSize.y / 2);
+		sprite.mOrigin = Vec2(player->mSize / 2);
 		sprite.mClip = { 0, 0, player->mSize.x, player->mSize.y };
-		sprite.mTint = Color::White;
+		sprite.mTint = player->mColor;
 		sprite.mRotation = player->mRotation;
 
 		mSprites.push_back(sprite);
@@ -127,6 +176,9 @@ namespace View {
 		for (SpriteDef &sprite : mSprites) {
 			if (sprite.mEntity == player) {
 				sprite.mPosition = player->mPos;
+				sprite.mTint = player->mColor;
+				sprite.mRotation = player->mRotation;
+				sprite.mScale = player->mScale;
 			}
 		}
 	}
@@ -153,8 +205,8 @@ namespace View {
 		sprite.mPosition = shot->mPos;
 
 		sprite.mScale = shot->mScale;
-		sprite.mOrigin = Vec2(0);
-		sprite.mClip = { 0, 0, 116, 140 };
+		sprite.mOrigin = Vec2(shot->mSize / 2);
+		sprite.mClip = { 0, 0, shot->mSize.x, shot->mSize.y};
 		sprite.mTint = Color::Red;
 		sprite.mRotation = shot->mRotation;
 
@@ -165,6 +217,8 @@ namespace View {
 		for (SpriteDef &sprite : mSprites) {
 			if (sprite.mEntity == shot) {
 				sprite.mPosition = shot->mPos;
+				sprite.mRotation = shot->mRotation;
+				sprite.mScale = shot->mScale;
 			}
 		}
 	}
@@ -173,6 +227,8 @@ namespace View {
 		for (SpriteDef &sprite : mSprites) {
 			if (sprite.mEntity == shot) {
 				sprite.mPosition = shot->mPos;
+				sprite.mRotation = shot->mRotation;
+				sprite.mScale = shot->mScale;
 			}
 		}
 	}
@@ -193,8 +249,9 @@ namespace View {
 		sprite.mPosition = asteroid->mPos;
 
 		sprite.mScale = asteroid->mScale;
-		sprite.mOrigin = asteroid->mSize / 2;
-		sprite.mClip = { 0, 0, sprite.mOrigin.x * 2, sprite.mOrigin.y * 2 };
+		sprite.mOrigin.x = asteroid->mSize.x / 2 * asteroid->mScale.x;
+		sprite.mOrigin.y = asteroid->mSize.y / 2 * asteroid->mScale.y;
+		sprite.mClip = { 0, 0, asteroid->mSize.x, asteroid->mSize.y };
 		sprite.mTint = Color::White;
 		sprite.mRotation = asteroid->mRotation;
 
@@ -205,6 +262,8 @@ namespace View {
 		for (SpriteDef &sprite : mSprites) {
 			if (sprite.mEntity == asteroid) {
 				sprite.mPosition = asteroid->mPos;
+				sprite.mRotation = asteroid->mRotation;
+				sprite.mScale = asteroid->mScale;
 			}
 		}
 	}
@@ -213,6 +272,8 @@ namespace View {
 		for (SpriteDef &sprite : mSprites) {
 			if (sprite.mEntity == asteroid) {
 				sprite.mPosition = asteroid->mPos;
+				sprite.mRotation = asteroid->mRotation;
+				sprite.mScale = asteroid->mScale;
 			}
 		}
 	}
@@ -237,6 +298,50 @@ namespace View {
 
 	void ManagerView::OnUpdateAsteroid(const float dt) {
 		mModel->OnMoveAsteroid();
+	}
+
+	void ManagerView::OnExplosionSpawned(Model::NewExplosion *explosion) {
+		SpriteDef sprite;
+		sprite.mEntity = explosion;
+		sprite.mTexture = mCommon->getTextureResource("explosion");
+		sprite.mPosition = explosion->mPos;
+
+		sprite.mScale = explosion->mScale;
+		sprite.mOrigin = explosion->mSize / 2;
+		sprite.mClip = { 0, 0, sprite.mOrigin.x * 2, sprite.mOrigin.y * 2 };
+		sprite.mTint = Color::White;
+		sprite.mRotation = explosion->mRotation;
+
+		mSprites.push_back(sprite);
+	}
+
+	void ManagerView::OnExplosionUpdateAnimation(const Model::NewExplosion *explosion) {
+		for (auto &sprite : mSprites) {
+			if (sprite.mEntity == explosion) {
+				sprite.mClip.x = (explosion->mCurrentFrame % 4) * explosion->mSize.x;
+				sprite.mClip.y = (explosion->mCurrentFrame / 4) * explosion->mSize.y;
+			}
+		}
+	}
+
+	void ManagerView::OnExplossionMoved(const Model::NewExplosion *explosion) {
+		for (SpriteDef &sprite : mSprites) {
+			if (sprite.mEntity == explosion) {
+				sprite.mPosition = explosion->mPos;
+				sprite.mRotation = explosion->mRotation;
+				sprite.mScale = explosion->mScale;
+			}
+		}
+	}
+
+	void ManagerView::OnMoveExplossion(const Model::NewExplosion *explosion) {
+		for (SpriteDef &sprite : mSprites) {
+			if (sprite.mEntity == explosion) {
+				sprite.mPosition = explosion->mPos;
+				sprite.mRotation = explosion->mRotation;
+				sprite.mScale = explosion->mScale;
+			}
+		}
 	}
 
 	void ManagerView::OnEntityDied(int index) {

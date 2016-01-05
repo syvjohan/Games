@@ -9,6 +9,8 @@ namespace Model {
 	class NewPlayer;
 	class Shot;
 	class NewAsteroid;
+	class NewExplosion;
+	class ScoreKeeper;
 }
 
 namespace View {
@@ -23,6 +25,16 @@ namespace View {
 		Model::Entity *mEntity;
 	};
 
+	struct TextDef {
+		RenderText  *mTexture;
+		Vec2         mPosition;
+		Vec2         mScale;
+		float        mRotation;
+		Vec2         mOrigin;
+		RectangleF   mClip;
+		Vec4         mTint;
+	};
+
 	class ManagerView {
 		public:
 				ManagerView();
@@ -30,7 +42,11 @@ namespace View {
 				~ManagerView();
 
 				void OnUpdate(const float dt);
+
+				//Render
 				void OnRender();
+				void OnRenderSprites();
+				void OnRenderText();
 
 				// Player
 				void OnPlayerSpawned(Model::NewPlayer *player);
@@ -51,12 +67,28 @@ namespace View {
 				void OnShotMoved(const Model::Shot *shot);
 				void OnShotUpdatePhysics(const Model::Shot *shot);
 
+				//Explosion
+				void OnExplosionSpawned(Model::NewExplosion *explosion);
+				void OnExplosionUpdateAnimation(const Model::NewExplosion *explosion);
+				void OnExplossionMoved(const Model::NewExplosion *explosion);
+				void OnMoveExplossion(const Model::NewExplosion *explosison);
+
 				void OnEntityDied(int index);
+
+				//Text
+				void OnUpdateText();
+
 		private:
 			Common *mCommon;
 			Model::ManagerModel *mModel;
 			Renderer2D *mRenderer;
+
 			std::vector<SpriteDef> mSprites;
+			std::vector<TextDef> mTexts;
+
+			RenderFont *font;
+			RenderText *textScore;
+			RenderText *textHealth;
 
 			bool btnIsPressedPlane = false; //controlling frames from fires behind plane.
 		

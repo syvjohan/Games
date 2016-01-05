@@ -3,7 +3,7 @@
 #include "NewPlayer.h"
 #include "Shot.h"
 #include "NewAsteroid.h"
-//#include "NewExplosion.h"
+#include "NewExplosion.h"
 
 #include <algorithm>
 
@@ -18,6 +18,10 @@ namespace Model {
 		// Create a player..
 		NewPlayer *player = DBG_NEW NewPlayer();
 		mEntities.push_back(player);
+
+		healthKeeper.mHealth = player->defaultHealth;
+		healthKeeper.mMaxHealth = player->defaultHealth;
+		scoreKeeper.mScore = 0;
 
 		NewAsteroid *asteroid = DBG_NEW NewAsteroid();
 		mEntities.push_back(asteroid);
@@ -61,7 +65,6 @@ namespace Model {
 			ProcessCollisions(collisions);
 		}
 
-
 		for (Entity *e : mEntities) {
 			e->OnUpdate();
 			if (e->Type() == ENTITY_PLAYER) {
@@ -71,6 +74,9 @@ namespace Model {
 
 					((NewPlayer*)e)->OnUpdatePhysics(dt);
 					view->OnPlayerUpdatedPhysics((NewPlayer*)e);
+
+					healthKeeper.mHealth = ((NewPlayer*)e)->mHealth;
+
 				}
 			} else if (e->Type() == ENTITY_BULLET) {
 				for (auto view : mViews) {
@@ -85,8 +91,15 @@ namespace Model {
 					((NewAsteroid*)e)->OnUpdatePhysics(dt);
 					view->OnAsteroidUpdatedPhysics((NewAsteroid*)e);
 				}
+			} else if (e->Type() == ENTITY_EXPLOSION) {
+				for (auto view : mViews) {
+					((NewExplosion*)e)->OnUpdateAnimation(dt);
+					view->OnExplosionUpdateAnimation((NewExplosion*)e);
+				}
 			}
 		}
+
+		RemoveDeadExplosion();
 	}
 
 	void ManagerModel::ColissionWall() {
@@ -122,7 +135,7 @@ namespace Model {
 				if (asteroid->mPos.x + asteroid->GetRadius() < 0 ||
 					asteroid->mPos.y + asteroid->GetRadius() < 0) {
 					RemoveEntity(e);
-					AddAsteroid(0, 0);
+					AddAsteroid(0, 0, 1, Vec2(0));
 					--index;
 				}
 			}
@@ -174,17 +187,59 @@ namespace Model {
 			NewAsteroid *asteroid = GET_ENTITY(NewAsteroid, ENTITY_ASTEROID, pair);
 
 			if (player && asteroid) {
-				RemoveEntity(asteroid);
-				RemoveEntity(player);
-				AddAsteroid(0, 0);
+				AddAsteroid(0, 2, 100, Vec2(0, 0));
+					if (player->mHealth == player->defaultHealth / 2) {
+						if (player->mFrameTimeIsHit <= 0) {
+							AddExplosion(player->GetPosition(), ENTITY_PLAYER);
+
+							healthKeeper.mHealth = 0;
+
+							RemoveEntity(player);
+							RemoveEntity(asteroid);
+
+							player->isHit = false;
+						}
+					} else {
+						player->Hit();
+
+						AddExplosion(asteroid->GetPosition(), ENTITY_PLAYER);
+						RemoveEntity(asteroid);
+					}
+
 			} else if (asteroid && shot) {
-				AddAsteroid(0, 0);
-				RemoveEntity(asteroid);
 				RemoveEntity(shot);
+				if (asteroid->mHealth == asteroid->defaulthealth) {
+					Vec2 pos = Vec2(asteroid->mPos.x, asteroid->mPos.y);
+					float health = asteroid->defaulthealth / 2;
+					RemoveEntity(asteroid);
+					
+					scoreKeeper.mScore += 1;
+
+					AddAsteroid(0, 2, health, pos);
+				} else if (asteroid->mHealth == asteroid->defaulthealth / 2) {
+					AddExplosion(asteroid->GetPosition(), ENTITY_ASTEROID);
+					RemoveEntity(asteroid);
+
+					scoreKeeper.mScore += 2;
+				}
 			} else if (asteroid && !player && !shot) {
-				RemoveEntity(pair.mEntityA);
-				RemoveEntity(pair.mEntityB);			
+				//RemoveEntity(pair.mEntityA);
+				//RemoveEntity(pair.mEntityB);			
 			}
+		}
+	}
+
+	void ManagerModel::RemoveDeadExplosion() {
+		int index = 0;
+		while (index < mEntities.size()) {
+			Entity *e = mEntities[index];
+			if (e->Type() == ENTITY_EXPLOSION) {
+				if (e->IsDead()) {
+					RemoveEntity(e);
+					--index;
+				}
+			}
+			++index;
 		}
 	}
 
@@ -219,8 +274,8 @@ namespace Model {
 		Vec2 position = Vec2(0, 0);
 		for (Entity *e : mEntities) {
 			if (e->Type() == ENTITY_PLAYER) {
-				float x = ((NewPlayer*)e)->mPos.x + ((NewPlayer*)e)->mSize.x + 6;
-				float y = ((NewPlayer*)e)->mPos.y - 65;
+				float x = ((NewPlayer*)e)->mPos.x + (((NewPlayer*)e)->GetRadius() * 2);
+				float y = ((NewPlayer*)e)->mPos.y + ((NewPlayer*)e)->GetRadius();
 				position = Vec2(x, y);
 			}
 		}
@@ -266,13 +321,46 @@ namespace Model {
 		}
 	}
 
-	void ManagerModel::AddAsteroid(int type, int length) {
-		NewAsteroid *asteroid = DBG_NEW NewAsteroid();
-		asteroid->OnInit(this);
-		mEntities.push_back(asteroid);
+	void ManagerModel::AddAsteroid(int type, int length, float size, Vec2 startPosition) {
+		for (int i = 0; i != length; ++i) {
+			NewAsteroid *asteroid = DBG_NEW NewAsteroid();
+			asteroid->OnInit(this);
+			asteroid->Cleavage(startPosition, size / 100);
+
+			mEntities.push_back(asteroid);
+			for (auto *view : mViews) {
+				view->OnAsteroidSpawned((NewAsteroid*)asteroid);
+			}
+		}
+	}
+
+	void ManagerModel::OnExplosionMoved(NewExplosion *e) {
+		for (auto *view : mViews) {
+			view->OnExplossionMoved(e);
+		}
+	}
+
+	void ManagerModel::OnMoveExplosion(NewExplosion *e) {
+		/*for (Entity *e : mEntities) {
+			if (e->Type() == ENTITY_ASTEROID) {
+				((NewAsteroid*)e)->mPos.x -= 1;
+			}
+		}*/
+	}
+
+	void ManagerModel::AddExplosion(Vec2 startPosition, Model::EntityType entity) {
+		NewExplosion *explosion = DBG_NEW NewExplosion();
+		explosion->OnInit(this);
+		explosion->mPos = startPosition;
+		if (entity == ENTITY_ASTEROID) {
+			explosion->mScale /= 1.5;
+		} else if (entity == ENTITY_PLAYER) {
+			explosion->mScale *= 2;
+		}
+		mEntities.push_back(explosion);
 
 		for (auto *view : mViews) {
-			view->OnAsteroidSpawned((NewAsteroid*)asteroid);
+			view->OnExplosionSpawned((NewExplosion*)explosion);
 		}
 	}
 

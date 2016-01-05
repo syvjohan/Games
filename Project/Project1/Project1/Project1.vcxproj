@@ -146,11 +146,11 @@
     <ClInclude Include="NewAsteroid.h" />
     <ClInclude Include="NewExplosion.h" />
     <ClInclude Include="NewPlayer.h" />
+    <ClInclude Include="NewScore.h" />
     <ClInclude Include="PlayerHealth.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="Score.h" />
     <ClInclude Include="Shot.h" />
     <ClInclude Include="ShootSystem.h" />
     <ClInclude Include="Explosion.h" />
@@ -168,7 +168,6 @@
     <ClCompile Include="PlayerHealth.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Score.cpp" />
     <ClCompile Include="Shot.cpp" />
     <ClCompile Include="ShootSystem.cpp" />
     <ClCompile Include="ManagerView.cpp" />

@@ -22,14 +22,11 @@ namespace Model {
 
 		mCurrentFrame = 0;
 		mFrameTime = 0.0f;
-		mFrameTimeIsHit = 0.0f;
+		mFrameTimeIsHit = 1.5f;
 	}
 
 	void NewPlayer::OnUpdate() {
 		GetModel()->OnPlayerMoved(this);
-		char buffer[128];
-		sprintf(buffer, "(%.2f, %.2f)\n", mPos.x, mPos.y);
-		OutputDebugString(buffer);
 	}
 
 	void NewPlayer::OnUpdatePhysics(const float dt) {
@@ -57,5 +54,27 @@ namespace Model {
 				mFrameTime = 0;
 			} 
 		}
+
+		if (isHit && mFrameTimeIsHit > 0) {
+			mFrameTimeIsHit -= dt;
+		} else if(isHit && mFrameTimeIsHit <= 0) {
+			if (mFrameTimeIsHit <= 0) {
+				mFrameTimeIsHit = 0;
+				mColor = Color::White;
+			}
+		}
+	}
+
+	void NewPlayer::Hit() {
+		isHit = true;
+		mHealth = defaultHealth / 2;
+		mColor = Color::Red;
+	}
+
+	bool NewPlayer::IsDead() {
+		if (mHealth >= 0) {
+			return true;
+		}
+		return false;
 	}
 }

@@ -15,6 +15,7 @@ namespace Model {
 
 			void OnInit(ManagerModel *m);
 			void OnUpdate();
+			bool IsDead();
 
 			inline EntityType Type() { return ENTITY_BULLET; }
 
