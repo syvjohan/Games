@@ -1,26 +1,37 @@
-#include <framework.h>
+#pragma once
 
-class Texture2D;
+#include <framework.h>
+#include <algorithm>
+
+#include "Entity.h"
 
 namespace Model {
+	class ManagerModel;
 
-	struct ExplosionAnimation {
-		Vec2 mPos;
-		Vec2 mStart;
-		Vec2 mFrameSize;
-		float mFrameTime;
-		Vec2 mScale;
-		int mFrameCount;
-		Texture2D* mTexture;
-		int mCurrentFrame;
-		float lifetime;
+	class Explosion : public Entity {
+		public:
+			Explosion();
+			~Explosion();
+
+			void OnInit(ManagerModel *m);
+			void OnUpdate();
+			bool IsDead();
+
+			inline EntityType Type() { return ENTITY_EXPLOSION; }
+
+			inline  Vec2 GetPosition() const { return mPos; }
+			inline float GetRadius() const { return std::max(mSize.x / 2, mSize.y / 2); }
+
+			void OnUpdateAnimation(const float dt);
+
+			Vec2 startPosition;
+			Vec2 mPos;
+			Vec2 mSize;
+			Vec2 mScale;
+			float mRotation;
+
+			float mFrameTime;
+			int mCurrentFrame;
+			int mLifeTime;
 	};
 }
-
-
-
-
-
-
-
-

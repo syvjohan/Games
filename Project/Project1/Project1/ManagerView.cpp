@@ -1,9 +1,9 @@
 #include "ManagerView.h"
 #include "ManagerModel.h"
-#include "NewPlayer.h"
+#include "Player.h"
 #include "Shot.h"
-#include "NewAsteroid.h"
-#include "NewExplosion.h"
+#include "Asteroid.h"
+#include "Explosion.h"
 
 namespace View {
 	ManagerView::ManagerView() {}
@@ -133,7 +133,7 @@ namespace View {
 		}
 	}
 
-	bool ManagerView::OnPlayerUpdatedAnimation(const Model::NewPlayer *player) {
+	bool ManagerView::OnPlayerUpdatedAnimation(const Model::Player *player) {
 		for (auto &sprite : mSprites) {
 			if (sprite.mEntity == player) {
 				sprite.mClip.x = (player->mCurrentFrame % 4) * player->mSize.x;
@@ -148,7 +148,7 @@ namespace View {
 		return false;
 	}
 
-	void ManagerView::OnPlayerUpdatedPhysics(const Model::NewPlayer *player) {
+	void ManagerView::OnPlayerUpdatedPhysics(const Model::Player *player) {
 		for (auto &sprite : mSprites) {
 			if (sprite.mEntity == player) {
 				sprite.mPosition.x = player->mPos.x;
@@ -157,7 +157,7 @@ namespace View {
 		}
 	}
 
-	void ManagerView::OnPlayerSpawned(Model::NewPlayer *player) {
+	void ManagerView::OnPlayerSpawned(Model::Player *player) {
 		SpriteDef sprite;
 		sprite.mEntity = player;
 		sprite.mTexture = mCommon->getTextureResource("plane");
@@ -172,7 +172,7 @@ namespace View {
 		mSprites.push_back(sprite);
 	}
 
-	void ManagerView::OnPlayerMoved(const Model::NewPlayer *player) {
+	void ManagerView::OnPlayerMoved(const Model::Player *player) {
 		for (SpriteDef &sprite : mSprites) {
 			if (sprite.mEntity == player) {
 				sprite.mPosition = player->mPos;
@@ -242,7 +242,14 @@ namespace View {
 		}
 	}
 
-	void ManagerView::OnAsteroidSpawned(Model::NewAsteroid *asteroid) {
+	void ManagerView::PlayShotSoundEffect(const Model::Shot *shot) {
+		if (source = mCommon->getAudio()->getSource()) {
+			source->setVolume(.1f);
+			source->play(mCommon->getSoundResource("soundShoot"));			
+		}
+	}
+
+	void ManagerView::OnAsteroidSpawned(Model::Asteroid *asteroid) {
 		SpriteDef sprite;
 		sprite.mEntity = asteroid;
 		sprite.mTexture = mCommon->getTextureResource("asteroid1");
@@ -258,7 +265,7 @@ namespace View {
 		mSprites.push_back(sprite);
 	}
 
-	void ManagerView::OnAsteroidMoved(Model::NewAsteroid *asteroid) {
+	void ManagerView::OnAsteroidMoved(Model::Asteroid *asteroid) {
 		for (SpriteDef &sprite : mSprites) {
 			if (sprite.mEntity == asteroid) {
 				sprite.mPosition = asteroid->mPos;
@@ -268,7 +275,7 @@ namespace View {
 		}
 	}
 
-	void ManagerView::OnMoveAsteroid(const Model::NewAsteroid *asteroid) {
+	void ManagerView::OnMoveAsteroid(const Model::Asteroid *asteroid) {
 		for (SpriteDef &sprite : mSprites) {
 			if (sprite.mEntity == asteroid) {
 				sprite.mPosition = asteroid->mPos;
@@ -278,7 +285,7 @@ namespace View {
 		}
 	}
 
-	void ManagerView::OnAsteroidUpdatedPhysics(Model::NewAsteroid *asteroid) {
+	void ManagerView::OnAsteroidUpdatedPhysics(Model::Asteroid *asteroid) {
 		for (auto &sprite : mSprites) {
 			if (sprite.mEntity == asteroid) {
 				sprite.mPosition.x = asteroid->mPos.x;
@@ -287,7 +294,7 @@ namespace View {
 		}
 	}
 
-	void ManagerView::OnAsteroidUpdatedAnimation(const Model::NewAsteroid *asteroid) {
+	void ManagerView::OnAsteroidUpdatedAnimation(const Model::Asteroid *asteroid) {
 		for (auto &sprite : mSprites) {
 			if (sprite.mEntity == asteroid) {
 				sprite.mClip.x = (asteroid->mCurrentFrame % 5) * asteroid->mSize.x;
@@ -300,7 +307,7 @@ namespace View {
 		mModel->OnMoveAsteroid();
 	}
 
-	void ManagerView::OnExplosionSpawned(Model::NewExplosion *explosion) {
+	void ManagerView::OnExplosionSpawned(Model::Explosion *explosion) {
 		SpriteDef sprite;
 		sprite.mEntity = explosion;
 		sprite.mTexture = mCommon->getTextureResource("explosion");
@@ -315,7 +322,7 @@ namespace View {
 		mSprites.push_back(sprite);
 	}
 
-	void ManagerView::OnExplosionUpdateAnimation(const Model::NewExplosion *explosion) {
+	void ManagerView::OnExplosionUpdateAnimation(const Model::Explosion *explosion) {
 		for (auto &sprite : mSprites) {
 			if (sprite.mEntity == explosion) {
 				sprite.mClip.x = (explosion->mCurrentFrame % 4) * explosion->mSize.x;
@@ -324,7 +331,7 @@ namespace View {
 		}
 	}
 
-	void ManagerView::OnExplossionMoved(const Model::NewExplosion *explosion) {
+	void ManagerView::OnExplossionMoved(const Model::Explosion *explosion) {
 		for (SpriteDef &sprite : mSprites) {
 			if (sprite.mEntity == explosion) {
 				sprite.mPosition = explosion->mPos;
@@ -334,13 +341,20 @@ namespace View {
 		}
 	}
 
-	void ManagerView::OnMoveExplossion(const Model::NewExplosion *explosion) {
+	void ManagerView::OnMoveExplossion(const Model::Explosion *explosion) {
 		for (SpriteDef &sprite : mSprites) {
 			if (sprite.mEntity == explosion) {
 				sprite.mPosition = explosion->mPos;
 				sprite.mRotation = explosion->mRotation;
 				sprite.mScale = explosion->mScale;
 			}
+		}
+	}
+
+	void ManagerView::PlayExplosionSoundEffect(const Model::Explosion *explosion) {
+		if(source = mCommon->getAudio()->getSource()) {
+			source->setVolume(.1f);
+			source->play(mCommon->getSoundResource("soundExplosion"));
 		}
 	}
 

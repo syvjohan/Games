@@ -1,12 +1,12 @@
-#include "NewAsteroid.h"
+#include "Asteroid.h"
 #include "ManagerModel.h"
 
 namespace Model {
-	NewAsteroid::NewAsteroid() {}
+	Asteroid::Asteroid() {}
 
-	NewAsteroid::~NewAsteroid() {}
+	Asteroid::~Asteroid() {}
 
-	void NewAsteroid::OnInit(ManagerModel *m) {
+	void Asteroid::OnInit(ManagerModel *m) {
 		Entity::OnInit(m);
 
 		mPos.x = m->GetPlayArea().x;
@@ -23,19 +23,19 @@ namespace Model {
 		mCurrentFrame = 0;
 	}
 
-	float NewAsteroid::InRange(float min, float max) {
+	float Asteroid::InRange(float min, float max) {
 		return min + (max - min) * r1();
 	}
 
-	float NewAsteroid::r1() {
+	float Asteroid::r1() {
 		return (float)(rand() % 10001) / 10000.0f;
 	}
 
-	void NewAsteroid::OnUpdate() {
+	void Asteroid::OnUpdate() {
 		GetModel()->OnAsteroidMoved(this);
 	}
 
-	void NewAsteroid::OnUpdateAnimation(const float dt) {
+	void Asteroid::OnUpdateAnimation(const float dt) {
 		mFrameTime += dt;
 
 		if (mFrameTime >= 0.09f) {
@@ -52,13 +52,13 @@ namespace Model {
 		}
 	}
 
-	void NewAsteroid::OnUpdatePhysics(const float dt) {
+	void Asteroid::OnUpdatePhysics(const float dt) {
 		mVel += Vec2(.0005f, .0005f);
 		mPos.x += mDir.x * mVel.x;
 		mPos.y += mDir.y * mVel.y;
 	}
 
-	void NewAsteroid::Cleavage(Vec2 startPosition, float scale) {
+	void Asteroid::Cleavage(Vec2 startPosition, float scale) {
 		if (startPosition.x != 0 && startPosition.y != 0) {
 			mPos = startPosition;
 			mHealth /= 2;
@@ -66,7 +66,7 @@ namespace Model {
 		mScale *= scale;
 	}
 
-	bool NewAsteroid::IsDead() {
+	bool Asteroid::IsDead() {
 		if (mHealth <= 0) {
 			return true;
 		}

@@ -3,12 +3,6 @@
 #include <framework.h>
 
 #include "Defs.h"
-#include "player.h"
-#include "ShootSystem.h"
-#include "AsteroidSystem.h"
-#include "CollisionDetection.h"
-#include "PlayerHealth.h"
-#include "Camera.h"
 
 #include "ManagerModel.h"
 #include "ManagerView.h"

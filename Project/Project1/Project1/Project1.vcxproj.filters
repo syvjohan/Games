@@ -18,43 +18,7 @@
     <ClInclude Include="Defs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Particle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GameController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ExplosionAnimation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ShootSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AsteroidSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Asteroid.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Bullet.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionDetection.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Explosion.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Plane.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerHealth.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ManagerView.h">
@@ -66,19 +30,16 @@
     <ClInclude Include="ManagerModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NewPlayer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Shot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NewAsteroid.h">
+    <ClInclude Include="Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NewExplosion.h">
+    <ClInclude Include="Explosion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NewScore.h">
+    <ClInclude Include="Asteroid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -89,40 +50,22 @@
     <ClCompile Include="GameController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ExplosionAnimation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ShootSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AsteroidSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CollisionDetection.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerHealth.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ManagerView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ManagerModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NewPlayer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Shot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NewAsteroid.cpp">
+    <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NewExplosion.cpp">
+    <ClCompile Include="Explosion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Asteroid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

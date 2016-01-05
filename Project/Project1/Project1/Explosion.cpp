@@ -1,12 +1,12 @@
-#include "NewExplosion.h"
+#include "Explosion.h"
 #include "ManagerModel.h"
 
 namespace Model {
-	NewExplosion::NewExplosion() {}
+	Explosion::Explosion() {}
 
-	NewExplosion::~NewExplosion() {}
+	Explosion::~Explosion() {}
 
-	void NewExplosion::OnInit(ManagerModel *m) {
+	void Explosion::OnInit(ManagerModel *m) {
 		Entity::OnInit(m);
 
 		mPos = startPosition;
@@ -19,11 +19,11 @@ namespace Model {
 		mLifeTime = 24;
 	}
 
-	void NewExplosion::OnUpdate() {
+	void Explosion::OnUpdate() {
 		GetModel()->OnExplosionMoved(this);
 	}
 
-	void NewExplosion::OnUpdateAnimation(const float dt) {
+	void Explosion::OnUpdateAnimation(const float dt) {
 		mFrameTime += dt;
 
 		if (mFrameTime >= 0.021) {
@@ -38,7 +38,7 @@ namespace Model {
 		}
 	}
 
-	bool NewExplosion::IsDead() {
+	bool Explosion::IsDead() {
 		if (mLifeTime <= 0) {
 			return true;
 		}

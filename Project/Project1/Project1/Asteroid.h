@@ -2,29 +2,47 @@
 
 #include <framework.h>
 
-#include <vector>
+#include "Entity.h"
+#include <algorithm>
 
 namespace Model {
-	struct AsteroidAnimation {
-		Vec2 mStart;
-		Vec2 mFrameSize;
-		float mFrameTime;
-		int mFrameCount;
-		Texture2D* mTexture;
-		int mCurrentFrame;
-	};
+	class ManagerModel;
+}
 
-	struct Asteroid {
-		Vec2 mPos;
-		Vec2 mDir;
-		Vec2 mVel;
+namespace Model {
+	class Asteroid : public Entity {
+		public:
+			Asteroid();
+			~Asteroid();
 
-		Vec2 mSize;
-		Vec2 mScale;
-		Vec2 mPlayArea;
-		int mType;
-		float mHealth;
+			void OnInit(ManagerModel *m);
+			void OnUpdate();
+			bool IsDead();
 
-		Model::AsteroidAnimation animation;
-	};
+			inline EntityType Type() { return ENTITY_ASTEROID; }
+
+			void OnUpdateAnimation(const float dt);
+			void OnUpdatePhysics(const float dt);
+			void Cleavage(Vec2 startPosition, float scale);
+
+			float InRange(float min, float max);
+			float r1();
+
+			inline  Vec2 GetPosition() const { return mPos; }
+			inline float GetRadius() const { return std::max(mSize.x / 2, mSize.y / 2); }
+		
+			Vec2 mPos;
+			Vec2 mDir;
+			Vec2 mVel;
+			Vec2 mSize;
+			Vec2 mScale;
+			int mType;
+			int mHealth;
+			float mRotation;
+
+			float mFrameTime;
+			int mCurrentFrame;
+
+			const int defaulthealth = 100;
+	};	
 }

@@ -30,10 +30,10 @@ namespace Model {
 	};
 
 	class ManagerModel;
-	class NewPlayer;
+	class Player;
 	class Shot;
-	class NewAsteroid;
-	class NewExplosion;
+	class Asteroid;
+	class Explosion;
 
 	class ManagerModel {
 		public:
@@ -45,7 +45,7 @@ namespace Model {
 			void RemoveView(View::ManagerView *v);
 			void OnUpdate(const float dt);
 
-			void OnPlayerMoved(NewPlayer *p); //outgoing..
+			void OnPlayerMoved(Player *p); //outgoing..
 			void OnMovePlayer(const Vec2 &delta); //incoming..
 			Vec2 GetStartPositionForShot();
 		
@@ -54,11 +54,11 @@ namespace Model {
 			void AddShot(Vec2 startPosition);
 
 			void OnMoveAsteroid(); //incoming..
-			void OnAsteroidMoved(NewAsteroid *a); //outgoing..
+			void OnAsteroidMoved(Asteroid *a); //outgoing..
 			void AddAsteroid(int type, int length, float size, Vec2 startPosition);
 
-			void OnMoveExplosion(NewExplosion *e);
-			void OnExplosionMoved(NewExplosion *e);
+			void OnMoveExplosion(Explosion *e);
+			void OnExplosionMoved(Explosion *e);
 			void AddExplosion(Vec2 startPosition, Model::EntityType);
 			void RemoveDeadExplosion();
 

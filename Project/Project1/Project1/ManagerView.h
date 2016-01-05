@@ -6,10 +6,10 @@
 namespace Model {
 	class Entity;
 	class ManagerModel;
-	class NewPlayer;
+	class Player;
 	class Shot;
-	class NewAsteroid;
-	class NewExplosion;
+	class Asteroid;
+	class Explosion;
 	class ScoreKeeper;
 }
 
@@ -35,6 +35,10 @@ namespace View {
 		Vec4         mTint;
 	};
 
+	struct SoundDef {
+
+	};
+
 	class ManagerView {
 		public:
 				ManagerView();
@@ -49,29 +53,31 @@ namespace View {
 				void OnRenderText();
 
 				// Player
-				void OnPlayerSpawned(Model::NewPlayer *player);
-				void OnPlayerMoved(const Model::NewPlayer *player);
-				bool OnPlayerUpdatedAnimation(const Model::NewPlayer *player);
-				void OnPlayerUpdatedPhysics(const Model::NewPlayer *player);
+				void OnPlayerSpawned(Model::Player *player);
+				void OnPlayerMoved(const Model::Player *player);
+				bool OnPlayerUpdatedAnimation(const Model::Player *player);
+				void OnPlayerUpdatedPhysics(const Model::Player *player);
 
 				//Asteroids
-				void OnAsteroidSpawned(Model::NewAsteroid *asteroid);
-				void OnAsteroidMoved(Model::NewAsteroid *asteroid);
-				void OnMoveAsteroid(const Model::NewAsteroid *asteroid);
-				void OnAsteroidUpdatedPhysics(Model::NewAsteroid *asteroid);
-				void OnAsteroidUpdatedAnimation(const Model::NewAsteroid *asteroid);
+				void OnAsteroidSpawned(Model::Asteroid *asteroid);
+				void OnAsteroidMoved(Model::Asteroid *asteroid);
+				void OnMoveAsteroid(const Model::Asteroid *asteroid);
+				void OnAsteroidUpdatedPhysics(Model::Asteroid *asteroid);
+				void OnAsteroidUpdatedAnimation(const Model::Asteroid *asteroid);
 
 				//Bullets
 				void OnShotSpawned(Model::Shot *shot);
 				void OnMoveShot(const Model::Shot *shot);
 				void OnShotMoved(const Model::Shot *shot);
 				void OnShotUpdatePhysics(const Model::Shot *shot);
+				void PlayShotSoundEffect(const Model::Shot *shot);
 
 				//Explosion
-				void OnExplosionSpawned(Model::NewExplosion *explosion);
-				void OnExplosionUpdateAnimation(const Model::NewExplosion *explosion);
-				void OnExplossionMoved(const Model::NewExplosion *explosion);
-				void OnMoveExplossion(const Model::NewExplosion *explosison);
+				void OnExplosionSpawned(Model::Explosion *explosion);
+				void OnExplosionUpdateAnimation(const Model::Explosion *explosion);
+				void OnExplossionMoved(const Model::Explosion *explosion);
+				void OnMoveExplossion(const Model::Explosion *explosison);
+				void PlayExplosionSoundEffect(const Model::Explosion *explosion);
 
 				void OnEntityDied(int index);
 
@@ -89,6 +95,8 @@ namespace View {
 			RenderFont *font;
 			RenderText *textScore;
 			RenderText *textHealth;
+
+			AudioSource *source;
 
 			bool btnIsPressedPlane = false; //controlling frames from fires behind plane.
 		
