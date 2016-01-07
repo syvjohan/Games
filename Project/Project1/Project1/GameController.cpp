@@ -95,7 +95,7 @@ namespace Controller {
 
 					menuView.OnUpdate(timer.getDeltaSeconds());
 					menuModel.OnUpdate(timer.getDeltaSeconds(), isGameStarted);
-					if (menuModel.IsPaused()) {
+					if (menuModel.IsPaused() && isGameStarted) {
 						currentState = GAMESTATE_INGAME;
 					} else if (menuModel.IsNewGame()) {
 						delete managerModel;

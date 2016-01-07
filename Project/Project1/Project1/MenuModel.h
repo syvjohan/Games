@@ -41,7 +41,6 @@ namespace Model {
 			void CollissionWall();
 			void CheckInput(Vec2 coordinates);
 
-			void ResetStates();
 			bool IsPaused();
 			bool IsNewGame();
 
