@@ -23,4 +23,9 @@ namespace View {
 	};
 }
 
+#include <math.h>
+bool compareFloat(float a, float b) {
+	return fabsf(a - b) < FLT_EPSILON;
+}
+
 #endif //!DEFS_H

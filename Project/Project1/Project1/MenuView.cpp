@@ -35,16 +35,21 @@ namespace View {
 							0.0f);
 		}
 
-
 		mRenderer->end();
 	}
 
 	void MenuView::OnUpdate(const float dt) {
-		//OnNewGameUpdate(newGame);
-		//OnContinueGameUpdate(continueGame);
-		//OnControllsUpdate(controlls);
-		//OnInstructionUpdate(instruction);
-		//OnBackgroundUpdate(dt);
+		InputState inputState;
+		mCommon->getInputState(&inputState);
+
+		accumulatorKeyPress -= dt;
+		if (accumulatorKeyPress <= 0) {
+			accumulatorKeyPress = 0;
+		}
+		if (inputState.isDown(Button::BUTTON_MOUSELEFT) && accumulatorKeyPress == 0) {
+			mModel->CheckInput(Vec2(inputState.mMouseX, inputState.mMouseY));
+			accumulatorKeyPress = delayKeyPress;
+		}
 	}
 
 	void MenuView::OnBackgroundUpdate(const float dt) {}

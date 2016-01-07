@@ -15,6 +15,11 @@
 #include <ctime>
 
 namespace Controller {
+	enum GameStates {
+		GAMESTATE_INGAME = 0,
+		GAMESTATE_INMENU
+	};
+
 
 	static bool gRunning = true;
 
@@ -34,11 +39,14 @@ namespace Controller {
 			int screenWidth = 1280;
 			int screenHeight = 720;
 
-			bool inMenu = true;
-			bool inGame = false;
-
 			WindowParams wParams;
 			Common common;
+
+			GameStates currentState;
+			const float coolDownEsc = 0.5f;
+			float timerEsc = coolDownEsc;
+
+			bool isGameStarted = false;
 	};
 
 }

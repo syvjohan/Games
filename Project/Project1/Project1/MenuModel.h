@@ -25,11 +25,13 @@ namespace Model {
 			void Init(Vec2 screen);
 			void AddView(View::MenuView *v);
 			void RemoveView(View::MenuView *v);
-			void OnUpdate(const float dt);
+			void OnUpdate(const float dt, bool isGameStarted);
 			Vec2 GetMenuArea();
 
 			void OnNewGameUpdated(NewGame *g);
+
 			void OnContinueGameUpdated(ContinueGame *c);
+
 			void OnControllsUpdated(Controlls *c);
 			void OnInstructionsUpdated(Instructions *i);
 
@@ -37,6 +39,11 @@ namespace Model {
 			void OnMoveBackground();
 
 			void CollissionWall();
+			void CheckInput(Vec2 coordinates);
+
+			void ResetStates();
+			bool IsPaused();
+			bool IsNewGame();
 
 		private:
 			std::vector<View::MenuView*> mViews;
@@ -44,5 +51,8 @@ namespace Model {
 			Vec2 mMenuArea;
 
 			void SetMenuArea(Vec2 screen);
+
+			bool clickedContinueGame = false;
+			bool clickedNewGame = false;
 	};
 }

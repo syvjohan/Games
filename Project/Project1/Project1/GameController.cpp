@@ -54,12 +54,14 @@ namespace Controller {
 			common.getGraphics()->getContextSize(&width, &height);
 			menuModel.Init(Vec2(width, height));
 
-			Model::ManagerModel managerModel;
-			View::ManagerView managerView(&common, &managerModel);
-			managerModel.AddView(&managerView);
+			Model::ManagerModel *managerModel = DBG_NEW Model::ManagerModel;
+			View::ManagerView *managerView = DBG_NEW View::ManagerView(&common, managerModel);
+			managerModel->AddView(managerView);
 
 			common.getGraphics()->getContextSize(&width, &height);
-			managerModel.Init(Vec2(width, height));
+			managerModel->Init(Vec2(width, height));
+
+			currentState = GAMESTATE_INMENU;
 
 			while (gRunning) {
 
@@ -68,17 +70,49 @@ namespace Controller {
 				// Process OS events.
 				common.frame();
 
+				if (timerEsc <= 0) {
+					timerEsc = 0;
+				} else {
+					timerEsc -= timer.getDeltaSeconds();
+				}
+
 				InputState input;
 				common.getInputState(&input);
 				if (input.isDown(Button::BUTTON_ESCAPE)) {
-					inMenu = true;
-					//gRunning = 0;
+					if (timerEsc <= 0) {
+						if (currentState == GAMESTATE_INGAME) {
+							currentState = GAMESTATE_INMENU;
+						} else {
+							currentState = GAMESTATE_INGAME;
+						}
+						timerEsc = coolDownEsc;
+					}
 				}
 
-				if (inMenu) {
+
+				if (currentState == GAMESTATE_INMENU) {
 					ShowCursor(TRUE);
+
 					menuView.OnUpdate(timer.getDeltaSeconds());
-					menuModel.OnUpdate(timer.getDeltaSeconds());
+					menuModel.OnUpdate(timer.getDeltaSeconds(), isGameStarted);
+					if (menuModel.IsPaused()) {
+						currentState = GAMESTATE_INGAME;
+					} else if (menuModel.IsNewGame()) {
+						delete managerModel;
+						delete managerView;
+
+						managerModel = NULL;
+						managerView = NULL;
+
+						managerModel = DBG_NEW Model::ManagerModel;
+						managerView = DBG_NEW View::ManagerView(&common, managerModel);
+						managerModel->AddView(managerView);
+
+						common.getGraphics()->getContextSize(&width, &height);
+						managerModel->Init(Vec2(width, height));
+
+						currentState = GAMESTATE_INGAME;
+					}
 
 					g->clear(Color::Black, true);
 
@@ -86,14 +120,16 @@ namespace Controller {
 
 					g->present();
 
-				} else if (inGame) {
+				} else if (currentState == GAMESTATE_INGAME) {
+					isGameStarted = true;
 					ShowCursor(FALSE);
-					managerView.OnUpdate(timer.getDeltaSeconds());
-					managerModel.OnUpdate(timer.getDeltaSeconds());
+
+					managerView->OnUpdate(timer.getDeltaSeconds());
+					managerModel->OnUpdate(timer.getDeltaSeconds());
 
 					g->clear(Color::Black, true);
 
-					managerView.OnRender();
+					managerView->OnRender();
 
 					g->present();
 				}

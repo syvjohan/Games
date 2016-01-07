@@ -17,7 +17,7 @@ namespace Model {
 		Background *background = DBG_NEW Background();
 		mEntities.push_back(background);
 
-		NewGame *newGame = DBG_NEW NewGame();
+		Model::NewGame *newGame = DBG_NEW Model::NewGame();
 		mEntities.push_back(newGame);
 
 		ContinueGame *continueGame = DBG_NEW ContinueGame();
@@ -40,7 +40,7 @@ namespace Model {
 					break;
 				case ENTITY_NEWGAME:
 					for (auto *view : mViews) {
-						view->OnNewGameInit((NewGame*)e);
+						view->OnNewGameInit((Model::NewGame*)e);
 					}
 					break;
 				case ENTITY_CONTINUE:
@@ -75,7 +75,7 @@ namespace Model {
 		}
 	}
 
-	void MenuModel::OnUpdate(const float dt) {
+	void MenuModel::OnUpdate(const float dt, bool isGameStarted) {
 		CollissionWall();
 
 		for (Entity *e : mEntities) {
@@ -85,11 +85,16 @@ namespace Model {
 					((Background*)e)->OnUpdatePhysics(dt);
 					view->OnBackgroundUpdatedPhysics((Background*)e);
 				}
+			} else if (e->Type() == ENTITY_CONTINUE) {
+				for (auto view : mViews) {
+					((ContinueGame*)e)->GameState(isGameStarted);
+					view->OnContinueGameUpdate((ContinueGame*)e);
+				}
 			}
 		}
 	}
 
-	void MenuModel::OnNewGameUpdated(NewGame *g) {
+	void MenuModel::OnNewGameUpdated(Model::NewGame *g) {
 		for (View::MenuView *v : mViews) {
 			v->OnNewGameUpdate(g);
 		}
@@ -151,6 +156,65 @@ namespace Model {
 			}
 			++index;
 		}
+	}
+
+	void MenuModel::CheckInput(Vec2 coordinates) {
+		Vec4 hitbox;
+		for (Entity *e : mEntities) {
+			if (e->Type() == ENTITY_CONTINUE) {
+				hitbox.x = ((ContinueGame*)e)->GetPosition().x - 100;
+				hitbox.y = ((ContinueGame*)e)->GetPosition().y - 8;
+				hitbox.w = 200;
+				hitbox.z = 16;
+
+				if ((coordinates.x > hitbox.x && coordinates.x < hitbox.x + hitbox.w) && ((coordinates.y > hitbox.y && coordinates.y < hitbox.y + hitbox.z))) {
+					clickedContinueGame = true;
+				}
+			} else if (e->Type() == ENTITY_CONTROLLS) {
+				hitbox.x = ((Controlls*)e)->GetPosition().x - 55;
+				hitbox.y = ((Controlls*)e)->GetPosition().y - 8;
+				hitbox.w = 110;
+				hitbox.z = 16;
+
+				if ((coordinates.x > hitbox.x && coordinates.x < hitbox.x + hitbox.w) && ((coordinates.y > hitbox.y && coordinates.y < hitbox.y + hitbox.z))) {
+					clickedContinueGame = true;
+				}
+			} else if (e->Type() == ENTITY_NEWGAME) {
+				hitbox.x = ((Model::NewGame*)e)->GetPosition().x - 65;
+				hitbox.y = ((Model::NewGame*)e)->GetPosition().y - 8;
+				hitbox.w = 130;
+				hitbox.z = 16;
+
+				if ((coordinates.x > hitbox.x && coordinates.x < hitbox.x + hitbox.w) && ((coordinates.y > hitbox.y && coordinates.y < hitbox.y + hitbox.z))) {
+					clickedNewGame = true;
+				}
+			} else if (e->Type() == ENTITY_INSTRUCTIONS) {
+				hitbox.x = ((Instructions*)e)->GetPosition().x - 75;
+				hitbox.y = ((Instructions*)e)->GetPosition().y - 8;
+				hitbox.w = 130;
+				hitbox.z = 16;
+
+				if ((coordinates.x > hitbox.x && coordinates.x < hitbox.x + hitbox.w) && ((coordinates.y > hitbox.y && coordinates.y < hitbox.y + hitbox.z))) {
+					clickedContinueGame = true;
+				}
+			}
+		}
+	}
+
+	bool MenuModel::IsPaused() {
+		if (clickedContinueGame) {
+			clickedContinueGame = false;
+			return true;
+		}
+		return false;
+	}
+
+	bool MenuModel::IsNewGame() {
+		if (clickedNewGame) {
+			clickedNewGame = false;
+			return true;
+		}
+		return false;
 	}
 
 	void MenuModel::SetMenuArea(Vec2 screen) {

@@ -52,6 +52,9 @@ namespace View {
 
 			RenderFont	*mFont;
 
+			const float delayKeyPress = 0.5f;
+			float accumulatorKeyPress = delayKeyPress;
+
 			std::vector<SpriteDef> mSprites;
 	};
 }

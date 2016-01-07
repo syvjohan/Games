@@ -10,7 +10,7 @@ namespace Model {
 		Entity::OnInit(m);
 
 		mText = "New Game";
-		mPos = Vec2(m->GetMenuArea().x / 2, m->GetMenuArea().y / 2 - 100);
+		mPos = Vec2(m->GetMenuArea().x / 2, m->GetMenuArea().y / 2);
 		mColor = Color::Blue;
 		mRotation = 0;
 		mScale = Vec2(1, 1);
