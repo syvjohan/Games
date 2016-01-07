@@ -4,6 +4,8 @@
 #include "Shot.h"
 #include "Asteroid.h"
 #include "Explosion.h"
+#include "HealthKeeper.h"
+#include "ScoreKeeper.h"
 
 #include <algorithm>
 
@@ -19,9 +21,14 @@ namespace Model {
 		Player *player = DBG_NEW Player();
 		mEntities.push_back(player);
 
-		healthKeeper.mHealth = player->defaultHealth;
-		healthKeeper.mMaxHealth = player->defaultHealth;
-		scoreKeeper.mScore = 0;
+		ScoreKeeper *scoreKeeper = DBG_NEW ScoreKeeper();
+		scoreKeeper->mScore = 0;
+		mEntities.push_back(scoreKeeper);
+
+		HealthKeeper *healthKeeper = DBG_NEW HealthKeeper();
+		healthKeeper->mHealth = player->defaultHealth;
+		healthKeeper->mMaxHealth = player->defaultHealth;
+		mEntities.push_back(healthKeeper);
 
 		Asteroid *asteroid = DBG_NEW Asteroid();
 		mEntities.push_back(asteroid);
@@ -38,6 +45,16 @@ namespace Model {
 				case ENTITY_ASTEROID:
 					for (View::ManagerView *view : mViews) {
 						view->OnAsteroidSpawned((Asteroid*)e);
+					}
+					break;
+				case ENTITY_HP:
+					for (View::ManagerView *view : mViews) {
+						view->OnHPInit((HealthKeeper*)e);
+					}
+					break;
+				case ENTITY_SCORE:
+					for (View::ManagerView *view : mViews) {
+						view->OnScoreInit((ScoreKeeper*)e);
 					}
 					break;
 			}
@@ -75,8 +92,7 @@ namespace Model {
 					((Player*)e)->OnUpdatePhysics(dt);
 					view->OnPlayerUpdatedPhysics((Player*)e);
 
-					healthKeeper.mHealth = ((Player*)e)->mHealth;
-
+					SetHealth(((Player*)e)->mHealth);
 				}
 			} else if (e->Type() == ENTITY_BULLET) {
 				for (auto view : mViews) {
@@ -192,7 +208,7 @@ namespace Model {
 						if (player->mFrameTimeIsHit <= 0) {
 							AddExplosion(player->GetPosition(), ENTITY_PLAYER);
 
-							healthKeeper.mHealth = 0;
+							SetHealth(0);
 
 							RemoveEntity(player);
 							RemoveEntity(asteroid);
@@ -201,7 +217,7 @@ namespace Model {
 						}
 					} else {
 						player->Hit();
-
+						SetHealth(player->mHealth);
 						AddExplosion(asteroid->GetPosition(), ENTITY_PLAYER);
 						RemoveEntity(asteroid);
 					}
@@ -213,14 +229,14 @@ namespace Model {
 					float health = asteroid->defaulthealth / 2;
 					RemoveEntity(asteroid);
 					
-					scoreKeeper.mScore += 1;
+					AddScore(1);
 
 					AddAsteroid(0, 2, health, pos);
 				} else if (asteroid->mHealth == asteroid->defaulthealth / 2) {
 					AddExplosion(asteroid->GetPosition(), ENTITY_ASTEROID);
 					RemoveEntity(asteroid);
 
-					scoreKeeper.mScore += 2;
+					AddScore(2);
 				}
 			} else if (asteroid && !player && !shot) {
 				//RemoveEntity(pair.mEntityA);
@@ -364,6 +380,54 @@ namespace Model {
 			view->OnExplosionSpawned((Explosion*)explosion);
 			view->PlayExplosionSoundEffect((Explosion*)explosion);
 		}
+	}
+
+	void ManagerModel::OnHpUpdated(HealthKeeper *h) {
+		for (View::ManagerView *v : mViews) {
+			v->OnHPUpdate(h);
+		}
+	}
+
+	void ManagerModel::SetHealth(int health) {
+		for (Entity *e : mEntities) {
+			if (e->Type() == ENTITY_HP) {
+				((HealthKeeper*)e)->mHealth = health;
+			}
+		}
+	}
+
+	int ManagerModel::GetHealth() {
+		int health = 0;
+		for (Entity *e : mEntities) {
+			if (e->Type() == ENTITY_SCORE) {
+				health = ((HealthKeeper*)e)->mHealth;
+			}
+		}
+		return health;
+	}
+
+	void ManagerModel::OnScoreUpdated(ScoreKeeper *s) {
+		for (View::ManagerView *v : mViews) {
+			v->OnScoreupdate(s);
+		}
+	}
+
+	void ManagerModel::AddScore(int score) {
+		for (Entity *e : mEntities) {
+			if (e->Type() == ENTITY_SCORE) {
+				((ScoreKeeper*)e)->mScore += score;
+			}
+		}
+	}
+
+	int ManagerModel::GetScore() {
+		int score = 0;
+		for (Entity *e : mEntities) {
+			if (e->Type() == ENTITY_SCORE) {
+				score = ((ScoreKeeper*)e)->mScore;
+			}
+		}
+		return score;
 	}
 
 	void ManagerModel::SetPlayArea(Vec2 screen) {

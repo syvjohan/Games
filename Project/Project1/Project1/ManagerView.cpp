@@ -4,6 +4,8 @@
 #include "Shot.h"
 #include "Asteroid.h"
 #include "Explosion.h"
+#include "HealthKeeper.h"
+#include "ScoreKeeper.h"
 
 namespace View {
 	ManagerView::ManagerView() {}
@@ -14,25 +16,15 @@ namespace View {
 		Graphics *g = common->getGraphics();
 
 		mRenderer = g->createRenderer2D();
-
-		font = common->getFontResource("sans16");
-		textScore = g->createRenderText(font, "gg");
-		textHealth = g->createRenderText(font, "gg");
+		
+		mFont = mCommon->getFontResource("sans16");
 	}
 
 	ManagerView::~ManagerView() {}
 
 	void ManagerView::OnRender() {
 		mRenderer->begin(Renderer2D::SPRITE_SORT_DEFERRED, Renderer2D::SPRITE_BLEND_ALPHA);
-		
-		OnRenderSprites();
-		OnRenderText();
-
-		mRenderer->end();
-	}
-
-	void ManagerView::OnRenderSprites() {
-		for (auto &sprite : mSprites) {
+		for (SpriteDef &sprite : mSprites) {
 			mRenderer->draw(sprite.mTexture,
 							sprite.mPosition,
 							sprite.mClip,
@@ -49,54 +41,75 @@ namespace View {
 
 			//}
 		}
-	}
 
-	void ManagerView::OnRenderText() {
-		int width, height;
-
-		textScore->getTexture()->getDimensions(&width, &height);
-		mRenderer->draw(textScore->getTexture(),
-					   Vec2(20, 20),
-					   { 0, 0, width, height },
-					   Vec2(0),
-					   0.0f,
-					   Vec2(1, 1),
-					   Color::Yellow,
-					   0.0f
-					   );
-
-		textHealth->getTexture()->getDimensions(&width, &height);
-		Color color = Color::Yellow;
-		if (mModel->healthKeeper.mHealth <= mModel->healthKeeper.mMaxHealth / 2) {
-			color = Color::Red;
-		}
-		mRenderer->draw(textHealth->getTexture(),
-						Vec2(120, 20),
-						{ 0, 0, width, height },
-						Vec2(0),
-						0.0f,
-						Vec2(1, 1),
-						color,
-						0.0f
-						);
+		mRenderer->end();
 	}
 
 	void ManagerView::OnUpdate(const float dt) {
 		OnUpdatePlayer(dt);
 		OnUpdateShot(dt);
 		OnUpdateAsteroid(dt);
-
-		OnUpdateText();
 	}
 
-	void ManagerView::OnUpdateText() {
-		char buffer[128];
-		sprintf(buffer, "Score: %i", mModel->scoreKeeper.mScore);
-		textScore->setText(buffer);
+	void ManagerView::OnScoreInit(Model::ScoreKeeper *scoreKeeper) {
+		SpriteDef sprite;
+		sprite.mEntity = scoreKeeper;
+		sprite.mTexture = mCommon->getGraphics()->createRenderText(mFont, scoreKeeper->mText)->getTexture();
+		sprite.mPosition = scoreKeeper->mPos;
+		sprite.mScale = scoreKeeper->mScale;
 
-		char buffer2[128];
-		sprintf(buffer2, "HP: %i%%", mModel->healthKeeper.mHealth);
-		textHealth->setText(buffer2);
+		int width, heigth;
+		sprite.mTexture->getDimensions(&width, &heigth);
+
+		sprite.mOrigin = Vec2(width / 2, heigth / 2);
+		sprite.mClip = { 0, 0, width, heigth };
+		sprite.mTint = scoreKeeper->mColor;
+		sprite.mRotation = scoreKeeper->mRotation;
+
+		mSprites.push_back(sprite);
+	}
+
+	void ManagerView::OnScoreupdate(const Model::ScoreKeeper *scoreKeeper) {
+		for (SpriteDef &sprite : mSprites) {
+			if (sprite.mEntity == scoreKeeper) {
+				sprite.mPosition = scoreKeeper->mPos;
+				sprite.mTint = scoreKeeper->mColor;
+				sprite.mRotation = scoreKeeper->mRotation;
+				sprite.mScale = scoreKeeper->mScale;
+				sprite.mTexture = mCommon->getGraphics()->createRenderText(mFont, scoreKeeper->mText)->getTexture();
+				printf("\n%s", scoreKeeper->mText);
+			}
+		}
+	}
+
+	void ManagerView::OnHPInit(Model::HealthKeeper *healthKeeper) {
+		SpriteDef sprite;
+		sprite.mEntity = healthKeeper;
+		sprite.mTexture = mCommon->getGraphics()->createRenderText(mFont, healthKeeper->mText)->getTexture();
+		sprite.mPosition = healthKeeper->mPos;
+		sprite.mScale = healthKeeper->mScale;
+
+		int width, heigth;
+		sprite.mTexture->getDimensions(&width, &heigth);
+
+		sprite.mOrigin = Vec2(width / 2, heigth / 2);
+		sprite.mClip = { 0, 0, width, heigth };
+		sprite.mTint = healthKeeper->mColor;
+		sprite.mRotation = healthKeeper->mRotation;
+
+		mSprites.push_back(sprite);
+	}
+
+	void ManagerView::OnHPUpdate(const Model::HealthKeeper *healthKeeper) {
+		for (SpriteDef &sprite : mSprites) {
+			if (sprite.mEntity == healthKeeper) {
+				sprite.mPosition = healthKeeper->mPos;
+				sprite.mTint = healthKeeper->mColor;
+				sprite.mRotation = healthKeeper->mRotation;
+				sprite.mScale = healthKeeper->mScale;
+				sprite.mTexture = mCommon->getGraphics()->createRenderText(mFont, healthKeeper->mText)->getTexture();
+			}
+		}
 	}
 
 	void ManagerView::OnUpdatePlayer(const float dt) {

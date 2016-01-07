@@ -3,6 +3,8 @@
 #include <framework.h>
 #include <vector>
 
+#include "Defs.h"
+
 namespace Model {
 	class Entity;
 	class ManagerModel;
@@ -11,34 +13,10 @@ namespace Model {
 	class Asteroid;
 	class Explosion;
 	class ScoreKeeper;
+	class HealthKeeper;
 }
 
 namespace View {
-	struct SpriteDef {
-		Texture2D   *mTexture;
-		Vec2         mPosition;
-		Vec2         mScale;
-		float        mRotation;
-		Vec2         mOrigin;
-		RectangleF   mClip;
-		Vec4         mTint;
-		Model::Entity *mEntity;
-	};
-
-	struct TextDef {
-		RenderText  *mTexture;
-		Vec2         mPosition;
-		Vec2         mScale;
-		float        mRotation;
-		Vec2         mOrigin;
-		RectangleF   mClip;
-		Vec4         mTint;
-	};
-
-	struct SoundDef {
-
-	};
-
 	class ManagerView {
 		public:
 				ManagerView();
@@ -49,8 +27,6 @@ namespace View {
 
 				//Render
 				void OnRender();
-				void OnRenderSprites();
-				void OnRenderText();
 
 				// Player
 				void OnPlayerSpawned(Model::Player *player);
@@ -81,8 +57,13 @@ namespace View {
 
 				void OnEntityDied(int index);
 
-				//Text
-				void OnUpdateText();
+				//Score
+				void OnScoreInit(Model::ScoreKeeper *scoreKeeper);
+				void OnScoreupdate(const Model::ScoreKeeper *scoreKeeper);
+
+				//HP
+				void OnHPInit(Model::HealthKeeper *healthKeeper);
+				void OnHPUpdate(const Model::HealthKeeper *healthKeeper);
 
 		private:
 			Common *mCommon;
@@ -90,11 +71,8 @@ namespace View {
 			Renderer2D *mRenderer;
 
 			std::vector<SpriteDef> mSprites;
-			std::vector<TextDef> mTexts;
 
-			RenderFont *font;
-			RenderText *textScore;
-			RenderText *textHealth;
+			RenderFont	*mFont;
 
 			AudioSource *source;
 

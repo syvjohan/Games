@@ -9,5 +9,18 @@
 #define DBG_NEW new
 #endif
 
+#include "Entity.h"
+namespace View {
+	struct SpriteDef {
+		Texture2D   *mTexture;
+		Vec2         mPosition;
+		Vec2         mScale;
+		float        mRotation;
+		Vec2         mOrigin;
+		RectangleF   mClip;
+		Vec4         mTint;
+		Model::Entity *mEntity;
+	};
+}
 
 #endif //!DEFS_H

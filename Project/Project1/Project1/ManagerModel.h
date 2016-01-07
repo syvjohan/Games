@@ -4,22 +4,13 @@
 #include <vector>
 
 #include "Defs.h"
-#include "entity.h"
+#include "Entity.h"
 
 namespace View {
 	class ManagerView;
 }
 
 namespace Model {
-	struct ScoreKeeper {
-		int mScore;
-	};
-
-	struct HealthKeeper {
-		int mMaxHealth;
-		int mHealth;
-	};
-
 	struct CollisionPair {
 		Entity *mEntityA;
 		Entity *mEntityB;
@@ -29,11 +20,12 @@ namespace Model {
 		}
 	};
 
-	class ManagerModel;
 	class Player;
 	class Shot;
 	class Asteroid;
 	class Explosion;
+	class HealthKeeper;
+	class ScoreKeeper;
 
 	class ManagerModel {
 		public:
@@ -62,10 +54,15 @@ namespace Model {
 			void AddExplosion(Vec2 startPosition, Model::EntityType);
 			void RemoveDeadExplosion();
 
-			Vec2 GetPlayArea();
+			void OnScoreUpdated(ScoreKeeper *s);
+			void AddScore(int score);
+			int GetScore();
 
-			ScoreKeeper scoreKeeper;
-			HealthKeeper healthKeeper;
+			void SetHealth(int health);
+			int GetHealth();
+			void OnHpUpdated(HealthKeeper *h);
+
+			Vec2 GetPlayArea();
 
 		private:
 			std::vector<View::ManagerView*> mViews;

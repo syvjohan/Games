@@ -29,8 +29,10 @@ namespace Controller {
 			common.registerTextureResource("asteroid4", "image/asteroid4.png");
 			common.registerTextureResource("asteroid5", "image/asteroid5.png");
 			common.registerTextureResource("asteroid6", "image/asteroid6.png");
+			common.registerTextureResource("background_menu", "image/space_background_menu.png");
 
 			common.registerFontResource("sans16", 16, "fonts/ARIAL.ttf");
+			common.registerFontResource("lobsterBold", 30, "fonts/LobsterTWo-Bold.otf");
 
 			EventManager em;
 			common.setEventProcessor(&em);
@@ -44,14 +46,20 @@ namespace Controller {
 			HiResTimer timer;
 			timer.restart();
 
-			Model::ManagerModel model;
-			View::ManagerView view(&common, &model);
-			model.AddView(&view);
-			int width, height;
-			common.getGraphics()->getContextSize(&width, &height);
-			model.Init(Vec2(width, height));
+			Model::MenuModel menuModel;
+			View::MenuView menuView(&common, &menuModel);
+			menuModel.AddView(&menuView);
 
-			ShowCursor(FALSE);
+			int height, width;
+			common.getGraphics()->getContextSize(&width, &height);
+			menuModel.Init(Vec2(width, height));
+
+			Model::ManagerModel managerModel;
+			View::ManagerView managerView(&common, &managerModel);
+			managerModel.AddView(&managerView);
+
+			common.getGraphics()->getContextSize(&width, &height);
+			managerModel.Init(Vec2(width, height));
 
 			while (gRunning) {
 
@@ -63,17 +71,32 @@ namespace Controller {
 				InputState input;
 				common.getInputState(&input);
 				if (input.isDown(Button::BUTTON_ESCAPE)) {
-					gRunning = 0;
+					inMenu = true;
+					//gRunning = 0;
 				}
 
-				view.OnUpdate(timer.getDeltaSeconds());
-				model.OnUpdate(timer.getDeltaSeconds());
+				if (inMenu) {
+					ShowCursor(TRUE);
+					menuView.OnUpdate(timer.getDeltaSeconds());
+					menuModel.OnUpdate(timer.getDeltaSeconds());
 
-				g->clear(Color::Black, true);
+					g->clear(Color::Black, true);
 
-				view.OnRender();
+					menuView.OnRender();
 
-				g->present();			
+					g->present();
+
+				} else if (inGame) {
+					ShowCursor(FALSE);
+					managerView.OnUpdate(timer.getDeltaSeconds());
+					managerModel.OnUpdate(timer.getDeltaSeconds());
+
+					g->clear(Color::Black, true);
+
+					managerView.OnRender();
+
+					g->present();
+				}
 			}
 		}
 	}

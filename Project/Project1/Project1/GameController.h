@@ -6,6 +6,9 @@
 
 #include "ManagerModel.h"
 #include "ManagerView.h"
+#include "MenuModel.h"
+#include "MenuView.h"
+
 
 #include <vector>
 #include <cstdlib>
@@ -31,12 +34,9 @@ namespace Controller {
 			int screenWidth = 1280;
 			int screenHeight = 720;
 
-			const float borderW = 10;
-			const float borderH = 10;
+			bool inMenu = true;
+			bool inGame = false;
 
-			AudioSource *source;
-
-			InputState inputState;
 			WindowParams wParams;
 			Common common;
 	};
