@@ -4,25 +4,34 @@
 #include "Entity.h"
 
 namespace Model {
-	class Controlls : public Entity {
+	class Help : public Entity {
 		public:
-			Controlls();
-			~Controlls();
+		Help();
+			~Help();
 
 			void OnInit(MenuModel *m);
 			void OnUpdate();
+
 			inline bool IsDead() { return false; }
 
 			inline  Vec2 GetPosition() const { return mPos; }
 			inline float GetRadius() const { return 0; }
 
-			inline EntityType Type() { return ENTITY_CONTROLLS; }
+			virtual EntityType Type() { return ENTITY_HELP; }
+
+			void UpdateTextHeader();
+			void UpdateTextHeader2();
+			void UpdateTextDescript1();
+			void UpdateTextDescript2();
+			void UpdateTextDescript3();
+			void UpdateTextDescript4();
 
 			Vec2 mPos;
 			char *mText;
 			Color mColor;
 			float mRotation;
 			Vec2 mScale;
+			bool mIsHeader;
 	};
 }
 

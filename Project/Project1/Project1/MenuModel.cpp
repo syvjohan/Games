@@ -2,8 +2,7 @@
 #include "MenuView.h"
 #include "NewGame.h"
 #include "ContinueGame.h"
-#include "Instructions.h"
-#include "Controlls.h"
+#include "Help.h"
 #include "Background.h"
 
 namespace Model {
@@ -12,7 +11,7 @@ namespace Model {
 	MenuModel::~MenuModel() {}
 
 	void MenuModel::Init(Vec2 screen) {
-		SetMenuArea(screen);
+ 		SetMenuArea(screen);
 
 		Background *background = DBG_NEW Background();
 		mEntities.push_back(background);
@@ -23,11 +22,23 @@ namespace Model {
 		ContinueGame *continueGame = DBG_NEW ContinueGame();
 		mEntities.push_back(continueGame);
 
-		Controlls *controlls = DBG_NEW Controlls();
-		mEntities.push_back(controlls);
+		Help *instructionsHeader = DBG_NEW Help();
+		mEntities.push_back(instructionsHeader);
 
-		Instructions *instructions = DBG_NEW Instructions();
-		mEntities.push_back(instructions);
+		Help *instructionsDescript1 = DBG_NEW Help();
+		mEntities.push_back(instructionsDescript1);
+
+		Help *instructionsDescript2 = DBG_NEW Help();
+		mEntities.push_back(instructionsDescript2);
+
+		Help *instructionsHeader2 = DBG_NEW Help();
+		mEntities.push_back(instructionsHeader2);
+
+		Help *instructionsDescript3 = DBG_NEW Help();
+		mEntities.push_back(instructionsDescript3);
+
+		Help *instructionsDescript4 = DBG_NEW Help();
+		mEntities.push_back(instructionsDescript4);
 
 		for (Entity *e : mEntities) {
 			e->OnInit(this);
@@ -48,14 +59,9 @@ namespace Model {
 						view->OnContinueGameInit((ContinueGame*)e);
 					}
 					break;
-				case ENTITY_CONTROLLS:
+				case ENTITY_HELP:
 					for (auto *view : mViews) {
-						view->OnControllsInit((Controlls*)e);
-					}
-					break;
-				case ENTITY_INSTRUCTIONS:
-					for (auto *view : mViews) {
-						view->OnInstructionsInit((Instructions*)e);
+						view->OnHelpInit((Help*)e);
 					}
 					break;
 			}
@@ -106,15 +112,9 @@ namespace Model {
 		}
 	}
 
-	void MenuModel::OnControllsUpdated(Controlls *c) {
+	void MenuModel::OnHelpUpdated(Help *i) {
 		for (View::MenuView *v : mViews) {
-			v->OnControllsUpdate(c);
-		}
-	}
-
-	void MenuModel::OnInstructionsUpdated(Instructions *i) {
-		for (View::MenuView *v : mViews) {
-			v->OnInstructionsUpdate(i);
+			v->OnHelpUpdate(i);
 		}
 	}
 
@@ -170,15 +170,6 @@ namespace Model {
 				if ((coordinates.x > hitbox.x && coordinates.x < hitbox.x + hitbox.w) && ((coordinates.y > hitbox.y && coordinates.y < hitbox.y + hitbox.z))) {
 					clickedContinueGame = true;
 				}
-			} else if (e->Type() == ENTITY_CONTROLLS) {
-				hitbox.x = ((Controlls*)e)->GetPosition().x - 55;
-				hitbox.y = ((Controlls*)e)->GetPosition().y - 8;
-				hitbox.w = 110;
-				hitbox.z = 16;
-
-				if ((coordinates.x > hitbox.x && coordinates.x < hitbox.x + hitbox.w) && ((coordinates.y > hitbox.y && coordinates.y < hitbox.y + hitbox.z))) {
-					clickedContinueGame = true;
-				}
 			} else if (e->Type() == ENTITY_NEWGAME) {
 				hitbox.x = ((Model::NewGame*)e)->GetPosition().x - 65;
 				hitbox.y = ((Model::NewGame*)e)->GetPosition().y - 8;
@@ -187,15 +178,6 @@ namespace Model {
 
 				if ((coordinates.x > hitbox.x && coordinates.x < hitbox.x + hitbox.w) && ((coordinates.y > hitbox.y && coordinates.y < hitbox.y + hitbox.z))) {
 					clickedNewGame = true;
-				}
-			} else if (e->Type() == ENTITY_INSTRUCTIONS) {
-				hitbox.x = ((Instructions*)e)->GetPosition().x - 75;
-				hitbox.y = ((Instructions*)e)->GetPosition().y - 8;
-				hitbox.w = 130;
-				hitbox.z = 16;
-
-				if ((coordinates.x > hitbox.x && coordinates.x < hitbox.x + hitbox.w) && ((coordinates.y > hitbox.y && coordinates.y < hitbox.y + hitbox.z))) {
-					clickedContinueGame = true;
 				}
 			}
 		}

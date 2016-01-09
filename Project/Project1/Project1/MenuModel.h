@@ -13,8 +13,7 @@ namespace View {
 namespace Model {
 	class NewGame;
 	class ContinueGame;
-	class Controlls;
-	class Instructions;
+	class Help;
 	class Background;
 
 	class MenuModel {
@@ -32,8 +31,7 @@ namespace Model {
 
 			void OnContinueGameUpdated(ContinueGame *c);
 
-			void OnControllsUpdated(Controlls *c);
-			void OnInstructionsUpdated(Instructions *i);
+			void OnHelpUpdated(Help *i);
 
 			void OnBackgroundUpdated(Background *b);
 			void OnMoveBackground();
@@ -43,6 +41,8 @@ namespace Model {
 
 			bool IsPaused();
 			bool IsNewGame();
+
+			int healpRow = 0;
 
 		private:
 			std::vector<View::MenuView*> mViews;

@@ -9,8 +9,7 @@ namespace Model {
 	class NewGame;
 	class Entity;
 	class ContinueGame;
-	class Instructions;
-	class Controlls;
+	class Help;
 	class Background;
 }
 
@@ -29,21 +28,19 @@ namespace View {
 			void OnMoveBackground(const Model::Background *background);
 			void OnBackgroundUpdatedPhysics(Model::Background *background);
 
-
 			void OnNewGameUpdate(const Model::NewGame *newGame);
 			void OnNewGameInit(Model::NewGame *newGame);
 
 			void OnContinueGameUpdate(const Model::ContinueGame *continueGame);
 			void OnContinueGameInit(Model::ContinueGame *continueGame);
 
-			void OnInstructionsUpdate(const Model::Instructions *instruction);
-			void OnInstructionsInit(Model::Instructions *instruction);
-
-			void OnControllsUpdate(const Model::Controlls *controlls);
-			void OnControllsInit(Model::Controlls *controlls);
+			void OnHelpUpdate(const Model::Help *help);
+			void OnHelpInit(Model::Help *help);
 
 			//Render
 			void OnRender();
+
+			void RemoveSprite(int index);
 
 		private:
 			Common *mCommon;
@@ -51,6 +48,7 @@ namespace View {
 			Renderer2D *mRenderer;
 
 			RenderFont	*mFont;
+			RenderFont *mFont2;
 
 			const float delayKeyPress = 0.5f;
 			float accumulatorKeyPress = delayKeyPress;

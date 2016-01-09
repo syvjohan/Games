@@ -20,7 +20,6 @@ namespace Controller {
 		GAMESTATE_INMENU
 	};
 
-
 	static bool gRunning = true;
 
 	class EventManager : public IEventProcessor {

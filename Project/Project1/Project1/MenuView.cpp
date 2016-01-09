@@ -2,9 +2,8 @@
 #include "MenuModel.h"
 #include "NewGame.h"
 #include "ContinueGame.h"
-#include "Controlls.h"
-#include "Instructions.h"
-#include "Background.h";
+#include "Help.h"
+#include "Background.h"
 
 namespace View {
 	MenuView::MenuView() {}
@@ -17,6 +16,7 @@ namespace View {
 		mRenderer = g->createRenderer2D();
 
 		mFont = mCommon->getFontResource("lobsterBold");
+		mFont2 = mCommon->getFontResource("sans20");
 	}
 
 	MenuView::~MenuView() {}
@@ -159,63 +159,41 @@ namespace View {
 		}
 	}
 
-	void MenuView::OnInstructionsUpdate(const Model::Instructions *instruction) {
+	void MenuView::OnHelpUpdate(const Model::Help *help) {
 		for (SpriteDef &sprite : mSprites) {
-			if (sprite.mEntity == instruction) {
-				sprite.mPosition = instruction->mPos;
-				sprite.mTint = instruction->mColor;
-				sprite.mRotation = instruction->mRotation;
-				sprite.mScale = instruction->mScale;
-				sprite.mTexture = mCommon->getGraphics()->createRenderText(mFont, instruction->mText)->getTexture();
+			if (sprite.mEntity == help) {
+				sprite.mPosition = help->mPos;
+				sprite.mTint = help->mColor;
+				sprite.mRotation = help->mRotation;
+				sprite.mScale = help->mScale;
+				if (help->mIsHeader) {
+					sprite.mTexture = mCommon->getGraphics()->createRenderText(mFont, help->mText)->getTexture();
+				} else {
+					sprite.mTexture = mCommon->getGraphics()->createRenderText(mFont2, help->mText)->getTexture();
+				}
 			}
 		}
 	}
 
-	void MenuView::OnInstructionsInit(Model::Instructions *instruction) {
+	void MenuView::OnHelpInit(Model::Help *help) {
 		SpriteDef sprite;
-		sprite.mEntity = instruction;
-		sprite.mTexture = mCommon->getGraphics()->createRenderText(mFont, instruction->mText)->getTexture();
-		sprite.mPosition = instruction->mPos;
-		sprite.mScale = instruction->mScale;
+		sprite.mEntity = help;
+		sprite.mTexture = mCommon->getGraphics()->createRenderText(mFont, help->mText)->getTexture();
+		sprite.mPosition = help->mPos;
+		sprite.mScale = help->mScale;
 
 		int width, heigth;
 		sprite.mTexture->getDimensions(&width, &heigth);
 
 		sprite.mOrigin = Vec2(width / 2, heigth / 2);
 		sprite.mClip = { 0, 0, width, heigth };
-		sprite.mTint = instruction->mColor;
-		sprite.mRotation = instruction->mRotation;
+		sprite.mTint = help->mColor;
+		sprite.mRotation = help->mRotation;
 
 		mSprites.push_back(sprite);
 	}
 
-	void MenuView::OnControllsUpdate(const Model::Controlls *controlls) {
-		for (SpriteDef &sprite : mSprites) {
-			if (sprite.mEntity == controlls) {
-				sprite.mPosition = controlls->mPos;
-				sprite.mTint = controlls->mColor;
-				sprite.mRotation = controlls->mRotation;
-				sprite.mScale = controlls->mScale;
-				sprite.mTexture = mCommon->getGraphics()->createRenderText(mFont, controlls->mText)->getTexture();
-			}
-		}
-	}
-
-	void MenuView::OnControllsInit(Model::Controlls *controlls) {
-		SpriteDef sprite;
-		sprite.mEntity = controlls;
-		sprite.mTexture = mCommon->getGraphics()->createRenderText(mFont, controlls->mText)->getTexture();
-		sprite.mPosition = controlls->mPos;
-		sprite.mScale = controlls->mScale;
-
-		int width, heigth;
-		sprite.mTexture->getDimensions(&width, &heigth);
-
-		sprite.mOrigin = Vec2(width / 2, heigth / 2);
-		sprite.mClip = { 0, 0, width, heigth };
-		sprite.mTint = controlls->mColor;
-		sprite.mRotation = controlls->mRotation;
-
-		mSprites.push_back(sprite);
+	void MenuView::RemoveSprite(int index) {
+		mSprites.erase(mSprites.begin() + index);
 	}
 }

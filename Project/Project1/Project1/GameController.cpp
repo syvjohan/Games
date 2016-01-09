@@ -1,4 +1,5 @@
 #include "GameController.h"
+#include "GameState.h"
 
 namespace Controller {
 
@@ -32,6 +33,7 @@ namespace Controller {
 			common.registerTextureResource("background_menu", "image/space_background_menu.png");
 
 			common.registerFontResource("sans16", 16, "fonts/ARIAL.ttf");
+			common.registerFontResource("sans20", 20, "fonts/OpenSans-Regular.ttf");
 			common.registerFontResource("lobsterBold", 30, "fonts/LobsterTWo-Bold.otf");
 
 			EventManager em;
@@ -40,8 +42,6 @@ namespace Controller {
 			Graphics *g = common.getGraphics();
 
 			g->setViewport(0, 0, screenWidth, screenHeight);
-
-			Renderer2D *renderer = g->createRenderer2D();
 
 			HiResTimer timer;
 			timer.restart();

@@ -135,19 +135,17 @@
   <ItemGroup>
     <ClInclude Include="Background.h" />
     <ClInclude Include="ContinueGame.h" />
-    <ClInclude Include="Controlls.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Defs.h" />
     <ClInclude Include="GameController.h" />
     <ClInclude Include="HealthKeeper.h" />
-    <ClInclude Include="Instructions.h" />
+    <ClInclude Include="Help.h" />
     <ClInclude Include="ManagerModel.h" />
     <ClInclude Include="Asteroid.h" />
     <ClInclude Include="Explosion.h" />
     <ClInclude Include="MenuModel.h" />
     <ClInclude Include="MenuView.h" />
     <ClInclude Include="NewGame.h" />
-    <ClInclude Include="Player.h" />
     <ClInclude Include="ScoreKeeper.h" />
     <ClInclude Include="Shot.h" />
     <ClInclude Include="ManagerView.h" />
@@ -155,10 +153,9 @@
   <ItemGroup>
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="ContinueGame.cpp" />
-    <ClCompile Include="Controlls.cpp" />
     <ClCompile Include="GameController.cpp" />
     <ClCompile Include="HealthKeeper.cpp" />
-    <ClCompile Include="Instructions.cpp" />
+    <ClCompile Include="Help.cpp" />
     <ClCompile Include="ManagerModel.cpp" />
     <ClCompile Include="Asteroid.cpp" />
     <ClCompile Include="Explosion.cpp" />
