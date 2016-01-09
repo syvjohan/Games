@@ -47,7 +47,7 @@ namespace Model {
 
 			void OnMoveAsteroid(); //incoming..
 			void OnAsteroidMoved(Asteroid *a); //outgoing..
-			void AddAsteroid(int type, int length, float size, Vec2 startPosition);
+			void AddAsteroid(int type, int length, Vec2 scale, Vec2 startPosition);
 
 			void OnMoveExplosion(Explosion *e);
 			void OnExplosionMoved(Explosion *e);

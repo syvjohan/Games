@@ -265,7 +265,7 @@ namespace View {
 	void ManagerView::OnAsteroidSpawned(Model::Asteroid *asteroid) {
 		SpriteDef sprite;
 		sprite.mEntity = asteroid;
-		sprite.mTexture = mCommon->getTextureResource("asteroid1");
+		sprite.mTexture = GetAsteroidTexture(asteroid);
 		sprite.mPosition = asteroid->mPos;
 
 		sprite.mScale = asteroid->mScale;
@@ -276,6 +276,31 @@ namespace View {
 		sprite.mRotation = asteroid->mRotation;
 
 		mSprites.push_back(sprite);
+	}
+
+	Texture2D* ManagerView::GetAsteroidTexture(Model::Asteroid *asteroid) {
+		Texture2D *texture = NULL;
+		switch (asteroid->mType) {
+			case 1:
+				texture = mCommon->getTextureResource("asteroid1");
+				break;
+			case 2:
+				texture = mCommon->getTextureResource("asteroid2");
+				break;
+			case 3:
+				texture = mCommon->getTextureResource("asteroid3");
+				break;
+			case 4:
+				texture = mCommon->getTextureResource("asteroid4");
+				break;
+			case 5:
+				texture = mCommon->getTextureResource("asteroid5");
+				break;
+			case 6:
+				texture = mCommon->getTextureResource("asteroid6");
+				break;
+		}
+		return texture;
 	}
 
 	void ManagerView::OnAsteroidMoved(Model::Asteroid *asteroid) {

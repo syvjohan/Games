@@ -31,7 +31,12 @@ namespace Model {
 		mEntities.push_back(healthKeeper);
 
 		Asteroid *asteroid = DBG_NEW Asteroid();
+		asteroid->SetType(1);
 		mEntities.push_back(asteroid);
+
+		Asteroid *asteroid2 = DBG_NEW Asteroid();
+		asteroid2->SetType(2);
+		mEntities.push_back(asteroid2);
 
 		for (Entity *e : mEntities) {
 			e->OnInit(this);
@@ -150,8 +155,9 @@ namespace Model {
 				Asteroid *asteroid = ((Asteroid*)e);
 				if (asteroid->mPos.x + asteroid->GetRadius() < 0 ||
 					asteroid->mPos.y + asteroid->GetRadius() < 0) {
+					int type = asteroid->mType;
 					RemoveEntity(e);
-					AddAsteroid(0, 0, 1, Vec2(0));
+					AddAsteroid(type, 1, Vec2(1, 1), Vec2(0));
 					--index;
 				}
 			}
@@ -203,7 +209,7 @@ namespace Model {
 			Asteroid *asteroid = GET_ENTITY(Asteroid, ENTITY_ASTEROID, pair);
 
 			if (player && asteroid) {
-				AddAsteroid(0, 2, 100, Vec2(0, 0));
+				AddAsteroid(asteroid->mType, 2, Vec2(1, 1), Vec2(0));
 					if (player->mHealth == player->defaultHealth / 2) {
 						if (player->mFrameTimeIsHit <= 0) {
 							AddExplosion(player->GetPosition(), ENTITY_PLAYER);
@@ -227,11 +233,12 @@ namespace Model {
 				if (asteroid->mHealth == asteroid->defaulthealth) {
 					Vec2 pos = Vec2(asteroid->mPos.x, asteroid->mPos.y);
 					float health = asteroid->defaulthealth / 2;
+					int type = asteroid->mType;
 					RemoveEntity(asteroid);
 					
 					AddScore(1);
 
-					AddAsteroid(0, 2, health, pos);
+					AddAsteroid(type, 2, Vec2(health / 100, health / 100), pos);
 				} else if (asteroid->mHealth == asteroid->defaulthealth / 2) {
 					AddExplosion(asteroid->GetPosition(), ENTITY_ASTEROID);
 					RemoveEntity(asteroid);
@@ -338,11 +345,13 @@ namespace Model {
 		}
 	}
 
-	void ManagerModel::AddAsteroid(int type, int length, float size, Vec2 startPosition) {
+	void ManagerModel::AddAsteroid(int type, int length, Vec2 scale, Vec2 startPosition) {
 		for (int i = 0; i != length; ++i) {
 			Asteroid *asteroid = DBG_NEW Asteroid();
 			asteroid->OnInit(this);
-			asteroid->Cleavage(startPosition, size / 100);
+			asteroid->mType = type;
+			asteroid->SetType(type);
+			asteroid->Cleavage(startPosition, scale);
 
 			mEntities.push_back(asteroid);
 			for (auto *view : mViews) {

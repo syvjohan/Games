@@ -23,14 +23,16 @@ namespace Model {
 
 			void OnUpdateAnimation(const float dt);
 			void OnUpdatePhysics(const float dt);
-			void Cleavage(Vec2 startPosition, float scale);
+			void Cleavage(Vec2 startPosition, Vec2 scale);
 
 			float InRange(float min, float max);
 			float r1();
 
 			inline  Vec2 GetPosition() const { return mPos; }
 			inline float GetRadius() const { return std::max(mSize.x / 2, mSize.y / 2); }
-		
+			
+			void SetType(int type);
+
 			Vec2 mPos;
 			Vec2 mDir;
 			Vec2 mVel;

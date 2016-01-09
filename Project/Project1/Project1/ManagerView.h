@@ -36,6 +36,7 @@ namespace View {
 
 				//Asteroids
 				void OnAsteroidSpawned(Model::Asteroid *asteroid);
+				Texture2D* GetAsteroidTexture(Model::Asteroid *asteoid);
 				void OnAsteroidMoved(Model::Asteroid *asteroid);
 				void OnMoveAsteroid(const Model::Asteroid *asteroid);
 				void OnAsteroidUpdatedPhysics(Model::Asteroid *asteroid);
