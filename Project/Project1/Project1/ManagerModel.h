@@ -74,7 +74,7 @@ namespace Model {
 			bool mLostRound = false;
 			bool mWonRound = false;
 
-			int countAsteroids = 0;
+			int mCountAsteroids = 0;
 
 			void ColissionWall();
 			std::vector<CollisionPair> CollisionEntities() const;

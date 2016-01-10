@@ -77,7 +77,6 @@ namespace View {
 				sprite.mRotation = scoreKeeper->mRotation;
 				sprite.mScale = scoreKeeper->mScale;
 				sprite.mTexture = mCommon->getGraphics()->createRenderText(mFont, scoreKeeper->mText)->getTexture();
-				printf("\n%s", scoreKeeper->mText);
 			}
 		}
 	}

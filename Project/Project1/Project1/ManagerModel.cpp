@@ -80,7 +80,7 @@ namespace Model {
 	}
 
 	void ManagerModel::OnUpdate(const float dt) {
-		if (GetScore() >= 1) {
+		if (GetScore() >= 50) {
 			mWonRound = true;
 		}
 
@@ -246,11 +246,11 @@ namespace Model {
 
 				} else if (asteroid->mHealth == asteroid->defaulthealth / 2) {
 					AddExplosion(asteroid->GetPosition(), ENTITY_ASTEROID);
-					if (countAsteroids == 8) {
+					if (mCountAsteroids == 8) {
 						AddAsteroid(asteroid->mType, 2, Vec2(1, 1), Vec2(0));
-						countAsteroids = 0;
+						mCountAsteroids = 0;
 					} else {
-						++countAsteroids;
+						++mCountAsteroids;
 					}
 					RemoveEntity(asteroid);
 
