@@ -15,7 +15,7 @@ namespace Model {
 		mRotation = 0;
 		mScale = Vec2(1, 1);
 
-		switch (m->healpRow) {
+		switch (m->helpRow) {
 			case 0:
 				UpdateTextHeader();
 				break;
@@ -36,7 +36,7 @@ namespace Model {
 				break;
 		}
 
-		++m->healpRow;
+		++m->helpRow;
 	}
 
 	void Help::OnUpdate() {
@@ -53,14 +53,14 @@ namespace Model {
 	void Help::UpdateTextDescript1() {
 		mText = "Avoid to get hit by the asteroids, on a second hit by the asteroids the ship will explode..";
 		mPos = Vec2(GetMenuModel()->GetMenuArea().x / 2 + 100, GetMenuModel()->GetMenuArea().y / 2 + 140);
-		mColor = Color::DodgerBlue;
+		mColor = Color::LightGray;
 		mIsHeader = false;
 	}
 
 	void Help::UpdateTextDescript2() {
 		mText = "There is 3 levels and each level is 30 seconds";
 		mPos = Vec2(GetMenuModel()->GetMenuArea().x / 2 + 60, GetMenuModel()->GetMenuArea().y / 2 + 160);
-		mColor = Color::DodgerBlue;
+		mColor = Color::LightGray;
 		mIsHeader = false;
 	}
 
@@ -74,14 +74,14 @@ namespace Model {
 	void Help::UpdateTextDescript3() {
 		mText = "Stear with 'w', 'a', 's', 'd' and shot with 'space.";
 		mPos = Vec2(GetMenuModel()->GetMenuArea().x / 2 + 60, GetMenuModel()->GetMenuArea().y / 2 + 260);
-		mColor = Color::DodgerBlue;
+		mColor = Color::LightGray;
 		mIsHeader = false;
 	}
 
 	void Help::UpdateTextDescript4() {
 		mText = "Navigate between game and menu with 'Esc'. Exit game by clicking the cross in upper right corner.";
 		mPos = Vec2(GetMenuModel()->GetMenuArea().x / 2 + 100, GetMenuModel()->GetMenuArea().y / 2 + 280);
-		mColor = Color::DodgerBlue;
+		mColor = Color::LightGray;
 		mIsHeader = false;
 	}
 }

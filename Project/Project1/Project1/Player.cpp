@@ -72,7 +72,7 @@ namespace Model {
 	}
 
 	bool Player::IsDead() {
-		if (mHealth >= 0) {
+		if (mHealth <= 0) {
 			return true;
 		}
 		return false;

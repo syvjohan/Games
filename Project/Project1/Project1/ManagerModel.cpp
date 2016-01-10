@@ -80,6 +80,10 @@ namespace Model {
 	}
 
 	void ManagerModel::OnUpdate(const float dt) {
+		if (GetScore() >= 1) {
+			mWonRound = true;
+		}
+
 		//Collision
 		ColissionWall();
 		auto collisions = CollisionEntities();
@@ -220,6 +224,7 @@ namespace Model {
 							RemoveEntity(asteroid);
 
 							player->isHit = false;
+							mLostRound = true;
 						}
 					} else {
 						player->Hit();
@@ -237,10 +242,16 @@ namespace Model {
 					RemoveEntity(asteroid);
 					
 					AddScore(1);
-
 					AddAsteroid(type, 2, Vec2(health / 100, health / 100), pos);
+
 				} else if (asteroid->mHealth == asteroid->defaulthealth / 2) {
 					AddExplosion(asteroid->GetPosition(), ENTITY_ASTEROID);
+					if (countAsteroids == 8) {
+						AddAsteroid(asteroid->mType, 2, Vec2(1, 1), Vec2(0));
+						countAsteroids = 0;
+					} else {
+						++countAsteroids;
+					}
 					RemoveEntity(asteroid);
 
 					AddScore(2);
@@ -437,6 +448,14 @@ namespace Model {
 			}
 		}
 		return score;
+	}
+
+	bool ManagerModel::WonRound() {
+		return mWonRound;
+	}
+
+	bool ManagerModel::LostRound() {
+		return mLostRound;
 	}
 
 	void ManagerModel::SetPlayArea(Vec2 screen) {

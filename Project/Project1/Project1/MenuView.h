@@ -11,6 +11,8 @@ namespace Model {
 	class ContinueGame;
 	class Help;
 	class Background;
+	class BackgroundAfterGame;
+	class Result;
 }
 
 namespace View {
@@ -21,8 +23,9 @@ namespace View {
 			~MenuView();
 
 			void OnUpdate(const float dt);
+			void OnRenderMenu();
+			void OnRenderAfterGame();
 
-			void OnBackgroundUpdate(const float dt);
 			void OnBackgroundInit(Model::Background *background);
 			void OnBackgroundMoved(const Model::Background *background);
 			void OnMoveBackground(const Model::Background *background);
@@ -37,8 +40,11 @@ namespace View {
 			void OnHelpUpdate(const Model::Help *help);
 			void OnHelpInit(Model::Help *help);
 
-			//Render
-			void OnRender();
+			void OnResultUpdate(const Model::Result *result);
+			void OnResultInit(Model::Result *result);
+
+			void OnBackgroundAfterGameUpdate(const Model::BackgroundAfterGame *background);
+			void OnBackgroundAfterGameInit(Model::BackgroundAfterGame *background);
 
 			void RemoveSprite(int index);
 

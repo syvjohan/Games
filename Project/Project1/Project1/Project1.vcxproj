@@ -66,12 +66,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Programmering\Games\Laboration2\Splitter&amp;GRavitation\Project1\SDL2-2.0.3\include;$(IncludePath);$(ProjectDir)\framework\;</IncludePath>
-    <LibraryPath>C:\Programmering\Games\Laboration2\Splitter&amp;GRavitation\Project1\SDL2-2.0.3\lib\x64;$(LibraryPath);$(ProjectDir)\framework\;</LibraryPath>
+    <IncludePath>C:\Programmering\Games\Project1\Project1\SDL2-2.0.3\include;C:\Programmering\Games\Laboration2\Splitter&amp;GRavitation\Project1\SDL2-2.0.3\include;$(IncludePath);$(ProjectDir)\framework\</IncludePath>
+    <LibraryPath>C:\Programmering\Games\Project1\Project1\SDL2-2.0.3\lib\x64;C:\Programmering\Games\Laboration2\Splitter&amp;GRavitation\Project1\SDL2-2.0.3\lib\x64;$(LibraryPath);$(ProjectDir)\framework\</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Programmering\Games\Laboration2\Splitter&amp;GRavitation\Project1\SDL2-2.0.3\include;$(IncludePath);$(ProjectDir)\framework\;</IncludePath>
-    <LibraryPath>C:\Programmering\Games\Laboration2\Splitter&amp;GRavitation\Project1\SDL2-2.0.3\lib\x64;$(LibraryPath);$(ProjectDir)\framework\;$(ProjectDir)\OpenAL\libs\Win64\;</LibraryPath>
+    <IncludePath>C:\Programmering\Games\Project\Project1\SDL2-2.0.3\include;C:\Programmering\Games\Laboration2\Splitter&amp;GRavitation\Project1\SDL2-2.0.3\include;$(IncludePath);$(ProjectDir)\framework\</IncludePath>
+    <LibraryPath>C:\Programmering\Games\Project\Project1\SDL2-2.0.3\lib\x64;C:\Programmering\Games\Laboration2\Splitter&amp;GRavitation\Project1\SDL2-2.0.3\lib\x64;$(LibraryPath);$(ProjectDir)\framework\;$(ProjectDir)\OpenAL\libs\Win64\</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -134,6 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Background.h" />
+    <ClInclude Include="BackgroundAfterGame.h" />
     <ClInclude Include="ContinueGame.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Defs.h" />
@@ -146,12 +147,14 @@
     <ClInclude Include="MenuModel.h" />
     <ClInclude Include="MenuView.h" />
     <ClInclude Include="NewGame.h" />
+    <ClInclude Include="Result.h" />
     <ClInclude Include="ScoreKeeper.h" />
     <ClInclude Include="Shot.h" />
     <ClInclude Include="ManagerView.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Background.cpp" />
+    <ClCompile Include="BackgroundAfterGame.cpp" />
     <ClCompile Include="ContinueGame.cpp" />
     <ClCompile Include="GameController.cpp" />
     <ClCompile Include="HealthKeeper.cpp" />
@@ -164,6 +167,7 @@
     <ClCompile Include="NewGame.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Result.cpp" />
     <ClCompile Include="ScoreKeeper.cpp" />
     <ClCompile Include="Shot.cpp" />
     <ClCompile Include="ManagerView.cpp" />

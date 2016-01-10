@@ -17,7 +17,8 @@
 namespace Controller {
 	enum GameStates {
 		GAMESTATE_INGAME = 0,
-		GAMESTATE_INMENU
+		GAMESTATE_INMENU,
+		GAMESTATE_AFTER_GAME
 	};
 
 	static bool gRunning = true;
@@ -45,7 +46,11 @@ namespace Controller {
 			const float coolDownEsc = 0.5f;
 			float timerEsc = coolDownEsc;
 
+			const float timeElapseResultScreen = 3;
+			float timerResultScreen = timeElapseResultScreen;
+
 			bool isGameStarted = false;
+			int currentLvl = 0;
 	};
 
 }

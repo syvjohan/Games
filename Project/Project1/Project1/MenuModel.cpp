@@ -4,6 +4,8 @@
 #include "ContinueGame.h"
 #include "Help.h"
 #include "Background.h"
+#include "BackgroundAfterGame.h"
+#include "Result.h"
 
 namespace Model {
 	MenuModel::MenuModel() {}
@@ -12,6 +14,12 @@ namespace Model {
 
 	void MenuModel::Init(Vec2 screen) {
  		SetMenuArea(screen);
+
+		BackgroundAfterGame *backgroundAfterGame = DBG_NEW Model::BackgroundAfterGame();
+		mEntities.push_back(backgroundAfterGame);
+
+		Result *result = DBG_NEW Result();
+		mEntities.push_back(result);
 
 		Background *background = DBG_NEW Background();
 		mEntities.push_back(background);
@@ -44,6 +52,10 @@ namespace Model {
 			e->OnInit(this);
 
 			switch (e->Type()) {
+				case ENTITY_BACKGROUND_AFTER_GAME:
+					for (auto *view : mViews) {
+						view->OnBackgroundAfterGameInit((BackgroundAfterGame*)e);
+					}
 				case ENTITY_BACKGROUND_MENU:
 					for (auto *view : mViews) {
 						view->OnBackgroundInit((Background*)e);
@@ -64,6 +76,10 @@ namespace Model {
 						view->OnHelpInit((Help*)e);
 					}
 					break;
+				case ENTITY_RESULT:
+					for (auto *view : mViews) {
+						view->OnResultInit((Result*)e);
+					}
 			}
 		}
 	}
@@ -96,6 +112,10 @@ namespace Model {
 					((ContinueGame*)e)->GameState(isGameStarted);
 					view->OnContinueGameUpdate((ContinueGame*)e);
 				}
+			} else if (e->Type() == ENTITY_RESULT) {
+				for (auto view : mViews) {
+					view->OnResultUpdate((Result*)e);
+				}
 			}
 		}
 	}
@@ -118,6 +138,12 @@ namespace Model {
 		}
 	}
 
+	void MenuModel::OnResultUpdated(Result *r) {
+		for (View::MenuView *v : mViews) {
+			v->OnResultUpdate(r);
+		}
+	}
+
 	void MenuModel::OnBackgroundUpdated(Background *b) {
 		for (View::MenuView *v : mViews) {
 			v->OnBackgroundMoved(b);
@@ -129,6 +155,12 @@ namespace Model {
 			if (e->Type() == ENTITY_BACKGROUND_MENU) {
 				((Background*)e)->mPos.x -= 1;
 			}
+		}
+	}
+
+	void MenuModel::OnBackgroundAfterGameUpdated(BackgroundAfterGame *b) {
+		for (View::MenuView *v : mViews) {
+			v->OnBackgroundAfterGameUpdate(b);
 		}
 	}
 
@@ -197,6 +229,30 @@ namespace Model {
 			return true;
 		}
 		return false;
+	}
+
+	void MenuModel::ShowLostRound() {
+		for (Entity *e : mEntities) {
+			if (e->Type() == Model::ENTITY_RESULT) {
+				((Result*)e)->UpdateText2();
+			}
+		}
+	}
+
+	void MenuModel::ShowWonRound() {
+		for (Entity *e : mEntities) {
+			if (e->Type() == Model::ENTITY_RESULT) {
+				((Result*)e)->UpdateText1();
+			}
+		}
+	}
+
+	void MenuModel::ShowWonGame() {
+		for (Entity *e : mEntities) {
+			if (e->Type() == Model::ENTITY_RESULT) {
+				((Result*)e)->UpdateText3();
+			}
+		}
 	}
 
 	void MenuModel::SetMenuArea(Vec2 screen) {

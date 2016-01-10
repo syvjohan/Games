@@ -4,6 +4,8 @@
 #include "ContinueGame.h"
 #include "Help.h"
 #include "Background.h"
+#include "BackgroundAfterGame.h"
+#include "Result.h"
 
 namespace View {
 	MenuView::MenuView() {}
@@ -21,7 +23,7 @@ namespace View {
 
 	MenuView::~MenuView() {}
 
-	void MenuView::OnRender() {
+	void MenuView::OnRenderMenu() {
 		mRenderer->begin(Renderer2D::SPRITE_SORT_DEFERRED, Renderer2D::SPRITE_BLEND_ALPHA);
 
 		for (auto &sprite : mSprites) {
@@ -33,6 +35,25 @@ namespace View {
 							sprite.mScale,
 							sprite.mTint,
 							0.0f);
+		}
+
+		mRenderer->end();
+	}
+
+	void MenuView::OnRenderAfterGame() {
+		mRenderer->begin(Renderer2D::SPRITE_SORT_DEFERRED, Renderer2D::SPRITE_BLEND_ALPHA);
+
+		for (auto &sprite : mSprites) {
+			if (sprite.mEntity->Type() == Model::ENTITY_BACKGROUND_AFTER_GAME || sprite.mEntity->Type() == Model::ENTITY_RESULT) {
+				mRenderer->draw(sprite.mTexture,
+								sprite.mPosition,
+								sprite.mClip,
+								sprite.mOrigin,
+								sprite.mRotation,
+								sprite.mScale,
+								sprite.mTint,
+								0.0f);
+			}
 		}
 
 		mRenderer->end();
@@ -51,8 +72,6 @@ namespace View {
 			accumulatorKeyPress = delayKeyPress;
 		}
 	}
-
-	void MenuView::OnBackgroundUpdate(const float dt) {}
 
 	void MenuView::OnBackgroundMoved(const Model::Background *background) {
 		for (SpriteDef &sprite : mSprites) {
@@ -95,6 +114,32 @@ namespace View {
 			if (sprite.mEntity == background) {
 				sprite.mPosition.x = background->mPos.x;
 				sprite.mPosition.y = background->mPos.y;
+			}
+		}
+	}
+
+	void MenuView::OnBackgroundAfterGameInit(Model::BackgroundAfterGame *background) {
+		SpriteDef sprite;
+		sprite.mEntity = background;
+		sprite.mTexture = mCommon->getTextureResource("background_after_game");
+		sprite.mPosition = background->mPos;
+
+		sprite.mScale = background->mScale;
+		sprite.mOrigin = Vec2(background->mSize / 2);
+		sprite.mClip = { 0, 0, background->mSize.x, background->mSize.y };
+		sprite.mTint = background->mColor;
+		sprite.mRotation = background->mRotation;
+
+		mSprites.push_back(sprite);
+	}
+
+	void MenuView::OnBackgroundAfterGameUpdate(const Model::BackgroundAfterGame *background) {
+		for (SpriteDef &sprite : mSprites) {
+			if (sprite.mEntity == background) {
+				sprite.mPosition = background->mPos;
+				sprite.mRotation = background->mRotation;
+				sprite.mScale = background->mScale;
+				sprite.mTint = background->mColor;
 			}
 		}
 	}
@@ -189,6 +234,36 @@ namespace View {
 		sprite.mClip = { 0, 0, width, heigth };
 		sprite.mTint = help->mColor;
 		sprite.mRotation = help->mRotation;
+
+		mSprites.push_back(sprite);
+	}
+
+	void MenuView::OnResultUpdate(const Model::Result *result) {
+		for (SpriteDef &sprite : mSprites) {
+			if (sprite.mEntity == result) {
+				sprite.mPosition = result->mPos;
+				sprite.mTint = result->mColor;
+				sprite.mRotation = result->mRotation;
+				sprite.mScale = result->mScale;
+				sprite.mTexture = mCommon->getGraphics()->createRenderText(mFont2, result->mText)->getTexture();
+			}
+		}
+	}
+
+	void MenuView::OnResultInit(Model::Result *result) {
+		SpriteDef sprite;
+		sprite.mEntity = result;
+		sprite.mTexture = mCommon->getGraphics()->createRenderText(mFont2, result->mText)->getTexture();
+		sprite.mPosition = result->mPos;
+		sprite.mScale = result->mScale;
+
+		int width, heigth;
+		sprite.mTexture->getDimensions(&width, &heigth);
+
+		sprite.mOrigin = Vec2(width / 2, heigth / 2);
+		sprite.mClip = { 0, 0, width, heigth };
+		sprite.mTint = result->mColor;
+		sprite.mRotation = result->mRotation;
 
 		mSprites.push_back(sprite);
 	}

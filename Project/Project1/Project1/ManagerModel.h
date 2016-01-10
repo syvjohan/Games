@@ -64,10 +64,17 @@ namespace Model {
 
 			Vec2 GetPlayArea();
 
+			bool WonRound();
+			bool LostRound();
+
 		private:
 			std::vector<View::ManagerView*> mViews;
 			std::vector<Entity*> mEntities;
 
+			bool mLostRound = false;
+			bool mWonRound = false;
+
+			int countAsteroids = 0;
 
 			void ColissionWall();
 			std::vector<CollisionPair> CollisionEntities() const;

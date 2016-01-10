@@ -15,6 +15,8 @@ namespace Model {
 	class ContinueGame;
 	class Help;
 	class Background;
+	class BackgroundAfterGame;
+	class Result;
 
 	class MenuModel {
 		public:
@@ -33,16 +35,24 @@ namespace Model {
 
 			void OnHelpUpdated(Help *i);
 
+			void OnResultUpdated(Result *i);
+
 			void OnBackgroundUpdated(Background *b);
 			void OnMoveBackground();
+
+			void OnBackgroundAfterGameUpdated(BackgroundAfterGame *b);
 
 			void CollissionWall();
 			void CheckInput(Vec2 coordinates);
 
+			void ShowWonRound();
+			void ShowLostRound();
+			void ShowWonGame();
+
 			bool IsPaused();
 			bool IsNewGame();
 
-			int healpRow = 0;
+			int helpRow = 0;
 
 		private:
 			std::vector<View::MenuView*> mViews;

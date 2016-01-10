@@ -63,6 +63,12 @@
     <ClInclude Include="Help.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BackgroundAfterGame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Result.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -111,6 +117,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Help.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BackgroundAfterGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Result.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
