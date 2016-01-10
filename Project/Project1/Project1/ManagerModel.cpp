@@ -14,7 +14,7 @@ namespace Model {
 
 	ManagerModel::~ManagerModel() {}
 
-	void ManagerModel::Init(Vec2 screen) {
+	void ManagerModel::Init(Vec2 screen, int asteroidType1, int asteroidType2) {
 		SetPlayArea(screen);
 
 		// Create a player..
@@ -31,11 +31,11 @@ namespace Model {
 		mEntities.push_back(healthKeeper);
 
 		Asteroid *asteroid = DBG_NEW Asteroid();
-		asteroid->SetType(1);
+		asteroid->SetType(asteroidType1);
 		mEntities.push_back(asteroid);
 
 		Asteroid *asteroid2 = DBG_NEW Asteroid();
-		asteroid2->SetType(2);
+		asteroid2->SetType(asteroidType2);
 		mEntities.push_back(asteroid2);
 
 		for (Entity *e : mEntities) {

@@ -21,6 +21,11 @@ namespace Controller {
 		GAMESTATE_AFTER_GAME
 	};
 
+	struct AsteroidType {
+		int typ1;
+		int type2;
+	};
+
 	static bool gRunning = true;
 
 	class EventManager : public IEventProcessor {
@@ -34,6 +39,9 @@ namespace Controller {
 			~GameController();
 
 			void gameLoop();
+
+			void SetAsteroidType(int lvl);
+			AsteroidType GetAsteroidType();
 
 		private:
 			int screenWidth = 1280;
@@ -51,6 +59,8 @@ namespace Controller {
 
 			bool isGameStarted = false;
 			int currentLvl = 0;
+
+			AsteroidType asteroidType;
 	};
 
 }

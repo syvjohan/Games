@@ -31,15 +31,19 @@ namespace Model {
 				break;
 			case 3:
 				mSize = Vec2(32, 32);
+				mVel += Vec2(InRange(.2f, .2f), 0);
 				break;
 			case 4:
 				mSize = Vec2(32, 32);
+				mVel += Vec2(InRange(.3f, .3f), 0);
 				break;
 			case 5:
 				mSize = Vec2(72, 72);
+				mVel += Vec2(InRange(.2f, .2f), 0);
 				break;
 			case 6:
 				mSize = Vec2(64, 64);
+				mVel += Vec2(InRange(.3f, .3f), 0);
 				break;
 		}
 		mType = type;

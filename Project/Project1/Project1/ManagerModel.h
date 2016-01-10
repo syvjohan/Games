@@ -32,7 +32,7 @@ namespace Model {
 			ManagerModel();
 			~ManagerModel();
 
-			void Init(Vec2 screen);
+			void Init(Vec2 screen, int asteroidType1, int asteroidType2);
 			void AddView(View::ManagerView *v);
 			void RemoveView(View::ManagerView *v);
 			void OnUpdate(const float dt);

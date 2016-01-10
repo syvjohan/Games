@@ -47,6 +47,8 @@ namespace Controller {
 			HiResTimer timer;
 			timer.restart();
 
+			SetAsteroidType(currentLvl);
+
 			Model::MenuModel menuModel;
 			View::MenuView menuView(&common, &menuModel);
 			menuModel.AddView(&menuView);
@@ -60,7 +62,7 @@ namespace Controller {
 			managerModel->AddView(managerView);
 
 			common.getGraphics()->getContextSize(&width, &height);
-			managerModel->Init(Vec2(width, height));
+			managerModel->Init(Vec2(width, height), GetAsteroidType().typ1, GetAsteroidType().type2);
 
 			currentState = GAMESTATE_INMENU;
 
@@ -113,6 +115,15 @@ namespace Controller {
 					if (timerResultScreen == 0) {
 						timerResultScreen = timeElapseResultScreen;
 
+						if (currentLvl >= 2) {
+							currentState = GAMESTATE_INMENU;
+						} else {
+							currentState = GAMESTATE_INGAME; //Start new game.
+						}
+
+						++currentLvl;
+						SetAsteroidType(currentLvl);
+
 						delete managerModel;
 						delete managerView;
 
@@ -124,15 +135,7 @@ namespace Controller {
 						managerModel->AddView(managerView);
 
 						common.getGraphics()->getContextSize(&width, &height);
-						managerModel->Init(Vec2(width, height));
-
-						if (currentLvl >= 2) {
-							currentState = GAMESTATE_INMENU;
-						} else {
-							currentState = GAMESTATE_INGAME; //Start new game.
-						}
-
-						++currentLvl;
+						managerModel->Init(Vec2(width, height), GetAsteroidType().typ1, GetAsteroidType().type2);
 					}
 				}
 
@@ -155,7 +158,7 @@ namespace Controller {
 						managerModel->AddView(managerView);
 
 						common.getGraphics()->getContextSize(&width, &height);
-						managerModel->Init(Vec2(width, height));
+						managerModel->Init(Vec2(width, height), GetAsteroidType().typ1, GetAsteroidType().type2);
 
 						currentState = GAMESTATE_INGAME;
 						currentLvl = 0;
@@ -188,6 +191,31 @@ namespace Controller {
 
 				g->present();
 			}
+		}
+	}
+
+	AsteroidType GameController::GetAsteroidType() {
+		return asteroidType;
+	}
+
+	void GameController::SetAsteroidType(int lvl) {
+		switch (lvl) {
+			case 0:
+				asteroidType.typ1 = 1;
+				asteroidType.type2 = 2;
+				break;
+			case 1:
+				asteroidType.typ1 = 3;
+				asteroidType.type2 = 5;
+				break;
+			case 2:
+				asteroidType.typ1 = 4;
+				asteroidType.type2 = 6;
+				break;
+			default:
+				asteroidType.typ1 = 1;
+				asteroidType.type2 = 2;
+				break;
 		}
 	}
 }
