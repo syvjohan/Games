@@ -122,8 +122,10 @@ namespace Controller {
 							currentState = GAMESTATE_INGAME; //Start new game.
 						}
 
-						++currentLvl;
-						SetAsteroidType(currentLvl);
+						if (managerModel->WonRound()) {
+							++currentLvl;
+							SetAsteroidType(currentLvl);
+						}
 
 						delete managerModel;
 						delete managerView;
