@@ -57,6 +57,9 @@ namespace Controller {
 			const float timeElapseResultScreen = 3;
 			float timerResultScreen = timeElapseResultScreen;
 
+			const float timeElapsedForExplosion = 1;
+			float timerDelayScreenForExplosion = timeElapsedForExplosion;
+
 			bool isGameStarted = false;
 			int currentLvl = 0;
 

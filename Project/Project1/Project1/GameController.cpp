@@ -102,6 +102,7 @@ namespace Controller {
 					if (managerModel->LostRound()) {
 						menuModel.ShowLostRound();
 						currentState = GAMESTATE_AFTER_GAME;
+						timerDelayScreenForExplosion = timeElapsedForExplosion;
 					} else {
 						if (currentLvl >= 2) {
 							menuModel.ShowWonGame();
@@ -181,14 +182,25 @@ namespace Controller {
 					managerView->OnRender();
 
 				} else if (currentState == GAMESTATE_AFTER_GAME) {
-					menuModel.OnUpdate(timer.getDeltaSeconds(), isGameStarted);
-					menuView.OnUpdate(timer.getDeltaSeconds());
+					timerDelayScreenForExplosion -= timer.getDeltaSeconds();
+					if (timerDelayScreenForExplosion <= 0) {
+						
+						menuModel.OnUpdate(timer.getDeltaSeconds(), isGameStarted);
+						menuView.OnUpdate(timer.getDeltaSeconds());
 
-					g->clear(Color::Black, true);
+						g->clear(Color::Black, true);
 
-					menuView.OnRenderAfterGame();
+						menuView.OnRenderAfterGame();
+
+					} else {
+						managerModel->OnUpdate(timer.getDeltaSeconds());
+						managerView->OnUpdate(timer.getDeltaSeconds());
+
+						g->clear(Color::Black, true);
+
+						managerView->OnRender();
+					}
 				}
-
 				g->present();
 			}
 		}
