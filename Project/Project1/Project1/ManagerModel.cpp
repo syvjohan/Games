@@ -161,7 +161,7 @@ namespace Model {
 					asteroid->mPos.y + asteroid->GetRadius() < 0) {
 					int type = asteroid->mType;
 					RemoveEntity(e);
-					AddAsteroid(type, 1, Vec2(1, 1), Vec2(0));
+					AddAsteroid(type, 2, Vec2(1, 1), Vec2(0));
 					--index;
 				}
 			}
@@ -213,25 +213,29 @@ namespace Model {
 			Asteroid *asteroid = GET_ENTITY(Asteroid, ENTITY_ASTEROID, pair);
 
 			if (player && asteroid) {
-				AddAsteroid(asteroid->mType, 2, Vec2(1, 1), Vec2(0));
-					if (player->mHealth == player->defaultHealth / 2) {
-						if (player->mFrameTimeIsHit <= 0) {
-							AddExplosion(player->GetPosition(), ENTITY_PLAYER);
+				int type = asteroid->mType;
+				if (player->mHealth == player->defaultHealth / 2) {
+					if (player->mFrameTimeIsHit <= 0) {
+						AddExplosion(player->GetPosition(), ENTITY_PLAYER);
 
-							SetHealth(0);
+						SetHealth(0);
 
-							RemoveEntity(player);
-							RemoveEntity(asteroid);
-
-							player->isHit = false;
-							mLostRound = true;
-						}
-					} else {
-						player->Hit();
-						SetHealth(player->mHealth);
-						AddExplosion(asteroid->GetPosition(), ENTITY_PLAYER);
+						RemoveEntity(player);
 						RemoveEntity(asteroid);
+
+						player->isHit = false;
+						mLostRound = true;
+
+						AddAsteroid(type, 2, Vec2(1, 1), Vec2(0));
 					}
+				} else {
+					player->Hit();
+					SetHealth(player->mHealth);
+					AddExplosion(asteroid->GetPosition(), ENTITY_PLAYER);
+					RemoveEntity(asteroid);
+					
+					AddAsteroid(type, 2, Vec2(1, 1), Vec2(0));		
+				}
 
 			} else if (asteroid && shot) {
 				RemoveEntity(shot);
@@ -246,14 +250,13 @@ namespace Model {
 
 				} else if (asteroid->mHealth == asteroid->defaulthealth / 2) {
 					AddExplosion(asteroid->GetPosition(), ENTITY_ASTEROID);
-					if (mCountAsteroids == 8) {
+					if (mCountAsteroids == 4) {
 						AddAsteroid(asteroid->mType, 2, Vec2(1, 1), Vec2(0));
 						mCountAsteroids = 0;
 					} else {
 						++mCountAsteroids;
 					}
 					RemoveEntity(asteroid);
-
 					AddScore(2);
 				}
 			} else if (asteroid && !player && !shot) {

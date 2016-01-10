@@ -75,6 +75,7 @@ namespace Model {
 			bool mWonRound = false;
 
 			int mCountAsteroids = 0;
+			const float asteroidRespawnDelay = 2;
 
 			void ColissionWall();
 			std::vector<CollisionPair> CollisionEntities() const;
