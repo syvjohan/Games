@@ -409,7 +409,7 @@ namespace Model {
 		Vec2 position = Vec2(0, 0);
 		for (Entity *e : mEntities) {
 			if (e->Type() == ENTITY_PLAYER) {
-				float x = ((Player*)e)->mPos.x + ((Player*)e)->GetRadius();
+				float x = ((Player*)e)->mPos.x + ((Player*)e)->GetRadius() + 70;
 				float y = ((Player*)e)->mPos.y + ((Player*)e)->GetRadius();
 				position = Vec2(x, y);
 			}
