@@ -79,7 +79,7 @@ namespace View {
 				void OnEnemieBossMoved(Model::EnemieBoss *enemieBoss);
 				void OnMoveEnemieBoss(const Model::EnemieBoss *enemieBoss);
 				void OnEnemieBossUpdatedPhysics(Model::EnemieBoss *enemieBoss);
-
+				void OnEnemieBossUpdatedAnimation(const Model::EnemieBoss *enemieBoss);
 		private:
 			Common *mCommon;
 			Model::ManagerModel *mModel;

@@ -73,6 +73,7 @@ namespace Model {
 			//Enemie boss
 			void OnEnemieBossMoved(EnemieBoss *e);
 			void OnMoveEnemieBoss();
+			bool DelayEnemieBossMove(EnemieBoss *e, const float dt);
 			void AddEnemieBoss();
 
 			//health player.

@@ -147,6 +147,9 @@ namespace Model {
 				}
 			} else if (e->Type() == ENTITY_ENEMIEBOSS) {
 				for (auto *view : mViews) {
+					((EnemieBoss*)e)->OnUpdateAnimation(dt, DelayEnemieBossMove(((EnemieBoss*)e), dt));
+					view->OnEnemieBossUpdatedAnimation((EnemieBoss*)e);
+
 					((EnemieBoss*)e)->OnUpdatePhysics(dt);
 					view->OnEnemieBossUpdatedPhysics((EnemieBoss*)e);
 				}
@@ -536,6 +539,19 @@ namespace Model {
 				((EnemieBoss*)e)->mDir.y += 1;
 			}
 		}
+	}
+
+	bool ManagerModel::DelayEnemieBossMove(EnemieBoss *e, const float dt) {
+		for (Entity *e : mEntities) {
+			if (e->Type() == ENTITY_ENEMIEBOSS) {
+				((EnemieBoss*)e)->timeAnimation -= dt;
+				if (((EnemieBoss*)e)->timeAnimation < 0) {
+					((EnemieBoss*)e)->timeAnimation = ((EnemieBoss*)e)->delayAnimation;
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	void ManagerModel::AddEnemieBoss() {

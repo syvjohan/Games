@@ -489,6 +489,15 @@ namespace View {
 		}
 	}
 
+	void ManagerView::OnEnemieBossUpdatedAnimation(const Model::EnemieBoss *enemieBoss) {
+		for (auto &sprite : mSprites) {
+			if (sprite.mEntity == enemieBoss) {
+				sprite.mClip.x = (enemieBoss->mCurrentFrame % 4) * enemieBoss->mSize.x;
+				sprite.mClip.y = (enemieBoss->mCurrentFrame / 4) * enemieBoss->mSize.y;
+			}
+		}
+	}
+
 	void ManagerView::OnEntityDied(int index) {
 		mSprites.erase(mSprites.begin() + index);
 	}

@@ -66,38 +66,45 @@ namespace Model {
 						countRounds = 0;
 					}
 					mCurrentMoveTime = mMoveTime;
+					isPaused = false;
+				} else {
+					isPaused = true;
 				}
 			}
 		}
 	}
 
-	void EnemieBoss::OnUpdateAnimation(bool btnIsPressed, const float dt) {
-		mFrameTime += dt; //cooldown.
-		if (btnIsPressed) {
-			if (mCurrentFrame >= 3) {
-				mCurrentFrame = 3;
-			} else {
-				mCurrentFrame++;
-			}
-			mFrameTime = 0;
-			mFrameTime = 0;
-		} else {
-			if (mFrameTime > 0.4f) {
-				if (mCurrentFrame > 0) {
-					mCurrentFrame--;
+	void EnemieBoss::OnUpdateAnimation(const float dt, bool isUpdate) {
+		if (dt < 2.0f) {
+			mFrameTime += dt; //cooldown.
+			if (isUpdate && !isPaused) {
+				if (mCurrentFrame >= 3) {
+					mCurrentFrame = 3;
 				} else {
-					mCurrentFrame = 0;
+					mCurrentFrame++;
 				}
 				mFrameTime = 0;
-			}
-		}
+				mFrameTime = 0;
+			} 
 
-		if (isHit && mFrameTimeIsHit > 0) {
-			mFrameTimeIsHit -= dt;
-		} else if (isHit && mFrameTimeIsHit <= 0) {
-			if (mFrameTimeIsHit <= 0) {
-				mFrameTimeIsHit = 0;
-				mColor = Color::White;
+			if (isPaused) {
+				if (mFrameTime > 0.3f) {
+					if (mCurrentFrame > 0) {
+						mCurrentFrame--;
+					} else {
+						mCurrentFrame = 0;
+					}
+					mFrameTime = 0;
+				}
+			}
+
+			if (isHit && mFrameTimeIsHit > 0) {
+				mFrameTimeIsHit -= dt;
+			} else if (isHit && mFrameTimeIsHit <= 0) {
+				if (mFrameTimeIsHit <= 0) {
+					mFrameTimeIsHit = 0;
+					mColor = Color::Aquamarine;
+				}
 			}
 		}
 	}

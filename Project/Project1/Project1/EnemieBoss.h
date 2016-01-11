@@ -19,7 +19,7 @@ namespace Model {
 
 		inline EntityType Type() { return ENTITY_ENEMIEBOSS; }
 
-		void OnUpdateAnimation(bool btnIsPressed, const float dt);
+		void OnUpdateAnimation(const float dt, bool isUpdate);
 		void OnUpdatePhysics(const float dt);
 
 		inline  Vec2 GetPosition() const { return mPos; }
@@ -47,6 +47,10 @@ namespace Model {
 		float mCurrentMoveTime = mMoveTime;
 		const float pauseMoveTime = 4;
 		float mCurrentPauseTime = pauseMoveTime;
+
+		const float delayAnimation = 0.7f;
+		float timeAnimation = delayAnimation;
+		bool isPaused = false;
 
 		int countRounds = 0;
 
