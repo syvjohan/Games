@@ -27,6 +27,7 @@ namespace Model {
 	class HealthKeeper;
 	class ScoreKeeper;
 	class HealthPackage;
+	class EnemieBoss;
 
 	class ManagerModel {
 		public:
@@ -38,33 +39,46 @@ namespace Model {
 			void RemoveView(View::ManagerView *v);
 			void OnUpdate(const float dt);
 
+			//Player
 			void OnPlayerMoved(Player *p); //outgoing..
 			void OnMovePlayer(const Vec2 &delta); //incoming..
 			Vec2 GetStartPositionForShot();
-		
+			
+			//Shot
 			void OnMoveShot(); //incoming..
 			void OnShotMoved(Shot *s); //outgoing..
 			void AddShot(Vec2 startPosition);
 
+			//Asteroid
 			void OnMoveAsteroid(); //incoming..
 			void OnAsteroidMoved(Asteroid *a); //outgoing..
 			void AddAsteroid(int type, int length, Vec2 scale, Vec2 startPosition);
 
+			//Health package
 			void OnMoveHealthPackage();
 			void OnHealthPackageMoved(HealthPackage *h);
 			void AddHealthPackage();
 
+			//Explosion
 			void OnMoveExplosion(Explosion *e);
 			void OnExplosionMoved(Explosion *e);
 			void AddExplosion(Vec2 startPosition, Model::EntityType);
 			void RemoveDeadExplosion();
 
+			//Score
 			void OnScoreUpdated(ScoreKeeper *s);
 			void AddScore(int score);
 			int GetScore();
 
+			//Enemie boss
+			void OnEnemieBossMoved(EnemieBoss *e);
+			void OnMoveEnemieBoss();
+			void AddEnemieBoss();
+
+			//health player.
 			void SetHealth(int health);
 			int GetHealth();
+
 			void OnHpUpdated(HealthKeeper *h);
 
 			int maxScore;

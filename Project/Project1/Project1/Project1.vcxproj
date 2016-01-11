@@ -136,6 +136,7 @@
     <ClInclude Include="Background.h" />
     <ClInclude Include="BackgroundAfterGame.h" />
     <ClInclude Include="ContinueGame.h" />
+    <ClInclude Include="EnemieBoss.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Defs.h" />
     <ClInclude Include="GameController.h" />
@@ -158,6 +159,7 @@
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="BackgroundAfterGame.cpp" />
     <ClCompile Include="ContinueGame.cpp" />
+    <ClCompile Include="EnemieBoss.cpp" />
     <ClCompile Include="GameController.cpp" />
     <ClCompile Include="HealthKeeper.cpp" />
     <ClCompile Include="HealthPackage.cpp" />

@@ -15,6 +15,7 @@ namespace Model {
 	class ScoreKeeper;
 	class HealthKeeper;
 	class HealthPackage;
+	class EnemieBoss;
 }
 
 namespace View {
@@ -72,6 +73,12 @@ namespace View {
 				void OnHealthPackageMoved(Model::HealthPackage *healthPackage);
 				void OnMoveHealthPackage(const Model::HealthPackage *healthPackage);
 				void OnHealthPackageUpdatedPhysics(Model::HealthPackage *healthPackage);
+
+				//Enemie boss
+				void OnEnemieBossSpawned(Model::EnemieBoss *enemieBoss);
+				void OnEnemieBossMoved(Model::EnemieBoss *enemieBoss);
+				void OnMoveEnemieBoss(const Model::EnemieBoss *enemieBoss);
+				void OnEnemieBossUpdatedPhysics(Model::EnemieBoss *enemieBoss);
 
 		private:
 			Common *mCommon;

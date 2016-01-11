@@ -7,6 +7,7 @@
 #include "HealthKeeper.h"
 #include "ScoreKeeper.h"
 #include "HealthPackage.h"
+#include "EnemieBoss.h"
 
 #include <algorithm>
 
@@ -23,7 +24,10 @@ namespace Model {
 		Player *player = DBG_NEW Player();
 		mEntities.push_back(player);
 
-		ScoreKeeper *scoreKeeper = DBG_NEW ScoreKeeper();
+		EnemieBoss *enemieBoss = DBG_NEW EnemieBoss();
+		mEntities.push_back(enemieBoss);
+
+		/*ScoreKeeper *scoreKeeper = DBG_NEW ScoreKeeper();
 		scoreKeeper->mScore = 0;
 		mEntities.push_back(scoreKeeper);
 
@@ -38,7 +42,7 @@ namespace Model {
 
 		Asteroid *asteroid2 = DBG_NEW Asteroid();
 		asteroid2->SetType(asteroidType2);
-		mEntities.push_back(asteroid2);
+		mEntities.push_back(asteroid2);*/
 
 		for (Entity *e : mEntities) {
 			e->OnInit(this);
@@ -49,7 +53,7 @@ namespace Model {
 						view->OnPlayerSpawned((Player*)e);
 					}
 					break;
-				case ENTITY_ASTEROID:
+				/*case ENTITY_ASTEROID:
 					for (View::ManagerView *view : mViews) {
 						view->OnAsteroidSpawned((Asteroid*)e);
 					}
@@ -62,6 +66,11 @@ namespace Model {
 				case ENTITY_SCORE:
 					for (View::ManagerView *view : mViews) {
 						view->OnScoreInit((ScoreKeeper*)e);
+					}
+					break;*/
+				case ENTITY_ENEMIEBOSS:
+					for (auto *view : mViews) {
+						view->OnEnemieBossSpawned((EnemieBoss*)e);
 					}
 					break;
 			}
@@ -135,6 +144,11 @@ namespace Model {
 				for (auto view : mViews) {
 					((HealthPackage*)e)->OnUpdatePhysics(dt);
 					view->OnHealthPackageUpdatedPhysics((HealthPackage*)e);
+				}
+			} else if (e->Type() == ENTITY_ENEMIEBOSS) {
+				for (auto *view : mViews) {
+					((EnemieBoss*)e)->OnUpdatePhysics(dt);
+					view->OnEnemieBossUpdatedPhysics((EnemieBoss*)e);
 				}
 			}
 		}
@@ -506,6 +520,31 @@ namespace Model {
 		mEntities.push_back(healthPackage);
 		for (auto *view : mViews) {
 			view->OnHealthPackageSpawned((HealthPackage*)healthPackage);
+		}
+	}
+
+	void ManagerModel::OnEnemieBossMoved(EnemieBoss *e) {
+		for (View::ManagerView *v : mViews) {
+			v->OnEnemieBossMoved(e);
+		}
+	}
+
+	void ManagerModel::OnMoveEnemieBoss() {
+		for (Entity *e : mEntities) {
+			if (e->Type() == ENTITY_HEALTHPACKAGE) {
+				((EnemieBoss*)e)->mDir.x += 1;
+				((EnemieBoss*)e)->mDir.y += 1;
+			}
+		}
+	}
+
+	void ManagerModel::AddEnemieBoss() {
+		EnemieBoss *enemieBoss = DBG_NEW EnemieBoss();
+		enemieBoss->OnInit(this);
+
+		mEntities.push_back(enemieBoss);
+		for (auto *view : mViews) {
+			view->OnEnemieBossSpawned((EnemieBoss*)enemieBoss);
 		}
 	}
 

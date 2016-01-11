@@ -7,6 +7,7 @@
 #include "HealthKeeper.h"
 #include "ScoreKeeper.h"
 #include "HealthPackage.h"
+#include "EnemieBoss.h"
 
 namespace View {
 	ManagerView::ManagerView() {}
@@ -437,6 +438,53 @@ namespace View {
 			if (sprite.mEntity == healthPackage) {
 				sprite.mPosition.x = healthPackage->mPos.x;
 				sprite.mPosition.y = healthPackage->mPos.y;
+			}
+		}
+	}
+
+	void ManagerView::OnEnemieBossSpawned(Model::EnemieBoss *enemieBoss) {
+		SpriteDef sprite;
+		sprite.mEntity = enemieBoss;
+		sprite.mTexture = mCommon->getTextureResource("plane");
+		sprite.mPosition = enemieBoss->mPos;
+
+		sprite.mScale = enemieBoss->mScale;
+		sprite.mOrigin.x = enemieBoss->mSize.x / 2 * enemieBoss->mScale.x;
+		sprite.mOrigin.y = enemieBoss->mSize.y / 2 * enemieBoss->mScale.y;
+		sprite.mClip = { 0, 0, enemieBoss->mSize.x, enemieBoss->mSize.y };
+		sprite.mTint = enemieBoss->mColor;
+		sprite.mRotation = enemieBoss->mRotation;
+
+		mSprites.push_back(sprite);
+	}
+
+	void ManagerView::OnEnemieBossMoved(Model::EnemieBoss *enemieBoss) {
+		for (SpriteDef &sprite : mSprites) {
+			if (sprite.mEntity == enemieBoss) {
+				sprite.mPosition = enemieBoss->mPos;
+				sprite.mRotation = enemieBoss->mRotation;
+				sprite.mScale = enemieBoss->mScale;
+				sprite.mTint = enemieBoss->mColor;
+			}
+		}
+	}
+
+	void ManagerView::OnMoveEnemieBoss(const Model::EnemieBoss *enemieBoss) {
+		for (SpriteDef &sprite : mSprites) {
+			if (sprite.mEntity == enemieBoss) {
+				sprite.mPosition = enemieBoss->mPos;
+				sprite.mRotation = enemieBoss->mRotation;
+				sprite.mScale = enemieBoss->mScale;
+				sprite.mTint = enemieBoss->mColor;
+			}
+		}
+	}
+
+	void ManagerView::OnEnemieBossUpdatedPhysics(Model::EnemieBoss *enemieBoss) {
+		for (auto &sprite : mSprites) {
+			if (sprite.mEntity == enemieBoss) {
+				sprite.mPosition.x = enemieBoss->mPos.x;
+				sprite.mPosition.y = enemieBoss->mPos.y;
 			}
 		}
 	}
