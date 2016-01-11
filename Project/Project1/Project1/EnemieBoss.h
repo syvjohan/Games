@@ -23,7 +23,7 @@ namespace Model {
 		void OnUpdatePhysics(const float dt);
 
 		inline  Vec2 GetPosition() const { return mPos; }
-		inline float GetRadius() const { return std::max(mSize.x / 2, mSize.y / 2) * 0.8f; }
+		inline float GetRadius() const { return std::max(mSize.x / 2, mSize.y / 2); }
 
 		void Hit();
 

@@ -151,6 +151,10 @@ namespace Controller {
 					if (menuModel.IsPaused() && isGameStarted) {
 						currentState = GAMESTATE_INGAME;
 					} else if (menuModel.IsNewGame()) {
+						currentState = GAMESTATE_INGAME;
+						currentLvl = 0;
+						SetAsteroidType(currentLvl);
+
 						delete managerModel;
 						delete managerView;
 
@@ -163,9 +167,6 @@ namespace Controller {
 
 						common.getGraphics()->getContextSize(&width, &height);
 						managerModel->Init(Vec2(width, height), GetAsteroidType().typ1, GetAsteroidType().type2, maxScore, currentLvl);
-
-						currentState = GAMESTATE_INGAME;
-						currentLvl = 0;
 					}
 
 					g->clear(Color::Black, true);
@@ -188,6 +189,14 @@ namespace Controller {
 					timerDelayScreenForExplosion -= timer.getDeltaSeconds();
 					if (timerDelayScreenForExplosion <= 0) {
 						
+						menuModel.OnUpdate(timer.getDeltaSeconds(), isGameStarted);
+						menuView.OnUpdate(timer.getDeltaSeconds());
+
+						g->clear(Color::Black, true);
+
+						menuView.OnRenderAfterGame();
+
+					} else if (timerResultScreen > 0) {
 						menuModel.OnUpdate(timer.getDeltaSeconds(), isGameStarted);
 						menuView.OnUpdate(timer.getDeltaSeconds());
 

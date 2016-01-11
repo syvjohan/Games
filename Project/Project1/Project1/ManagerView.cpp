@@ -37,12 +37,10 @@ namespace View {
 							sprite.mTint,
 							0.0f);
 
-			//if (sprite.mEntity->Type() == Model::ENTITY_PLAYER) {
-			//	Model::PlaneParams params = ((Model::NewPlayer*)sprite.mEntity)->planeParams;
+			/*if (sprite.mEntity->Type() == Model::ENTITY_BULLET) {
+				mRenderer->debugCircle(((Model::Shot*)sprite.mEntity)->mPos.x, ((Model::Shot*)sprite.mEntity)->mPos.y, 20.0f, Color::Red);
 
-			//	mRenderer->debugCircle(params.mPos.x, params.mPos.y, 20.0f, Color::Red);
-
-			//}
+			}*/
 		}
 
 		mRenderer->end();
@@ -79,6 +77,13 @@ namespace View {
 				sprite.mTint = scoreKeeper->mColor;
 				sprite.mRotation = scoreKeeper->mRotation;
 				sprite.mScale = scoreKeeper->mScale;
+
+				int width, heigth;
+				sprite.mTexture->getDimensions(&width, &heigth);
+
+				sprite.mOrigin = Vec2(width / 2, heigth / 2);
+				sprite.mClip = { 0, 0, width, heigth };
+
 				sprite.mTexture = mCommon->getGraphics()->createRenderText(mFont, scoreKeeper->mText)->getTexture();
 			}
 		}
@@ -109,6 +114,13 @@ namespace View {
 				sprite.mTint = healthKeeper->mColor;
 				sprite.mRotation = healthKeeper->mRotation;
 				sprite.mScale = healthKeeper->mScale;
+
+				int width, heigth;
+				sprite.mTexture->getDimensions(&width, &heigth);
+
+				sprite.mOrigin = Vec2(width / 2, heigth / 2);
+				sprite.mClip = { 0, 0, width, heigth };
+
 				sprite.mTexture = mCommon->getGraphics()->createRenderText(mFont, healthKeeper->mText)->getTexture();
 			}
 		}
@@ -221,7 +233,7 @@ namespace View {
 
 		sprite.mScale = shot->mScale;
 		sprite.mOrigin = Vec2(shot->mSize / 2);
-		sprite.mClip = { 0, 0, shot->mSize.x, shot->mSize.y};
+		sprite.mClip = { 0, 0, shot->mSize.x, shot->mSize.y };
 		sprite.mTint = Color::Red;
 		sprite.mRotation = shot->mRotation;
 

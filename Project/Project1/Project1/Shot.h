@@ -24,7 +24,7 @@ namespace Model {
 			Vec2 startPosition;
 
 			inline  Vec2 GetPosition() const { return mPos; }
-			inline float GetRadius() const { return std::max(mSize.x / 2, mSize.y / 2); }
+			inline float GetRadius() const { return std::max(mSize.x / 2, (mSize.y) / 2); }
 
 			Vec2 mPos;
 			Vec2 mVel;
