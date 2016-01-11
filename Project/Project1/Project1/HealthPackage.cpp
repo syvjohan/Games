@@ -11,8 +11,8 @@ namespace Model {
 
 		mPos.x = m->GetPlayArea().x;
 		mPos.y = InRange(0, m->GetPlayArea().y);
-		mDir = Vec2(InRange(-1, -10), InRange(-2, 2));
-		mVel += Vec2(InRange(.2f, .2f), 0);
+		mDir = Vec2(InRange(-1, 1), InRange(-1, 1));
+		mVel += Vec2(InRange(4.5f, 4.5f), 0);
 		mScale = Vec2(0.2f, 0.2f);
 		mSize = Vec2(150, 150);
 		mColor = Color::White;
