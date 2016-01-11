@@ -32,6 +32,7 @@ namespace Controller {
 			common.registerTextureResource("asteroid6", "image/asteroid6.png");
 			common.registerTextureResource("background_menu", "image/space_background_menu.png");
 			common.registerTextureResource("background_after_game", "image/space_background_after_game.png");
+			common.registerTextureResource("health_package", "image/health_package.png");
 
 			common.registerFontResource("sans16", 16, "fonts/ARIAL.ttf");
 			common.registerFontResource("sans20", 20, "fonts/OpenSans-Regular.ttf");
@@ -62,7 +63,7 @@ namespace Controller {
 			managerModel->AddView(managerView);
 
 			common.getGraphics()->getContextSize(&width, &height);
-			managerModel->Init(Vec2(width, height), GetAsteroidType().typ1, GetAsteroidType().type2);
+			managerModel->Init(Vec2(width, height), GetAsteroidType().typ1, GetAsteroidType().type2, maxScore);
 
 			currentState = GAMESTATE_INMENU;
 
@@ -138,7 +139,7 @@ namespace Controller {
 						managerModel->AddView(managerView);
 
 						common.getGraphics()->getContextSize(&width, &height);
-						managerModel->Init(Vec2(width, height), GetAsteroidType().typ1, GetAsteroidType().type2);
+						managerModel->Init(Vec2(width, height), GetAsteroidType().typ1, GetAsteroidType().type2, maxScore);
 					}
 				}
 
@@ -161,7 +162,7 @@ namespace Controller {
 						managerModel->AddView(managerView);
 
 						common.getGraphics()->getContextSize(&width, &height);
-						managerModel->Init(Vec2(width, height), GetAsteroidType().typ1, GetAsteroidType().type2);
+						managerModel->Init(Vec2(width, height), GetAsteroidType().typ1, GetAsteroidType().type2, maxScore);
 
 						currentState = GAMESTATE_INGAME;
 						currentLvl = 0;

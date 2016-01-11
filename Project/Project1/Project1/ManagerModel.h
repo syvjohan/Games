@@ -26,13 +26,14 @@ namespace Model {
 	class Explosion;
 	class HealthKeeper;
 	class ScoreKeeper;
+	class HealthPackage;
 
 	class ManagerModel {
 		public:
 			ManagerModel();
 			~ManagerModel();
 
-			void Init(Vec2 screen, int asteroidType1, int asteroidType2);
+			void Init(Vec2 screen, int asteroidType1, int asteroidType2, int maxScore);
 			void AddView(View::ManagerView *v);
 			void RemoveView(View::ManagerView *v);
 			void OnUpdate(const float dt);
@@ -49,6 +50,10 @@ namespace Model {
 			void OnAsteroidMoved(Asteroid *a); //outgoing..
 			void AddAsteroid(int type, int length, Vec2 scale, Vec2 startPosition);
 
+			void OnMoveHealthPackage();
+			void OnHealthPackageMoved(HealthPackage *h);
+			void AddHealthPackage();
+
 			void OnMoveExplosion(Explosion *e);
 			void OnExplosionMoved(Explosion *e);
 			void AddExplosion(Vec2 startPosition, Model::EntityType);
@@ -61,6 +66,8 @@ namespace Model {
 			void SetHealth(int health);
 			int GetHealth();
 			void OnHpUpdated(HealthKeeper *h);
+
+			int maxScore;
 
 			Vec2 GetPlayArea();
 
@@ -76,6 +83,9 @@ namespace Model {
 
 			int mCountAsteroids = 0;
 			const float asteroidRespawnDelay = 2;
+
+			const float timePeriodSpawnHealtPackage = 5;
+			float timerHealthPackage = timePeriodSpawnHealtPackage;
 
 			void ColissionWall();
 			std::vector<CollisionPair> CollisionEntities() const;

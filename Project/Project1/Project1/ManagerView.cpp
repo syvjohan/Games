@@ -6,6 +6,7 @@
 #include "Explosion.h"
 #include "HealthKeeper.h"
 #include "ScoreKeeper.h"
+#include "HealthPackage.h"
 
 namespace View {
 	ManagerView::ManagerView() {}
@@ -392,6 +393,51 @@ namespace View {
 		if(source = mCommon->getAudio()->getSource()) {
 			source->setVolume(.1f);
 			source->play(mCommon->getSoundResource("soundExplosion"));
+		}
+	}
+
+	void ManagerView::OnHealthPackageSpawned(Model::HealthPackage *healthPackage) {
+		SpriteDef sprite;
+		sprite.mEntity = healthPackage;
+		sprite.mTexture = mCommon->getTextureResource("health_package");
+		sprite.mPosition = healthPackage->mPos;
+
+		sprite.mScale = healthPackage->mScale;
+		sprite.mOrigin.x = healthPackage->mSize.x / 2 * healthPackage->mScale.x;
+		sprite.mOrigin.y = healthPackage->mSize.y / 2 * healthPackage->mScale.y;
+		sprite.mClip = { 0, 0, healthPackage->mSize.x, healthPackage->mSize.y };
+		sprite.mTint = healthPackage->mColor;
+		sprite.mRotation = healthPackage->mRotation;
+
+		mSprites.push_back(sprite);
+	}
+
+	void ManagerView::OnHealthPackageMoved(Model::HealthPackage *healthPackage) {
+		for (SpriteDef &sprite : mSprites) {
+			if (sprite.mEntity == healthPackage) {
+				sprite.mPosition = healthPackage->mPos;
+				sprite.mRotation = healthPackage->mRotation;
+				sprite.mScale = healthPackage->mScale;
+			}
+		}
+	}
+
+	void ManagerView::OnMoveHealthPackage(const Model::HealthPackage *healthPackage) {
+		for (SpriteDef &sprite : mSprites) {
+			if (sprite.mEntity == healthPackage) {
+				sprite.mPosition = healthPackage->mPos;
+				sprite.mRotation = healthPackage->mRotation;
+				sprite.mScale = healthPackage->mScale;
+			}
+		}
+	}
+
+	void ManagerView::OnHealthPackageUpdatedPhysics(Model::HealthPackage *healthPackage) {
+		for (auto &sprite : mSprites) {
+			if (sprite.mEntity == healthPackage) {
+				sprite.mPosition.x = healthPackage->mPos.x;
+				sprite.mPosition.y = healthPackage->mPos.y;
+			}
 		}
 	}
 

@@ -140,6 +140,7 @@
     <ClInclude Include="Defs.h" />
     <ClInclude Include="GameController.h" />
     <ClInclude Include="HealthKeeper.h" />
+    <ClInclude Include="HealthPackage.h" />
     <ClInclude Include="Help.h" />
     <ClInclude Include="ManagerModel.h" />
     <ClInclude Include="Asteroid.h" />
@@ -147,6 +148,7 @@
     <ClInclude Include="MenuModel.h" />
     <ClInclude Include="MenuView.h" />
     <ClInclude Include="NewGame.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="ScoreKeeper.h" />
     <ClInclude Include="Shot.h" />
@@ -158,6 +160,7 @@
     <ClCompile Include="ContinueGame.cpp" />
     <ClCompile Include="GameController.cpp" />
     <ClCompile Include="HealthKeeper.cpp" />
+    <ClCompile Include="HealthPackage.cpp" />
     <ClCompile Include="Help.cpp" />
     <ClCompile Include="ManagerModel.cpp" />
     <ClCompile Include="Asteroid.cpp" />

@@ -70,8 +70,8 @@
     <LibraryPath>C:\Programmering\Games\Laboration2\Splitter&amp;GRavitation\Project1\SDL2-2.0.3\lib\x64;$(LibraryPath);$(ProjectDir)\framework\;</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Programmering\Games\Laboration2\Splitter&amp;GRavitation\Project1\SDL2-2.0.3\include;$(IncludePath);$(ProjectDir)\framework\;</IncludePath>
-    <LibraryPath>C:\Programmering\Games\Laboration2\Splitter&amp;GRavitation\Project1\SDL2-2.0.3\lib\x64;$(LibraryPath);$(ProjectDir)\framework\;$(ProjectDir)\OpenAL\libs\Win64\;</LibraryPath>
+    <IncludePath>C:\Programmering\Games\Lab3Collection\Assignmnet3\Project1\SDL2-2.0.3\include;C:\Programmering\Games\Laboration2\Splitter&amp;GRavitation\Project1\SDL2-2.0.3\include;$(IncludePath);$(ProjectDir)\framework\</IncludePath>
+    <LibraryPath>C:\Programmering\Games\Lab3Collection\Assignmnet3\Project1\SDL2-2.0.3\lib\x64;C:\Programmering\Games\Laboration2\Splitter&amp;GRavitation\Project1\SDL2-2.0.3\lib\x64;$(LibraryPath);$(ProjectDir)\framework\;$(ProjectDir)\OpenAL\libs\Win64\</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

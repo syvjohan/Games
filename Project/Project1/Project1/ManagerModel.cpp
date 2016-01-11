@@ -6,6 +6,7 @@
 #include "Explosion.h"
 #include "HealthKeeper.h"
 #include "ScoreKeeper.h"
+#include "HealthPackage.h"
 
 #include <algorithm>
 
@@ -14,10 +15,11 @@ namespace Model {
 
 	ManagerModel::~ManagerModel() {}
 
-	void ManagerModel::Init(Vec2 screen, int asteroidType1, int asteroidType2) {
+	void ManagerModel::Init(Vec2 screen, int asteroidType1, int asteroidType2, int maxScore) {
+		this->maxScore = maxScore;
+
 		SetPlayArea(screen);
 
-		// Create a player..
 		Player *player = DBG_NEW Player();
 		mEntities.push_back(player);
 
@@ -80,8 +82,16 @@ namespace Model {
 	}
 
 	void ManagerModel::OnUpdate(const float dt) {
-		if (GetScore() >= 50) {
+		//Exit if score is over rhs.
+		if (GetScore() >= maxScore) {
 			mWonRound = true;
+		}
+
+		//Add health package if time delta is right
+		timerHealthPackage -= dt;
+		if (timerHealthPackage <= 0) {
+			timerHealthPackage = timePeriodSpawnHealtPackage;
+			AddHealthPackage();
 		}
 
 		//Collision
@@ -120,6 +130,11 @@ namespace Model {
 				for (auto view : mViews) {
 					((Explosion*)e)->OnUpdateAnimation(dt);
 					view->OnExplosionUpdateAnimation((Explosion*)e);
+				}
+			} else if (e->Type() == ENTITY_HEALTHPACKAGE) {
+				for (auto view : mViews) {
+					((HealthPackage*)e)->OnUpdatePhysics(dt);
+					view->OnHealthPackageUpdatedPhysics((HealthPackage*)e);
 				}
 			}
 		}
@@ -164,7 +179,16 @@ namespace Model {
 					AddAsteroid(type, 2, Vec2(1, 1), Vec2(0));
 					--index;
 				}
+			} else if (e->Type() == ENTITY_HEALTHPACKAGE) {
+				HealthPackage *healthPackage = ((HealthPackage*)e);
+				if (healthPackage->mPos.x + healthPackage->GetRadius() < 0 ||
+					healthPackage->mPos.y + healthPackage->GetRadius() < 0) {
+
+					RemoveEntity(e);
+					--index;
+				}
 			}
+
 			++index;
 		}
 	}
@@ -211,6 +235,7 @@ namespace Model {
 			Player *player = GET_ENTITY(Player, ENTITY_PLAYER, pair);
 			Shot *shot = GET_ENTITY(Shot, ENTITY_BULLET, pair);
 			Asteroid *asteroid = GET_ENTITY(Asteroid, ENTITY_ASTEROID, pair);
+			HealthPackage *healthPackage = GET_ENTITY(HealthPackage, ENTITY_HEALTHPACKAGE, pair);
 
 			if (player && asteroid) {
 				int type = asteroid->mType;
@@ -259,6 +284,12 @@ namespace Model {
 					RemoveEntity(asteroid);
 					AddScore(2);
 				}
+			} else if (healthPackage && player) {
+				RemoveEntity(healthPackage);
+				player->mHealth = player->defaultHealth;
+				player->isHit = false;
+				player->mFrameTimeIsHit = player->coolDownIsHit;
+
 			} else if (asteroid && !player && !shot) {
 				//RemoveEntity(pair.mEntityA);
 				//RemoveEntity(pair.mEntityB);			
@@ -451,6 +482,31 @@ namespace Model {
 			}
 		}
 		return score;
+	}
+
+	void ManagerModel::OnMoveHealthPackage() {
+		for (Entity *e : mEntities) {
+			if (e->Type() == ENTITY_HEALTHPACKAGE) {
+				((HealthPackage*)e)->mDir.x += 1;
+				((HealthPackage*)e)->mDir.y += 1;
+			}
+		}
+	}
+
+	void ManagerModel::OnHealthPackageMoved(HealthPackage *h) {
+		for (View::ManagerView *v : mViews) {
+			v->OnHealthPackageMoved(h);
+		}
+	}
+
+	void ManagerModel::AddHealthPackage() {
+		HealthPackage *healthPackage = DBG_NEW HealthPackage();
+		healthPackage->OnInit(this);
+
+		mEntities.push_back(healthPackage);
+		for (auto *view : mViews) {
+			view->OnHealthPackageSpawned((HealthPackage*)healthPackage);
+		}
 	}
 
 	bool ManagerModel::WonRound() {

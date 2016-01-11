@@ -60,6 +60,8 @@ namespace Controller {
 			const float timeElapsedForExplosion = 1;
 			float timerDelayScreenForExplosion = timeElapsedForExplosion;
 
+			int maxScore = 100;
+
 			bool isGameStarted = false;
 			int currentLvl = 0;
 

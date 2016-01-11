@@ -22,7 +22,7 @@ namespace Model {
 
 		mCurrentFrame = 0;
 		mFrameTime = 0.0f;
-		mFrameTimeIsHit = 1.5f;
+		mFrameTimeIsHit = coolDownIsHit;
 	}
 
 	void Player::OnUpdate() {

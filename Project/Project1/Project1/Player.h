@@ -40,6 +40,7 @@ namespace Model {
 
 			float mFrameTime;
 			int mCurrentFrame;
+			const float coolDownIsHit = 1.5f;
 			float mFrameTimeIsHit;
 			bool isHit = false;
 

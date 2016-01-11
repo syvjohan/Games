@@ -14,6 +14,7 @@ namespace Model {
 	class Explosion;
 	class ScoreKeeper;
 	class HealthKeeper;
+	class HealthPackage;
 }
 
 namespace View {
@@ -65,6 +66,12 @@ namespace View {
 				//HP
 				void OnHPInit(Model::HealthKeeper *healthKeeper);
 				void OnHPUpdate(const Model::HealthKeeper *healthKeeper);
+
+				//HealthPackage
+				void OnHealthPackageSpawned(Model::HealthPackage *healthPackage);
+				void OnHealthPackageMoved(Model::HealthPackage *healthPackage);
+				void OnMoveHealthPackage(const Model::HealthPackage *healthPackage);
+				void OnHealthPackageUpdatedPhysics(Model::HealthPackage *healthPackage);
 
 		private:
 			Common *mCommon;

@@ -9,8 +9,8 @@ namespace Model {
 	void ScoreKeeper::OnInit(ManagerModel *m) {
 		Entity::OnInit(m);
 
-		sprintf(mText, "Score: %i%s", mScore, "/50");
-		mPos = Vec2(40 , 20);
+		sprintf(mText, "Score: %i%s", mScore, "/100");
+		mPos = Vec2(60 , 20);
 		mColor = Color::Yellow;
 		mRotation = 0;
 		mScale = Vec2(1, 1);
@@ -19,7 +19,7 @@ namespace Model {
 	}
 
 	void ScoreKeeper::OnUpdate() {
-		sprintf(mText, "Score: %i%s", mScore, "/50");
+		sprintf(mText, "Score: %i%s", mScore, "/100");
 
 		GetModel()->OnScoreUpdated(this);
 	}

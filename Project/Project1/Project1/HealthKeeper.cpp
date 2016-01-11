@@ -10,15 +10,18 @@ namespace Model {
 		Entity::OnInit(m);
 
 		sprintf(mText, "HP: %i%%", mHealth);
-		mPos = Vec2(140, 20);
+		mPos = Vec2(160, 20);
 		mColor = Color::Yellow;
 		mRotation = 0;
 		mScale = Vec2(1, 1);
+		mHealth = mMaxHealth;
 	}
 
 	void HealthKeeper::OnUpdate() {
 		if (mHealth == mMaxHealth / 2) {
 			mColor = Color::Red;
+		} else if (mHealth == mMaxHealth) {
+			mColor = Color::Yellow;
 		}
 
 		sprintf(mText, "HP: %i%%", mHealth);
