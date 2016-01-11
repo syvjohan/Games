@@ -10,8 +10,8 @@ namespace Model {
 		Entity::OnInit(m);
 
 		mPos.x = m->GetPlayArea().x;
-		mPos.y = InRange(0, m->GetPlayArea().y);
-		mDir = Vec2(InRange(-1, 1), InRange(-1, 1));
+		mPos.y = InRange(50, m->GetPlayArea().y -50);
+		mDir = Vec2(1, 0);
 		mVel += Vec2(InRange(4.5f, 4.5f), 0);
 		mScale = Vec2(0.2f, 0.2f);
 		mSize = Vec2(150, 150);
@@ -32,7 +32,6 @@ namespace Model {
 	}
 
 	void HealthPackage::OnUpdatePhysics(const float dt) {
-		mPos.x += mDir.x * mVel.x;
-		mPos.y += mDir.y * mVel.y;
+		mPos.x -= mDir.x * mVel.x;
 	}
 }

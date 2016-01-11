@@ -10,7 +10,7 @@ namespace Model {
 		Entity::OnInit(m);
 
 		sprintf(mText, "HP: %i%%", mHealth);
-		mPos = Vec2(160, 20);
+		mPos = Vec2(200, 20);
 		mColor = Color::Yellow;
 		mRotation = 0;
 		mScale = Vec2(1, 1);

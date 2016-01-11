@@ -17,16 +17,17 @@ namespace Model {
 
 	ManagerModel::~ManagerModel() {}
 
-	void ManagerModel::Init(Vec2 screen, int asteroidType1, int asteroidType2, int maxScore) {
+	void ManagerModel::Init(Vec2 screen, int asteroidType1, int asteroidType2, int maxScore, int level) {
 		this->maxScore = maxScore;
 
 		SetPlayArea(screen);
 
+		if (level > 0) {
+			isHealthPackageRespawnActivated = true;
+		}
+
 		Player *player = DBG_NEW Player();
 		mEntities.push_back(player);
-
-		EnemieBoss *enemieBoss = DBG_NEW EnemieBoss();
-		mEntities.push_back(enemieBoss);
 
 		ScoreKeeper *scoreKeeper = DBG_NEW ScoreKeeper();
 		scoreKeeper->mScore = 0;
@@ -37,28 +38,35 @@ namespace Model {
 		healthKeeper->mMaxHealth = player->defaultHealth;
 		mEntities.push_back(healthKeeper);
 
-		/*Asteroid *asteroid = DBG_NEW Asteroid();
-		asteroid->SetType(asteroidType1);
-		mEntities.push_back(asteroid);
+		if (level == 0 || level == 1) {
+			Asteroid *asteroid = DBG_NEW Asteroid();
+			asteroid->SetType(asteroidType1);
+			mEntities.push_back(asteroid);
 
-		Asteroid *asteroid2 = DBG_NEW Asteroid();
-		asteroid2->SetType(asteroidType2);
-		mEntities.push_back(asteroid2);*/
+			Asteroid *asteroid2 = DBG_NEW Asteroid();
+			asteroid2->SetType(asteroidType2);
+			mEntities.push_back(asteroid2);
+
+		} else if (level == 2) {
+			EnemieBoss *enemieBoss = DBG_NEW EnemieBoss();
+			mEntities.push_back(enemieBoss);
+		} else {
+			//TODO! Add new game elements for levels > 2...
+		}
 
 		for (Entity *e : mEntities) {
 			e->OnInit(this);
-
 			switch (e->Type()) {
 				case ENTITY_PLAYER:
 					for (auto *view : mViews) {
 						view->OnPlayerSpawned((Player*)e);
 					}
 					break;
-					/*case ENTITY_ASTEROID:
+					case ENTITY_ASTEROID:
 						for (View::ManagerView *view : mViews) {
 						view->OnAsteroidSpawned((Asteroid*)e);
 						}
-						break;*/
+						break;
 				case ENTITY_HP:
 					for (View::ManagerView *view : mViews) {
 						view->OnHPInit((HealthKeeper*)e);
@@ -343,6 +351,12 @@ namespace Model {
 					SetHealth(player->mHealth);
 				}
 
+			} else if (player && enemieBoss) {
+				RemoveEntity(player);
+				AddExplosion(player->GetPosition(), ENTITY_PLAYER);
+				player->isHit = true;
+				mLostRound = true;
+
 			} else if (asteroid && !player && !shot) {
 				//RemoveEntity(pair.mEntityA);
 				//RemoveEntity(pair.mEntityB);			
@@ -555,12 +569,14 @@ namespace Model {
 	}
 
 	void ManagerModel::AddHealthPackage() {
-		HealthPackage *healthPackage = DBG_NEW HealthPackage();
-		healthPackage->OnInit(this);
+		if (isHealthPackageRespawnActivated) {
+			HealthPackage *healthPackage = DBG_NEW HealthPackage();
+			healthPackage->OnInit(this);
 
-		mEntities.push_back(healthPackage);
-		for (auto *view : mViews) {
-			view->OnHealthPackageSpawned((HealthPackage*)healthPackage);
+			mEntities.push_back(healthPackage);
+			for (auto *view : mViews) {
+				view->OnHealthPackageSpawned((HealthPackage*)healthPackage);
+			}
 		}
 	}
 

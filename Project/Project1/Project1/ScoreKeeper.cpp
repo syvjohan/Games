@@ -19,6 +19,7 @@ namespace Model {
 	}
 
 	void ScoreKeeper::OnUpdate() {
+		if (mScore >= GetModel()->maxScore) { GetModel()->maxScore; }
 		sprintf(mText, "Score: %i%s", mScore, "/100");
 
 		GetModel()->OnScoreUpdated(this);

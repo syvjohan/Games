@@ -63,7 +63,7 @@ namespace Controller {
 			managerModel->AddView(managerView);
 
 			common.getGraphics()->getContextSize(&width, &height);
-			managerModel->Init(Vec2(width, height), GetAsteroidType().typ1, GetAsteroidType().type2, maxScore);
+			managerModel->Init(Vec2(width, height), GetAsteroidType().typ1, GetAsteroidType().type2, maxScore, currentLvl);
 
 			currentState = GAMESTATE_INMENU;
 
@@ -139,7 +139,7 @@ namespace Controller {
 						managerModel->AddView(managerView);
 
 						common.getGraphics()->getContextSize(&width, &height);
-						managerModel->Init(Vec2(width, height), GetAsteroidType().typ1, GetAsteroidType().type2, maxScore);
+						managerModel->Init(Vec2(width, height), GetAsteroidType().typ1, GetAsteroidType().type2, maxScore, currentLvl);
 					}
 				}
 
@@ -162,7 +162,7 @@ namespace Controller {
 						managerModel->AddView(managerView);
 
 						common.getGraphics()->getContextSize(&width, &height);
-						managerModel->Init(Vec2(width, height), GetAsteroidType().typ1, GetAsteroidType().type2, maxScore);
+						managerModel->Init(Vec2(width, height), GetAsteroidType().typ1, GetAsteroidType().type2, maxScore, currentLvl);
 
 						currentState = GAMESTATE_INGAME;
 						currentLvl = 0;

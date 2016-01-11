@@ -10,7 +10,7 @@ namespace Model {
 		Entity::OnInit(m);
 
 		mPos.x = m->GetPlayArea().x;
-		mPos.y = InRange(0, m->GetPlayArea().y);
+		mPos.y = InRange(50, m->GetPlayArea().y -50);
 		mDir = Vec2(InRange(-1, -10), InRange(-2, 2));
 		mVel += Vec2(InRange(.02f, .02f), 0);
 		mScale = Vec2(1, 1);

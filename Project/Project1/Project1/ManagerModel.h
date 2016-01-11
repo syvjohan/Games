@@ -35,7 +35,7 @@ namespace Model {
 			ManagerModel();
 			~ManagerModel();
 
-			void Init(Vec2 screen, int asteroidType1, int asteroidType2, int maxScore);
+			void Init(Vec2 screen, int asteroidType1, int asteroidType2, int maxScore, int level);
 			void AddView(View::ManagerView *v);
 			void RemoveView(View::ManagerView *v);
 			void OnUpdate(const float dt);
@@ -102,6 +102,7 @@ namespace Model {
 
 			bool mLostRound = false;
 			bool mWonRound = false;
+			bool isHealthPackageRespawnActivated = false;
 
 			int mCountAsteroids = 0;
 			const float asteroidRespawnDelay = 2;
