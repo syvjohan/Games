@@ -28,6 +28,7 @@ namespace Model {
 	class ScoreKeeper;
 	class HealthPackage;
 	class EnemieBoss;
+	class EnemieBossShot;
 
 	class ManagerModel {
 		public:
@@ -75,6 +76,12 @@ namespace Model {
 			void OnMoveEnemieBoss();
 			bool DelayEnemieBossMove(EnemieBoss *e, const float dt);
 			void AddEnemieBoss();
+
+			//Enemie boss shot
+			void OnMoveEnemieBossShot();
+			void OnEnemieBossShotMoved(EnemieBossShot *s);
+			void AddEnemieBossShot(Vec2 startPosition);
+			void EvalRequestNewBullet(const float dt);
 
 			//health player.
 			void SetHealth(int health);

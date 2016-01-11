@@ -39,7 +39,7 @@ namespace Model {
 
 		float mFrameTime;
 		int mCurrentFrame;
-		const float coolDownIsHit = 1.5f;
+		const float coolDownIsHit = 1;
 		float mFrameTimeIsHit;
 		bool isHit = false;
 
@@ -54,7 +54,7 @@ namespace Model {
 
 		int countRounds = 0;
 
-		const int defaultHealth = 1000;
+		const int defaultHealth = 100;
 	};
 }
 

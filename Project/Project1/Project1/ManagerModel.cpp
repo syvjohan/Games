@@ -8,6 +8,7 @@
 #include "ScoreKeeper.h"
 #include "HealthPackage.h"
 #include "EnemieBoss.h"
+#include "EnemieBossShot.h"
 
 #include <algorithm>
 
@@ -27,7 +28,7 @@ namespace Model {
 		EnemieBoss *enemieBoss = DBG_NEW EnemieBoss();
 		mEntities.push_back(enemieBoss);
 
-		/*ScoreKeeper *scoreKeeper = DBG_NEW ScoreKeeper();
+		ScoreKeeper *scoreKeeper = DBG_NEW ScoreKeeper();
 		scoreKeeper->mScore = 0;
 		mEntities.push_back(scoreKeeper);
 
@@ -36,7 +37,7 @@ namespace Model {
 		healthKeeper->mMaxHealth = player->defaultHealth;
 		mEntities.push_back(healthKeeper);
 
-		Asteroid *asteroid = DBG_NEW Asteroid();
+		/*Asteroid *asteroid = DBG_NEW Asteroid();
 		asteroid->SetType(asteroidType1);
 		mEntities.push_back(asteroid);
 
@@ -53,11 +54,11 @@ namespace Model {
 						view->OnPlayerSpawned((Player*)e);
 					}
 					break;
-				/*case ENTITY_ASTEROID:
-					for (View::ManagerView *view : mViews) {
+					/*case ENTITY_ASTEROID:
+						for (View::ManagerView *view : mViews) {
 						view->OnAsteroidSpawned((Asteroid*)e);
-					}
-					break;
+						}
+						break;*/
 				case ENTITY_HP:
 					for (View::ManagerView *view : mViews) {
 						view->OnHPInit((HealthKeeper*)e);
@@ -67,7 +68,7 @@ namespace Model {
 					for (View::ManagerView *view : mViews) {
 						view->OnScoreInit((ScoreKeeper*)e);
 					}
-					break;*/
+					break;
 				case ENTITY_ENEMIEBOSS:
 					for (auto *view : mViews) {
 						view->OnEnemieBossSpawned((EnemieBoss*)e);
@@ -153,9 +154,15 @@ namespace Model {
 					((EnemieBoss*)e)->OnUpdatePhysics(dt);
 					view->OnEnemieBossUpdatedPhysics((EnemieBoss*)e);
 				}
+			} else if (e->Type() == ENTITY_BULLETENEMIEBOSS) {
+				for (auto view : mViews) {
+					((EnemieBossShot*)e)->OnUpdatedPhysics(dt);
+					view->OnEnemieBossShotUpdatePhysics((EnemieBossShot*)e);
+				}
 			}
 		}
 
+		EvalRequestNewBullet(dt);
 		RemoveDeadExplosion();
 	}
 
@@ -253,6 +260,8 @@ namespace Model {
 			Shot *shot = GET_ENTITY(Shot, ENTITY_BULLET, pair);
 			Asteroid *asteroid = GET_ENTITY(Asteroid, ENTITY_ASTEROID, pair);
 			HealthPackage *healthPackage = GET_ENTITY(HealthPackage, ENTITY_HEALTHPACKAGE, pair);
+			EnemieBoss *enemieBoss = GET_ENTITY(EnemieBoss, ENTITY_ENEMIEBOSS, pair);
+			EnemieBossShot *enemieBossShot = GET_ENTITY(EnemieBossShot, ENTITY_BULLETENEMIEBOSS, pair);
 
 			if (player && asteroid) {
 				int type = asteroid->mType;
@@ -306,6 +315,33 @@ namespace Model {
 				player->mHealth = player->defaultHealth;
 				player->isHit = false;
 				player->mFrameTimeIsHit = player->coolDownIsHit;
+
+			} else if (enemieBoss && shot) {
+				RemoveEntity(shot);
+				enemieBoss->Hit();
+				AddScore(1);
+				if (enemieBoss->mHealth <= 0) {
+					RemoveEntity(enemieBoss);
+					AddExplosion(enemieBoss->mPos, ENTITY_ENEMIEBOSS);
+				} else {
+					AddExplosion(enemieBoss->mPos, ENTITY_ASTEROID);
+				}
+			} else if (enemieBossShot && player) {
+				if (player->mHealth == player->defaultHealth / 2) {
+					if (player->mFrameTimeIsHit <= 0) {
+						AddExplosion(player->GetPosition(), ENTITY_PLAYER);
+
+						SetHealth(0);
+
+						RemoveEntity(player);
+
+						player->isHit = false;
+						mLostRound = true;
+					}
+				} else {
+					player->Hit();
+					SetHealth(player->mHealth);
+				}
 
 			} else if (asteroid && !player && !shot) {
 				//RemoveEntity(pair.mEntityA);
@@ -444,6 +480,8 @@ namespace Model {
 			explosion->mScale /= 1.5;
 		} else if (entity == ENTITY_PLAYER) {
 			explosion->mScale *= 2;
+		} else if (entity == ENTITY_ENEMIEBOSS) {
+			explosion->mScale *= 3;
 		}
 		mEntities.push_back(explosion);
 
@@ -561,6 +599,43 @@ namespace Model {
 		mEntities.push_back(enemieBoss);
 		for (auto *view : mViews) {
 			view->OnEnemieBossSpawned((EnemieBoss*)enemieBoss);
+		}
+	}
+
+	void ManagerModel::OnMoveEnemieBossShot() {
+		for (Entity *e : mEntities) {
+			if (e->Type() == ENTITY_BULLETENEMIEBOSS) {
+				((EnemieBossShot*)e)->mPos.x -= 1;
+			}
+		}
+	}
+
+	void ManagerModel::OnEnemieBossShotMoved(EnemieBossShot *e) {
+		for (auto *view : mViews) {
+			view->OnEnemieBossShotMoved(e);
+		}
+	}
+
+	void ManagerModel::EvalRequestNewBullet(const float dt) {
+		for (Entity *e : mEntities) {
+			if (e->Type() == ENTITY_ENEMIEBOSS) {
+				if (DelayEnemieBossMove(((EnemieBoss*)e), dt) && !((EnemieBoss*)e)->isPaused) {
+					AddEnemieBossShot(((EnemieBoss*)e)->mPos);
+					break;
+				}
+			}
+		}
+	}
+
+	void ManagerModel::AddEnemieBossShot(Vec2 startPosition) {
+		EnemieBossShot *shot = DBG_NEW EnemieBossShot();
+		shot->startPosition = startPosition;
+		shot->OnInit(this);
+		mEntities.push_back(shot);
+
+		for (auto *view : mViews) {
+			view->OnEnemieBossShotSpawned((EnemieBossShot*)shot);
+			view->PlayEnemieBossShotSoundEffect((EnemieBossShot*)shot);
 		}
 	}
 

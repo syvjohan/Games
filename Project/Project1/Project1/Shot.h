@@ -34,7 +34,5 @@ namespace Model {
 			Vec2 mScale;
 			float mRotation;
 			bool isDead;
-
-		private:
 	};
 }

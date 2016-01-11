@@ -16,6 +16,7 @@ namespace Model {
 	class HealthKeeper;
 	class HealthPackage;
 	class EnemieBoss;
+	class EnemieBossShot;
 }
 
 namespace View {
@@ -80,6 +81,14 @@ namespace View {
 				void OnMoveEnemieBoss(const Model::EnemieBoss *enemieBoss);
 				void OnEnemieBossUpdatedPhysics(Model::EnemieBoss *enemieBoss);
 				void OnEnemieBossUpdatedAnimation(const Model::EnemieBoss *enemieBoss);
+				
+				//Bullets Enemie boss
+				void OnEnemieBossShotSpawned(Model::EnemieBossShot *shot);
+				void OnMoveEnemieBossShot(const Model::EnemieBossShot *shot);
+				void OnEnemieBossShotMoved(const Model::EnemieBossShot *shot);
+				void OnEnemieBossShotUpdatePhysics(const Model::EnemieBossShot *shot);
+				void PlayEnemieBossShotSoundEffect(const Model::EnemieBossShot *shot);
+		
 		private:
 			Common *mCommon;
 			Model::ManagerModel *mModel;

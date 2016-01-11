@@ -102,7 +102,7 @@ namespace Model {
 				mFrameTimeIsHit -= dt;
 			} else if (isHit && mFrameTimeIsHit <= 0) {
 				if (mFrameTimeIsHit <= 0) {
-					mFrameTimeIsHit = 0;
+					mFrameTimeIsHit = 1;
 					mColor = Color::Aquamarine;
 				}
 			}
@@ -111,7 +111,7 @@ namespace Model {
 
 	void EnemieBoss::Hit() {
 		isHit = true;
-		mHealth = defaultHealth / 2;
+		mHealth -= 1;
 		mColor = Color::Red;
 	}
 

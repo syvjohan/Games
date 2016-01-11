@@ -8,6 +8,7 @@
 #include "ScoreKeeper.h"
 #include "HealthPackage.h"
 #include "EnemieBoss.h"
+#include "EnemieBossShot.h"
 
 namespace View {
 	ManagerView::ManagerView() {}
@@ -495,6 +496,57 @@ namespace View {
 				sprite.mClip.x = (enemieBoss->mCurrentFrame % 4) * enemieBoss->mSize.x;
 				sprite.mClip.y = (enemieBoss->mCurrentFrame / 4) * enemieBoss->mSize.y;
 			}
+		}
+	}
+
+	void ManagerView::OnEnemieBossShotSpawned(Model::EnemieBossShot *shot) {
+		SpriteDef sprite;
+		sprite.mEntity = shot;
+		sprite.mTexture = mCommon->getTextureResource("shoot");
+		sprite.mPosition = shot->mPos;
+
+		sprite.mScale = shot->mScale;
+		sprite.mOrigin = Vec2(shot->mSize / 2);
+		sprite.mClip = { 0, 0, shot->mSize.x, shot->mSize.y };
+		sprite.mTint = shot->mColor;
+		sprite.mRotation = shot->mRotation;
+
+		mSprites.push_back(sprite);
+	}
+
+	void ManagerView::OnMoveEnemieBossShot(const Model::EnemieBossShot *shot) {
+		for (SpriteDef &sprite : mSprites) {
+			if (sprite.mEntity == shot) {
+				sprite.mPosition = shot->mPos;
+				sprite.mRotation = shot->mRotation;
+				sprite.mScale = shot->mScale;
+			}
+		}
+	}
+
+	void ManagerView::OnEnemieBossShotMoved(const Model::EnemieBossShot *shot) {
+		for (SpriteDef &sprite : mSprites) {
+			if (sprite.mEntity == shot) {
+				sprite.mPosition = shot->mPos;
+				sprite.mRotation = shot->mRotation;
+				sprite.mScale = shot->mScale;
+			}
+		}
+	}
+
+	void ManagerView::OnEnemieBossShotUpdatePhysics(const Model::EnemieBossShot *shot) {
+		for (auto &sprite : mSprites) {
+			if (sprite.mEntity == shot) {
+				sprite.mPosition.x = shot->mPos.x;
+				sprite.mPosition.y = shot->mPos.y;
+			}
+		}
+	}
+
+	void ManagerView::PlayEnemieBossShotSoundEffect(const Model::EnemieBossShot *shot) {
+		if (source = mCommon->getAudio()->getSource()) {
+			source->setVolume(.1f);
+			source->play(mCommon->getSoundResource("soundShoot"));
 		}
 	}
 
